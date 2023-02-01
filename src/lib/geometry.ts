@@ -78,7 +78,6 @@ export function starPath(radius: number, options?: GeometryOptions): string {
 	return (
 		angles
 			.map((angle, i) => {
-				console.log(i, i % 2);
 				return `${i === 0 ? 'M' : 'L'}${radialPointString(
 					angle,
 					i % 2 === 1 ? radius * (PHI - 1) ** 2 : radius,
