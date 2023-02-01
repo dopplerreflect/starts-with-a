@@ -18,7 +18,6 @@ export function angles(count: number) {
 export function radialPoint(angle: number, radius: number, options?: GeometryOptions): Point {
 	let center = options?.center || { x: 0, y: 0 };
 	let rotate = options?.rotate || 0;
-	console.log(center);
 	return {
 		x: center.x + radius * Math.cos((angle + rotate) * (Math.PI / 180)),
 		y: center.y + radius * Math.sin((angle + rotate) * (Math.PI / 180))

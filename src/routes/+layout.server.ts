@@ -8,7 +8,6 @@ export const load = (async () => {
 		.map((e) => e.name);
 
 	if (pages) {
-		console.log(pages);
 		return { pages };
 	}
 
