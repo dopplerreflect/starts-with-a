@@ -32,12 +32,17 @@
 	body {
 		margin: 0;
 		padding: 0;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	body,
+	a {
+		color: white;
 	}
 	#container {
 		height: 100vh;
 		display: grid;
 		grid-template-rows: 2em 1fr;
-		background-color: hsl(220, 100%, 80%);
+		background-color: hsl(220, 100%, 5%);
 	}
 	header {
 		display: flex;

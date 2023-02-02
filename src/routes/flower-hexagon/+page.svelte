@@ -1,26 +1,39 @@
 <svelte:options namespace="svg" />
 
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { PHI, radialPoint, polygonPath } from '$lib/geometry';
+	import { useSaveFile } from '$lib/save-svg';
 	import BorderedPath from '$lib/components/BorderedPath.svelte';
-	import { PHI, anglesArray, radialPoint, polygonPath } from '$lib/geometry';
+	let size = 4096;
 	let goldenAngle = 360 - 360 / PHI;
 	let count = 360;
 	let angles = [...Array(count).keys()].map((k) => k * goldenAngle);
+	let svg: SVGElement;
+	onMount(() => useSaveFile(svg));
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-101 -101 202 202">
-	<path d="m-101,-101H101V101H-101Z" fill="hsl(270, 100%, 10%)" />
+<svg
+	id="flower-hexagon"
+	bind:this={svg}
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox={`${-size / 2} ${-size / 2} ${size} ${size}`}
+>
+	<path
+		d={`M${-size / 2},${-size / 2}H${size / 2}V${size / 2}H${-size / 2}Z`}
+		fill="hsl(240, 100%, 10%)"
+	/>
 	{#each angles as angle, i}
 		<BorderedPath
-			d={polygonPath(6, 1 + 0.025 * i, {
+			d={polygonPath(6, 1 + 0.6 * i, {
 				center: {
-					x: radialPoint(angle, i / (count / 100)).x,
-					y: radialPoint(angle, i / (count / 100)).y
+					x: radialPoint(angle, i / (count / 2048)).x,
+					y: radialPoint(angle, i / (count / 2048)).y
 				}
 			})}
-			outerColor={`hsl(0, 100%, 50%)`}
-			innerColor={`hsl(60, 100%, 50%)`}
-			strokeWidth={1}
+			outerColor={`hsl(30, 100%, 50%)`}
+			innerColor={`hsl(120, 100%, 50%)`}
+			strokeWidth={size / 200}
 		/>
 	{/each}
 </svg>
