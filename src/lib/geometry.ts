@@ -63,7 +63,7 @@ export function polygonPath(count: number, radius: number, options?: GeometryOpt
 			.map((point, i) => {
 				return `${i === 0 ? 'M' : 'L'}${point.x},${point.y}`;
 			})
-			.join() + 'Z'
+			.join('') + 'Z'
 	);
 }
 
