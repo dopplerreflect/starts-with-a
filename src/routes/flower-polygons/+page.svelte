@@ -9,7 +9,7 @@
 	let goldenAngle = 360 - 360 / PHI;
 	let count = 360;
 	let angles = [...Array(count).keys()].map((k) => k * goldenAngle);
-	let svg: SVGElement;
+	let svg: SVGSVGElement;
 	onMount(() => useSaveFile(svg));
 </script>
 

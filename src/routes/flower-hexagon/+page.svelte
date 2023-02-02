@@ -9,7 +9,7 @@
 	let goldenAngle = 360 - 360 / PHI;
 	let count = 360;
 	let angles = [...Array(count).keys()].map((k) => k * goldenAngle);
-	let svg: SVGElement;
+	let svg: SVGSVGElement;
 	onMount(() => useSaveFile(svg));
 </script>
 
@@ -31,9 +31,9 @@
 					y: radialPoint(angle, i / (count / 2048)).y
 				}
 			})}
-			outerColor={`hsl(30, 100%, 50%)`}
-			innerColor={`hsl(120, 100%, 50%)`}
-			strokeWidth={size / 200}
+			outerColor={`hsl(0, 100%, 50%)`}
+			innerColor={`hsl(60, 100%, 50%)`}
+			strokeWidth={(1 + 0.33 * i) / 1.5}
 		/>
 	{/each}
 </svg>
