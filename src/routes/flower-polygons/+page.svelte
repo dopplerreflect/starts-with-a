@@ -6,7 +6,7 @@
 	import { useSaveFile } from '$lib/save-svg';
 	import BorderedPath from '$lib/components/BorderedPath.svelte';
 	let size = 4096;
-	let goldenAngle = 360 - 360 / PHI;
+	let goldenAngle = 360 / PHI;
 	let count = 360;
 	let angles = [...Array(count).keys()].map((k) => k * goldenAngle);
 	let svg: SVGSVGElement;
