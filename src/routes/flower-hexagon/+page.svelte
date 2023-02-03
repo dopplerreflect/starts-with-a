@@ -25,15 +25,16 @@
 	/>
 	{#each angles as angle, i}
 		<BorderedPath
-			d={polygonPath(6, 1 + 0.6 * i, {
+			d={polygonPath(6, 6 + ((i / (count / 1920)) * (PHI - 1)) / 10, {
 				center: {
-					x: radialPoint(angle, i / (count / 2048)).x,
-					y: radialPoint(angle, i / (count / 2048)).y
-				}
+					x: radialPoint(angle % 360, i / (count / 1920)).x,
+					y: radialPoint(angle % 360, i / (count / 1920)).y
+				},
+				rotate: angle % 360
 			})}
-			outerColor={`hsl(0, 100%, 50%)`}
-			innerColor={`hsl(60, 100%, 50%)`}
-			strokeWidth={(1 + 0.33 * i) / 1.5}
+			outerColor={`hsl(210, 100%, 50%)`}
+			innerColor={`hsl(270, 100%, 60%)`}
+			strokeWidth={20.48}
 		/>
 	{/each}
 </svg>
