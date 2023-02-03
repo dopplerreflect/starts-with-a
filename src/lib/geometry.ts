@@ -1,4 +1,5 @@
 export const PHI = (Math.sqrt(5) + 1) / 2;
+export const SQRT3 = Math.sqrt(3);
 
 /**
  * Returns angles for a circle divided by count. Rotates -90deg.
