@@ -99,6 +99,11 @@
   resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.5.1.tgz#b29aa1f91a59f35e29ff8f7cb24faf1a3a750554"
   integrity sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==
 
+"@types/geometric@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@types/geometric/-/geometric-2.2.1.tgz#370ab5581bb585cb3ecb7d714e73f1d27250ac30"
+  integrity sha512-lWc+so8skGxBP8h30NV8652gBSbtkRjsVmXVbZ8t+sEqmEVRXAU5sMnqsJ3G6Ozl+bPo+4AZSR1/Dhrr/d+NIg==
+
 "@types/node@*":
   version "18.11.18"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.18.tgz#8dfb97f0da23c2293e554c5a50d61ef134d7697f"
@@ -390,6 +395,11 @@ function-bind@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
+
+geometric@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/geometric/-/geometric-2.5.0.tgz#ebc1cb5dc2f9551fdb8fe6c11e17069e6c6bc99a"
+  integrity sha512-lesHX2IgvIJtXz7EU9uq/KZxROWIRTEIRb08H3mg+TT4GT90XzNBKbNVtxK7pxn7RFd4wLyzI8AjkVleYdvQlQ==
 
 glob-parent@^5.1.2, glob-parent@~5.1.2:
   version "5.1.2"
