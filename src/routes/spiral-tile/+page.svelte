@@ -6,7 +6,7 @@
 	import { polygonScale } from 'geometric';
 	import { onMount } from 'svelte';
 	let size = 4096;
-	let zoom = 1;
+	let zoom = 1.5;
 	let count = 144;
 	let outerRadius = size / 2;
 	let points = [...Array(count).keys()].map((k) => {
@@ -43,8 +43,8 @@
 >
 	<defs>
 		<radialGradient id="rGradient">
-			<stop offset="0%" stop-color="hsl(90, 100%, 50%)" />
-			<stop offset="100%" stop-color="hsl(120, 100%, 15%)" />
+			<stop offset="0%" stop-color="hsl(210, 100%, 50%)" />
+			<stop offset="100%" stop-color="hsl(240, 100%, 15%)" />
 		</radialGradient>
 		<filter id="blur">
 			<feOffset result="offOut" in="SourceGraphic" dx="0" dy={size / 270} />
@@ -66,8 +66,8 @@
 		{#each scaledPolygonPaths(1) as path, i}
 			<path
 				d={path}
-				fill={`hsla(90,100%,50%,0.2)`}
-				stroke={`hsla(120, 100%, 50%, 0.25)`}
+				fill={`hsla(240,100%,50%,0.2)`}
+				stroke={`hsla(210, 100%, 50%, 0.25)`}
 				stroke-width={size / 360}
 				stroke-linejoin="round"
 			/>
@@ -77,8 +77,8 @@
 		{#each scaledPolygonPaths(PHI - 1) as path, i}
 			<path
 				d={path}
-				fill={`hsla(${(i % 21) + 90}, 100%, 50%, 1)`}
-				stroke={`hsla(${(i % 21) + 120}, 100%, 50%, 1)`}
+				fill={`hsla(${(i % 21) + 210}, 100%, 50%, 1)`}
+				stroke={`hsla(${(i % 21) + 225}, 100%, 50%, 1)`}
 				stroke-width={size / 360}
 				stroke-linejoin="round"
 			/>
@@ -88,8 +88,8 @@
 		{#each scaledPolygonPaths((PHI - 1) ** 2) as path, i}
 			<path
 				d={path}
-				fill={`hsla(${(i % 21) + 120}, 100%, 50%, 1)`}
-				stroke={`hsla(${(i % 21) + 150}, 100%, 50%, 1)`}
+				fill={`hsla(${(i % 21) + 225}, 100%, 50%, 1)`}
+				stroke={`hsla(${(i % 21) + 225}, 100%, 50%, 1)`}
 				stroke-width={size / 720}
 				stroke-linejoin="round"
 			/>
