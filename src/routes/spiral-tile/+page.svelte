@@ -5,9 +5,9 @@
 	import { radialPoint, PHI } from '$lib/geometry';
 	import { polygonScale } from 'geometric';
 	import { onMount } from 'svelte';
-	let size = 4096;
-	let zoom = 1.5;
-	let count = 144;
+	let size = 8092;
+	let zoom = PHI;
+	let count = 288;
 	let outerRadius = size / 2;
 	let points = [...Array(count).keys()].map((k) => {
 		let angle = k * (360 - 360 * (PHI - 1));
@@ -39,12 +39,14 @@
 	bind:this={svg}
 	id="spiral-tile"
 	xmlns="http://www.w3.org/2000/svg"
-	viewBox={`${-size / (zoom * 2)} ${-size / (zoom * 2)} ${size / zoom} ${size / zoom}`}
+	viewBox={`${-size / (zoom * 2)} ${(-size / (zoom * 2)) * (PHI - 1)} ${size / zoom} ${
+		(size / zoom) * (PHI - 1)
+	}`}
 >
 	<defs>
 		<radialGradient id="rGradient">
-			<stop offset="0%" stop-color="hsl(210, 100%, 50%)" />
-			<stop offset="100%" stop-color="hsl(240, 100%, 15%)" />
+			<stop offset="0%" stop-color="hsl(240, 100%, 50%)" />
+			<stop offset="100%" stop-color="hsl(270, 100%, 25%)" />
 		</radialGradient>
 		<filter id="blur">
 			<feOffset result="offOut" in="SourceGraphic" dx="0" dy={size / 270} />
@@ -66,8 +68,8 @@
 		{#each scaledPolygonPaths(1) as path, i}
 			<path
 				d={path}
-				fill={`hsla(240,100%,50%,0.2)`}
-				stroke={`hsla(210, 100%, 50%, 0.25)`}
+				fill={`hsla(240,100%,50%,0.1)`}
+				stroke={`hsla(270, 100%, 50%, 0.5)`}
 				stroke-width={size / 360}
 				stroke-linejoin="round"
 			/>
@@ -77,8 +79,8 @@
 		{#each scaledPolygonPaths(PHI - 1) as path, i}
 			<path
 				d={path}
-				fill={`hsla(${(i % 21) + 210}, 100%, 50%, 1)`}
-				stroke={`hsla(${(i % 21) + 225}, 100%, 50%, 1)`}
+				fill={`hsla(${(i % 21) + 240}, 100%, 50%, 1)`}
+				stroke={`hsla(${(i % 13) + 270}, 100%, 30%, 1)`}
 				stroke-width={size / 360}
 				stroke-linejoin="round"
 			/>
@@ -88,8 +90,8 @@
 		{#each scaledPolygonPaths((PHI - 1) ** 2) as path, i}
 			<path
 				d={path}
-				fill={`hsla(${(i % 21) + 225}, 100%, 50%, 1)`}
-				stroke={`hsla(${(i % 21) + 225}, 100%, 50%, 1)`}
+				fill={`hsla(${(i % 21) + 270}, 100%, 33%, 1)`}
+				stroke={`hsla(${(i % 21) + 300}, 100%, 33%, 1)`}
 				stroke-width={size / 720}
 				stroke-linejoin="round"
 			/>
