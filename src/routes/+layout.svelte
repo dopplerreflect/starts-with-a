@@ -1,10 +1,30 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 	import type { LayoutData } from './$types';
 	export let data: LayoutData;
 	let path: string;
-
 	$: path = $page.url.pathname.replace('/', '');
+	let pageIndex = -1;
+	function handleKeyDown(event: KeyboardEvent) {
+		let { key } = event;
+		switch (key) {
+			case 'ArrowRight':
+				pageIndex = pageIndex === data.pages.length - 1 ? 0 : pageIndex + 1;
+				break;
+			case 'ArrowLeft':
+				pageIndex = pageIndex < 1 ? data.pages.length - 1 : pageIndex - 1;
+				break;
+			default:
+				return;
+		}
+		goto(data.pages[pageIndex]);
+	}
+	onMount(() => {
+		document.addEventListener('keydown', handleKeyDown);
+		return () => document.removeEventListener('keydown', handleKeyDown);
+	});
 </script>
 
 <div id="container">
