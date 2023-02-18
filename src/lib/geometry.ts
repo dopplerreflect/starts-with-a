@@ -1,4 +1,5 @@
-export const PHI = (Math.sqrt(5) + 1) / 2;
+export const Φ = (Math.sqrt(5) + 1) / 2;
+export const φ = Φ - 1;
 export const SQRT3 = Math.sqrt(3);
 
 /**
@@ -81,7 +82,7 @@ export function starPath(radius: number, options?: GeometryOptions): string {
 			.map((angle, i) => {
 				return `${i === 0 ? 'M' : 'L'}${radialPointString(
 					angle,
-					i % 2 === 1 ? radius * (PHI - 1) ** 2 : radius,
+					i % 2 === 1 ? radius * φ ** 2 : radius,
 					options
 				)}`;
 			})

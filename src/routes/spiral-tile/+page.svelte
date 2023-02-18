@@ -2,7 +2,7 @@
 
 <script lang="ts">
 	import { useSaveFile } from '$lib/save-svg';
-	import { radialPoint, PHI } from '$lib/geometry';
+	import { radialPoint, Φ, φ } from '$lib/geometry';
 	import { polygonScale } from 'geometric';
 	import { onMount, onDestroy } from 'svelte';
 	import { configIndex } from './stores';
@@ -15,15 +15,15 @@
 	let configs: Config[] = [
 		{ count: 52, zoom: 1 },
 		{ count: 64, zoom: 1 },
-		{ count: 128, zoom: PHI },
-		{ count: 360, zoom: PHI - 1 }
+		{ count: 128, zoom: Φ },
+		{ count: 360, zoom: Φ - 1 }
 	];
 	let config: Config = { zoom: 1, count: 64 };
 	let scaledPolygonPaths: Function;
 	const unsubscribe = configIndex.subscribe((value) => {
 		config = configs[value];
 		let points = [...Array(config.count).keys()].map((k) => {
-			let angle = k * (360 - 360 * (PHI - 1));
+			let angle = k * (360 - 360 * φ);
 			let radius = (outerRadius / config.count) * k;
 			return radialPoint(angle, radius);
 		});
@@ -79,9 +79,9 @@
 	bind:this={svg}
 	id="spiral-tile"
 	xmlns="http://www.w3.org/2000/svg"
-	viewBox={`${-size / (config.zoom * 2)} ${(-size / (config.zoom * 2)) * (PHI - 1)} ${
-		size / config.zoom
-	} ${(size / config.zoom) * (PHI - 1)}`}
+	viewBox={`${-size / (config.zoom * 2)} ${(-size / (config.zoom * 2)) * φ} ${size / config.zoom} ${
+		(size / config.zoom) * φ
+	}`}
 >
 	<defs>
 		<radialGradient id="rGradient">
@@ -116,7 +116,7 @@
 		{/each}
 	</g>
 	<g id="level2" filter="url(#blur)">
-		{#each scaledPolygonPaths(PHI - 1) as path, i}
+		{#each scaledPolygonPaths(φ) as path, i}
 			<path
 				d={path}
 				fill={`hsla(${(i % 21) + 240}, 100%, 50%, 1)`}
@@ -127,7 +127,7 @@
 		{/each}
 	</g>
 	<g id="level1" filter="url(#blur)">
-		{#each scaledPolygonPaths((PHI - 1) ** 2) as path, i}
+		{#each scaledPolygonPaths(φ ** 2) as path, i}
 			<path
 				d={path}
 				fill={`hsla(${(i % 21) + 270}, 100%, 33%, 1)`}

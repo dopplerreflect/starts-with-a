@@ -2,11 +2,11 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { PHI, radialPoint, polygonPath } from '$lib/geometry';
+	import { Φ, φ, radialPoint, polygonPath } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import BorderedPath from '$lib/components/BorderedPath.svelte';
 	let size = 4096;
-	let goldenAngle = 360 / PHI;
+	let goldenAngle = 360 / Φ;
 	let count = 360;
 	let angles = [...Array(count).keys()].map((k) => k * goldenAngle);
 	let svg: SVGSVGElement;
@@ -25,7 +25,7 @@
 	/>
 	{#each angles as angle, i}
 		<BorderedPath
-			d={polygonPath(6, 6 + ((i / (count / 1920)) * (PHI - 1)) / 10, {
+			d={polygonPath(6, 6 + ((i / (count / 1920)) * φ) / 10, {
 				center: {
 					x: radialPoint(angle % 360, i / (count / 1920)).x,
 					y: radialPoint(angle % 360, i / (count / 1920)).y
