@@ -4,44 +4,84 @@
 	import { useSaveFile } from '$lib/save-svg';
 	import { radialPoint, PHI } from '$lib/geometry';
 	import { polygonScale } from 'geometric';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
+	import { configIndex } from './stores';
 	let size = 8092;
-	let zoom = PHI;
-	let count = 288;
 	let outerRadius = size / 2;
-	let points = [...Array(count).keys()].map((k) => {
-		let angle = k * (360 - 360 * (PHI - 1));
-		let radius = (outerRadius / count) * k;
-		return radialPoint(angle, radius);
+	type Config = {
+		zoom: number;
+		count: number;
+	};
+	let configs: Config[] = [
+		{ count: 52, zoom: 1 },
+		{ count: 64, zoom: 1 },
+		{ count: 128, zoom: PHI },
+		{ count: 360, zoom: PHI - 1 }
+	];
+	let config: Config = { zoom: 1, count: 64 };
+	let scaledPolygonPaths: Function;
+	const unsubscribe = configIndex.subscribe((value) => {
+		config = configs[value];
+		let points = [...Array(config.count).keys()].map((k) => {
+			let angle = k * (360 - 360 * (PHI - 1));
+			let radius = (outerRadius / config.count) * k;
+			return radialPoint(angle, radius);
+		});
+		let polygons = [...Array(config.count).keys()]
+			.map(
+				(k) =>
+					points[k + 21] && [
+						k < 13 ? [0, 0] : [points[k].x, points[k].y],
+						[points[k + 13].x, points[k + 13].y],
+						[points[k + 21].x, points[k + 21].y],
+						[points[k + 8].x, points[k + 8].y]
+					]
+			)
+			.filter((e) => e !== undefined);
+		let scaledPolygons = (scale: number): geometric.Polygon[] =>
+			polygons.map((p) => polygonScale(p, scale));
+		scaledPolygonPaths = (scale: number): string[] =>
+			scaledPolygons(scale).map(
+				(c) =>
+					`M${c[0][0]},${c[0][1]}L${c[1][0]},${c[1][1]}L${c[2][0]},${c[2][1]}L${c[3][0]},${c[3][1]}Z`
+			);
 	});
-	let polygons = [...Array(count).keys()]
-		.map(
-			(k) =>
-				points[k + 21] && [
-					k < 13 ? [0, 0] : [points[k].x, points[k].y],
-					[points[k + 13].x, points[k + 13].y],
-					[points[k + 21].x, points[k + 21].y],
-					[points[k + 8].x, points[k + 8].y]
-				]
-		)
-		.filter((e) => e !== undefined);
-	let scaledPolygons = (scale: number) => polygons.map((p) => polygonScale(p, scale));
-	let scaledPolygonPaths = (scale: number) =>
-		scaledPolygons(scale).map(
-			(c) =>
-				`M${c[0][0]},${c[0][1]}L${c[1][0]},${c[1][1]}L${c[2][0]},${c[2][1]}L${c[3][0]},${c[3][1]}Z`
-		);
+	onDestroy(unsubscribe);
+	function handleUpDownKeys(event: KeyboardEvent) {
+		switch (event.key) {
+			case 'ArrowUp':
+				$configIndex =
+					$configIndex === 0 || $configIndex < configs.length - 1 ? $configIndex + 1 : 0;
+				break;
+			case 'ArrowDown':
+				$configIndex = $configIndex === 0 ? configs.length - 1 : $configIndex - 1;
+				break;
+			default:
+				break;
+		}
+	}
+	function configChanger() {
+		document.addEventListener('keydown', handleUpDownKeys);
+		return () => document.removeEventListener('keydown', handleUpDownKeys);
+	}
 	let svg: SVGSVGElement;
-	onMount(() => useSaveFile(svg));
+	onMount(() => {
+		let unMountSaveFile = useSaveFile(svg);
+		let unMountConfigChanger = configChanger();
+		return () => {
+			unMountSaveFile();
+			unMountConfigChanger();
+		};
+	});
 </script>
 
 <svg
 	bind:this={svg}
 	id="spiral-tile"
 	xmlns="http://www.w3.org/2000/svg"
-	viewBox={`${-size / (zoom * 2)} ${(-size / (zoom * 2)) * (PHI - 1)} ${size / zoom} ${
-		(size / zoom) * (PHI - 1)
-	}`}
+	viewBox={`${-size / (config.zoom * 2)} ${(-size / (config.zoom * 2)) * (PHI - 1)} ${
+		size / config.zoom
+	} ${(size / config.zoom) * (PHI - 1)}`}
 >
 	<defs>
 		<radialGradient id="rGradient">
