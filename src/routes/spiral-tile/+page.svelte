@@ -2,23 +2,14 @@
 
 <script lang="ts">
 	import { useSaveFile } from '$lib/save-svg';
-	import { radialPoint, Φ, φ } from '$lib/geometry';
+	import { radialPoint, φ } from '$lib/geometry';
 	import { polygonScale } from 'geometric';
 	import { onMount, onDestroy } from 'svelte';
-	import { configIndex } from './stores';
+	import { configs, configChanger, configIndex } from './stores';
 	let size = 8092;
 	let outerRadius = size / 2;
-	type Config = {
-		zoom: number;
-		count: number;
-	};
-	let configs: Config[] = [
-		{ count: 52, zoom: 1 },
-		{ count: 64, zoom: 1 },
-		{ count: 128, zoom: Φ },
-		{ count: 360, zoom: Φ - 1 }
-	];
-	let config: Config = { zoom: 1, count: 64 };
+	let config = configs[0];
+
 	let scaledPolygonPaths: Function;
 	const unsubscribe = configIndex.subscribe((value) => {
 		config = configs[value];
@@ -47,23 +38,6 @@
 			);
 	});
 	onDestroy(unsubscribe);
-	function handleUpDownKeys(event: KeyboardEvent) {
-		switch (event.key) {
-			case 'ArrowUp':
-				$configIndex =
-					$configIndex === 0 || $configIndex < configs.length - 1 ? $configIndex + 1 : 0;
-				break;
-			case 'ArrowDown':
-				$configIndex = $configIndex === 0 ? configs.length - 1 : $configIndex - 1;
-				break;
-			default:
-				break;
-		}
-	}
-	function configChanger() {
-		document.addEventListener('keydown', handleUpDownKeys);
-		return () => document.removeEventListener('keydown', handleUpDownKeys);
-	}
 	let svg: SVGSVGElement;
 	onMount(() => {
 		let unMountSaveFile = useSaveFile(svg);
@@ -108,8 +82,8 @@
 		{#each scaledPolygonPaths(1) as path, i}
 			<path
 				d={path}
-				fill={`hsla(240,100%,50%,0.1)`}
-				stroke={`hsla(270, 100%, 50%, 0.5)`}
+				fill={`hsla(240,100%,50%,0.05)`}
+				stroke={`hsla(270, 100%, 50%, 0.05)`}
 				stroke-width={size / 360}
 				stroke-linejoin="round"
 			/>
