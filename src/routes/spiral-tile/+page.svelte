@@ -5,7 +5,9 @@
 	import { radialPoint, φ } from '$lib/geometry';
 	import { polygonScale } from 'geometric';
 	import { onMount, onDestroy } from 'svelte';
-	import { configs, configChanger, configIndex } from './stores';
+	import { configs, configIndex } from './configs';
+	import { configChanger } from '$lib/config-changer';
+
 	let size = 8092;
 	let outerRadius = size / 2;
 	let config = configs[0];
@@ -41,7 +43,7 @@
 	let svg: SVGSVGElement;
 	onMount(() => {
 		let unMountSaveFile = useSaveFile(svg);
-		let unMountConfigChanger = configChanger();
+		let unMountConfigChanger = configChanger(configIndex, configs);
 		return () => {
 			unMountSaveFile();
 			unMountConfigChanger();
@@ -59,8 +61,14 @@
 >
 	<defs>
 		<radialGradient id="rGradient">
-			<stop offset="0%" stop-color="hsl(240, 100%, 50%)" />
-			<stop offset="100%" stop-color="hsl(270, 100%, 25%)" />
+			<stop
+				offset="0%"
+				stop-color={`hsl(${config.gradient.offset1.hue}, 100%, ${config.gradient.offset1.lit}%)`}
+			/>
+			<stop
+				offset="100%"
+				stop-color={`hsl(${config.gradient.offset2.hue}, 100%, ${config.gradient.offset2.lit}%)`}
+			/>
 		</radialGradient>
 		<filter id="blur">
 			<feOffset result="offOut" in="SourceGraphic" dx="0" dy={size / 270} />
@@ -82,8 +90,10 @@
 		{#each scaledPolygonPaths(1) as path, i}
 			<path
 				d={path}
-				fill={`hsla(240,100%,50%,0.05)`}
-				stroke={`hsla(270, 100%, 50%, 0.05)`}
+				fill={`hsla(${config.level1.fill.hue},${config.level1.fill.sat}%,${config.level1.fill.lit}%,${config.level1.fill.alp})`}
+				stroke={`hsla(${(i % 8) + config.level1.stroke.hue}, ${config.level1.stroke.sat}%, ${
+					config.level1.stroke.lit
+				}%, ${config.level1.stroke.alp})`}
 				stroke-width={size / 360}
 				stroke-linejoin="round"
 			/>
@@ -93,9 +103,9 @@
 		{#each scaledPolygonPaths(φ) as path, i}
 			<path
 				d={path}
-				fill={`hsla(${(i % 21) + 240}, 100%, 50%, 1)`}
-				stroke={`hsla(${(i % 13) + 270}, 100%, 30%, 1)`}
-				stroke-width={size / 360}
+				fill={`hsla(${(i % 55) + config.level2.fill.hue}, 100%, 25%, 1)`}
+				stroke={`hsla(${(i % 55) + config.level2.stroke.hue}, 100%, 50%, 1)`}
+				stroke-width={size / 720}
 				stroke-linejoin="round"
 			/>
 		{/each}
@@ -104,9 +114,9 @@
 		{#each scaledPolygonPaths(φ ** 2) as path, i}
 			<path
 				d={path}
-				fill={`hsla(${(i % 21) + 270}, 100%, 33%, 1)`}
-				stroke={`hsla(${(i % 21) + 300}, 100%, 33%, 1)`}
-				stroke-width={size / 720}
+				fill={`hsla(${(i % 21) + config.level3.fill.hue}, 100%, 25%, 1)`}
+				stroke={`hsla(${(i % 21) + config.level3.stroke.hue}, 100%, 50%, 1)`}
+				stroke-width={size / 1080}
 				stroke-linejoin="round"
 			/>
 		{/each}
