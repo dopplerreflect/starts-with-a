@@ -105,7 +105,7 @@
 				d={path}
 				fill={`hsla(${(i % 55) + config.level2.fill.hue}, ${config.level2.fill.sat}%, ${
 					config.level2.fill.lit
-				}%, 1)`}
+				}%, ${config.level2.fill.alp})`}
 				stroke={`hsla(${(i % 55) + config.level2.stroke.hue}, ${config.level2.stroke.sat}%, ${
 					config.level2.stroke.lit
 				}%, 1)`}
@@ -120,7 +120,7 @@
 				d={path}
 				fill={`hsla(${(i % 21) + config.level3.fill.hue}, ${config.level3.fill.sat}%, ${
 					config.level3.fill.lit
-				}%, 1)`}
+				}%, ${config.level3.fill.alp})`}
 				stroke={`hsla(${(i % 21) + config.level3.stroke.hue}, ${config.level3.stroke.sat}%, ${
 					config.level3.stroke.lit
 				}%, 1)`}
