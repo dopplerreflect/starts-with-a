@@ -59,7 +59,6 @@
 		color: white;
 	}
 	#container {
-		height: 100vh;
 		display: grid;
 		grid-template-rows: 2em 1fr;
 		background-color: hsl(220, 100%, 5%);
@@ -76,6 +75,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		height: calc(100vh - 2em);
+		overflow: hidden;
 	}
 	ul {
 		padding: 0;
@@ -90,9 +91,5 @@
 	}
 	li:last-child::after {
 		content: '';
-	}
-	svg {
-		max-height: calc(100vh - 4em);
-		max-width: calc(100vh - 4em);
 	}
 </style>
