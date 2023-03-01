@@ -63,11 +63,11 @@
 		<radialGradient id="rGradient">
 			<stop
 				offset="0%"
-				stop-color={`hsl(${config.gradient.offset1.hue}, 100%, ${config.gradient.offset1.lit}%)`}
+				stop-color={`hsl(${config.gradient.offset1.hue}, ${config.gradient.offset1.sat}%, ${config.gradient.offset1.lit}%)`}
 			/>
 			<stop
 				offset="100%"
-				stop-color={`hsl(${config.gradient.offset2.hue}, 100%, ${config.gradient.offset2.lit}%)`}
+				stop-color={`hsl(${config.gradient.offset2.hue}, ${config.gradient.offset2.sat}%, ${config.gradient.offset2.lit}%)`}
 			/>
 		</radialGradient>
 		<filter id="blur">
@@ -103,19 +103,27 @@
 		{#each scaledPolygonPaths(φ) as path, i}
 			<path
 				d={path}
-				fill={`hsla(${(i % 55) + config.level2.fill.hue}, 100%, 25%, 1)`}
-				stroke={`hsla(${(i % 55) + config.level2.stroke.hue}, 100%, 50%, 1)`}
+				fill={`hsla(${(i % 55) + config.level2.fill.hue}, ${config.level2.fill.sat}%, ${
+					config.level2.fill.lit
+				}%, 1)`}
+				stroke={`hsla(${(i % 55) + config.level2.stroke.hue}, ${config.level2.stroke.sat}%, ${
+					config.level2.stroke.lit
+				}%, 1)`}
 				stroke-width={size / 720}
 				stroke-linejoin="round"
 			/>
 		{/each}
 	</g>
-	<g id="level1" filter="url(#blur)">
+	<g id="level3" filter="url(#blur)">
 		{#each scaledPolygonPaths(φ ** 2) as path, i}
 			<path
 				d={path}
-				fill={`hsla(${(i % 21) + config.level3.fill.hue}, 100%, 25%, 1)`}
-				stroke={`hsla(${(i % 21) + config.level3.stroke.hue}, 100%, 50%, 1)`}
+				fill={`hsla(${(i % 21) + config.level3.fill.hue}, ${config.level3.fill.sat}%, ${
+					config.level3.fill.lit
+				}%, 1)`}
+				stroke={`hsla(${(i % 21) + config.level3.stroke.hue}, ${config.level3.stroke.sat}%, ${
+					config.level3.stroke.lit
+				}%, 1)`}
 				stroke-width={size / 1080}
 				stroke-linejoin="round"
 			/>

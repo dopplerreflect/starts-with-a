@@ -28,44 +28,40 @@ export const configs: Config[] = [
 		count: 180,
 		zoom: Φ,
 		gradient: {
-			offset1: {
-				hue: 0,
-				lit: 50
-			},
-			offset2: {
-				hue: 30,
-				lit: 5
-			}
+			offset1: { hue: 200, sat: 20, lit: 20 },
+			offset2: { hue: 240, sat: 20, lit: 20 }
 		},
 		level1: {
-			fill: {
-				hue: 0,
-				sat: 100,
-				lit: 50,
-				alp: 0.05
-			},
-			stroke: {
-				hue: 30,
-				sat: 100,
-				lit: 50,
-				alp: 1
-			}
+			fill: { hue: 240, sat: 20, lit: 0, alp: 0.1 },
+			stroke: { hue: 240, sat: 20, lit: 20, alp: 0.2 }
 		},
 		level2: {
-			fill: {
-				hue: 0
-			},
-			stroke: {
-				hue: 30
-			}
+			fill: { hue: 240, sat: 20, lit: 15 },
+			stroke: { hue: 60, sat: 20, lit: 10 }
 		},
 		level3: {
-			fill: {
-				hue: 240
-			},
-			stroke: {
-				hue: 180
-			}
+			fill: { hue: 270, sat: 20, lit: 5 },
+			stroke: { hue: 240, sat: 20, lit: 20 }
+		}
+	},
+	{
+		count: 180,
+		zoom: Φ,
+		gradient: {
+			offset1: { hue: 0, sat: 100, lit: 50 },
+			offset2: { hue: 30, sat: 100, lit: 5 }
+		},
+		level1: {
+			fill: { hue: 0, sat: 100, lit: 50, alp: 0.05 },
+			stroke: { hue: 30, sat: 100, lit: 50, alp: 1 }
+		},
+		level2: {
+			fill: { hue: 0, sat: 100, lit: 25 },
+			stroke: { hue: 30, sat: 100, lit: 50 }
+		},
+		level3: {
+			fill: { hue: 240, sat: 100, lit: 25 },
+			stroke: { hue: 180, sat: 100, lit: 50 }
 		}
 	}
 ];
