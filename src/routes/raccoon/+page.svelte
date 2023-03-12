@@ -44,7 +44,7 @@
 	/>
 	<!-- <image x={-size / 2} y={-size / 2} width={size} height={size} href="/raccoon.jpg" /> -->
 	<!-- <use href="#guide" /> -->
-	<g id="raccoonFace" style="opacity: 1">
+	<g id="raccoonFace">
 		<g id="leftEar">
 			<path
 				d={[
@@ -149,6 +149,12 @@
 				r={eyeRadius}
 				fill="hsl(0, 0%, 0%, 1)"
 			/>
+			<circle
+				cx={radialPoint(angles[15], radii[3] + eyeRadius * φ).x}
+				cy={radialPoint(angles[15], radii[3] + eyeRadius * φ).y}
+				r={eyeRadius * φ ** 2}
+				fill="white"
+			/>
 		</g>
 		<g id="rightCheek">
 			<path
@@ -178,6 +184,12 @@
 				cy={radialPoint(angles[3], radii[3] + eyeRadius).y}
 				r={eyeRadius}
 				fill="hsl(0, 0%, 0%, 1)"
+			/>
+			<circle
+				cx={radialPoint(angles[3], radii[3] + eyeRadius * φ).x}
+				cy={radialPoint(angles[3], radii[3] + eyeRadius * φ).y}
+				r={eyeRadius * φ ** 2}
+				fill="white"
 			/>
 		</g>
 		<g id="snout">
