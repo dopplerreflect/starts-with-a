@@ -21,8 +21,8 @@ export function radialPoint(angle: number, radius: number, options?: GeometryOpt
 	let center = options?.center || { x: 0, y: 0 };
 	let rotate = options?.rotate || 0;
 	return {
-		x: center.x + radius * Math.cos((angle + rotate) * (Math.PI / 180)),
-		y: center.y + radius * Math.sin((angle + rotate) * (Math.PI / 180))
+		x: Number((center.x + radius * Math.cos((angle + rotate) * (Math.PI / 180))).toFixed(2)),
+		y: Number((center.y + radius * Math.sin((angle + rotate) * (Math.PI / 180))).toFixed(2))
 	};
 }
 
