@@ -21,9 +21,9 @@
 				[radialPointString(angles[20], radii[0], { center })],
 				[radialPointString(angles[21], radii[0], { center })],
 				[radialPointString(angles[22], radii[0], { center })],
-				['S'],
+				['Q'],
 				[radialPointString(angles[23], radii[0], { center })],
-				[radialPointString(angles[24], radii[1], { center })]
+				[radialPointString(angles[24], radii[2], { center })]
 			].join(' ')}
 			stroke="black"
 			stroke-width={size / 128}
@@ -39,9 +39,9 @@
 				[radialPointString(angles[34], radii[0], { center })],
 				[radialPointString(angles[33], radii[0], { center })],
 				[radialPointString(angles[32], radii[0], { center })],
-				['S'],
+				['Q'],
 				[radialPointString(angles[31], radii[0], { center })],
-				[radialPointString(angles[30], radii[1], { center })]
+				[radialPointString(angles[30], radii[2], { center })]
 			].join(' ')}
 			stroke="black"
 			stroke-width={size / 128}
