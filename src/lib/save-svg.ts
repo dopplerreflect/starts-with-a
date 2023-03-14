@@ -1,3 +1,5 @@
+import { optimize } from 'svgo';
+
 const debounce = (func: Function, wait: number): Function => {
 	let timeout: NodeJS.Timeout;
 	return function executedFunction(...args: any) {
@@ -11,13 +13,14 @@ const debounce = (func: Function, wait: number): Function => {
 };
 
 const showSize = debounce(async (svg: SVGSVGElement) => {
-	const svgText = new XMLSerializer().serializeToString(svg);
+	const svgText = optimize(new XMLSerializer().serializeToString(svg)).data;
+	console.log(svgText);
 	console.log(`SVG is ${svgText.length} bytes`);
 }, 500);
 
 const saveSvg = debounce(async (svg: SVGSVGElement) => {
 	console.log('saving svg');
-	const svgText = new XMLSerializer().serializeToString(svg);
+	const svgText = optimize(new XMLSerializer().serializeToString(svg)).data;
 	try {
 		const fileHandle = await window.showSaveFilePicker({
 			suggestedName: `${svg.id}.svg`,
@@ -35,7 +38,7 @@ const saveSvg = debounce(async (svg: SVGSVGElement) => {
 
 const savePng = debounce(async (svg: SVGSVGElement) => {
 	console.log('saving png');
-	const svgText = new XMLSerializer().serializeToString(svg);
+	const svgText = optimize(new XMLSerializer().serializeToString(svg)).data;
 	const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
 	const url = window.URL.createObjectURL(svgBlob);
 	const canvas = document.createElement('canvas');

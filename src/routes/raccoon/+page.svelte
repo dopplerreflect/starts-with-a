@@ -28,7 +28,7 @@
 	{#each angles as a, i}
 		<RaccoonFace
 			size={i < 15 ? size / 80.92 : size / 80.92 + i * (size / Φ ** 17.3)}
-			rotate={a + 90}
+			rotate={Math.round(a + 90)}
 			center={radialPoint(a, (size / 1.4 / count) * i)}
 			hue={hue(i)}
 		/>
