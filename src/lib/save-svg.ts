@@ -1,4 +1,21 @@
-async function saveSvg(svg: SVGSVGElement) {
+const debounce = (func: Function, wait: number): Function => {
+	let timeout: NodeJS.Timeout;
+	return function executedFunction(...args: any) {
+		const later = () => {
+			clearTimeout(timeout);
+			func(...args);
+		};
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+	};
+};
+
+const showSize = debounce(async (svg: SVGSVGElement) => {
+	const svgText = new XMLSerializer().serializeToString(svg);
+	console.log(`SVG is ${svgText.length} bytes`);
+}, 500);
+
+const saveSvg = debounce(async (svg: SVGSVGElement) => {
 	console.log('saving svg');
 	const svgText = new XMLSerializer().serializeToString(svg);
 	try {
@@ -11,12 +28,12 @@ async function saveSvg(svg: SVGSVGElement) {
 		await writable.close();
 		return true;
 	} catch (e) {
-		console.log(e);
+		console.log('Nevermind...', e);
 		return false;
 	}
-}
+}, 500);
 
-async function savePng(svg: SVGSVGElement) {
+const savePng = debounce(async (svg: SVGSVGElement) => {
 	console.log('saving png');
 	const svgText = new XMLSerializer().serializeToString(svg);
 	const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
@@ -48,23 +65,24 @@ async function savePng(svg: SVGSVGElement) {
 			await writable.close();
 			return true;
 		} catch (e) {
-			console.log(e);
+			console.log('Nevermind...', e);
 			return false;
 		}
 	};
 	img.src = url;
-}
+}, 500);
 
 export function useSaveFile(svg: SVGSVGElement) {
 	document.addEventListener('keydown', handleKeypress);
 	async function handleKeypress(event: KeyboardEvent) {
-		if (event.ctrlKey && event.altKey) {
-			if (event.key === 's') {
-				await saveSvg(svg);
-			}
-			if (event.key === 'p') {
-				await savePng(svg);
-			}
+		if (event.key === 'S') {
+			await showSize(svg);
+		}
+		if (event.key === 's') {
+			await saveSvg(svg);
+		}
+		if (event.key === 'p') {
+			await savePng(svg);
 		}
 	}
 	return () => {
