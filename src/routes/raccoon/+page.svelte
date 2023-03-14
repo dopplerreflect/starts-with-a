@@ -6,7 +6,7 @@
 	const size = 8092;
 	const count = 360;
 	const angles = [...Array(count).keys()].map((k) => k * (360 * φ));
-	const hues = { start: 330, end: 180 };
+	const hues = { start: 0, end: 180 };
 	function hue(i: number) {
 		return Math.floor(hues.start - Math.abs(((hues.start - hues.end) / count) * i));
 		// return (i % 8) * ((hues.end - hues.start) / 8) + hues.start;
@@ -34,6 +34,6 @@
 		/>
 	{/each}
 	<g style="opacity: 1">
-		<RaccoonFace size={size / 6} rotate={0} center={{ x: 0, y: 0 }} hue={45} saturation={15} />
+		<RaccoonFace size={size / 2} rotate={0} center={{ x: 0, y: 0 }} hue={45} saturation={15} />
 	</g>
 </svg>
