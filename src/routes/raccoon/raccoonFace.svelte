@@ -4,6 +4,7 @@
 	export let rotate = 0;
 	export let center = { x: 0, y: 0 };
 	export let hue = 0;
+	export let saturation = 100;
 	const angles = [...Array(36).keys()].map((k) => 10 * k);
 	const radii = [...Array(5).keys()].map((k) => (size / 2) * φ ** k);
 	const eyeRadius = (radii[2] - radii[3]) / 2;
@@ -26,7 +27,7 @@
 			].join(' ')}
 			stroke="black"
 			stroke-width={size / 128}
-			fill={`hsl(${hue}, 100%, 90%)`}
+			fill={`hsl(${hue}, ${saturation}%, 90%)`}
 		/>
 	</g>
 	<g id="rightEar">
@@ -44,7 +45,7 @@
 			].join(' ')}
 			stroke="black"
 			stroke-width={size / 128}
-			fill={`hsl(${hue}, 100%, 90%)`}
+			fill={`hsl(${hue}, ${saturation}%, 90%)`}
 		/>
 	</g>
 	<g id="skull">
@@ -86,7 +87,7 @@
 			].join(' ')}
 			stroke="black"
 			stroke-width={size / 128}
-			fill={`hsl(${hue}, 100%, 50%)`}
+			fill={`hsl(${hue}, ${saturation}%, 50%)`}
 		/>
 	</g>
 	<g id="leftCheek">
@@ -107,9 +108,9 @@
 				['0 0 0'],
 				[radialPointString(angles[14], radii[0], { center })]
 			].join(' ')}
-			stroke="black"
+			stroke="white"
 			stroke-width={size / 128}
-			fill={`hsl(${hue}, 100%, 25%)`}
+			fill={`hsl(${hue}, ${saturation}%, 25%)`}
 		/>
 	</g>
 	<g id="leftEye">
@@ -144,9 +145,9 @@
 				['0 0 1'],
 				[radialPointString(angles[4], radii[0], { center })]
 			].join(' ')}
-			stroke="black"
+			stroke="white"
 			stroke-width={size / 128}
-			fill={`hsl(${hue}, 100%, 25%)`}
+			fill={`hsl(${hue}, ${saturation}%, 25%)`}
 		/>
 	</g>
 	<g id="rightEye">
@@ -181,7 +182,7 @@
 			].join(' ')}
 			stroke="black"
 			stroke-width={size / 128}
-			fill={`hsl(${hue}, 100%, 90%)`}
+			fill={`hsl(${hue}, ${saturation}%, 90%)`}
 		/>
 	</g>
 	<g id="nose">

@@ -6,9 +6,10 @@
 	const size = 8092;
 	const count = 360;
 	const angles = [...Array(count).keys()].map((k) => k * (360 * φ));
-	const hues = { start: 330, end: 170 };
+	const hues = { start: 330, end: 180 };
 	function hue(i: number) {
-		return hues.start - Math.abs(((hues.start - hues.end) / count) * i);
+		return Math.floor(hues.start - Math.abs(((hues.start - hues.end) / count) * i));
+		// return (i % 8) * ((hues.end - hues.start) / 8) + hues.start;
 	}
 	let svg: SVGSVGElement;
 	onMount(() => useSaveFile(svg));
@@ -32,5 +33,7 @@
 			hue={hue(i)}
 		/>
 	{/each}
-	<RaccoonFace size={size / 4} rotate={0} center={{ x: 0, y: 0 }} hue={330} />
+	<g style="opacity: 1">
+		<RaccoonFace size={size / 6} rotate={0} center={{ x: 0, y: 0 }} hue={45} saturation={15} />
+	</g>
 </svg>
