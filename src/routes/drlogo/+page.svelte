@@ -6,12 +6,10 @@
 	const angles = anglesArray(30);
 	const radii = [...Array(4).keys()].map((k) => size * 0.45 * φ ** k);
 	const strokeWidth = radii[2] - radii[3];
-	const starPath = [
-		'M',
+	const starPoints = [
 		...anglesArray(10)
 			.map((a, i) => radialPointString(a, i % 2 == 0 ? radii[0] : radii[2]))
-			.join('L'),
-		'Z'
+			.join(' ')
 	].join('');
 	const dPath = [
 		'M',
@@ -72,7 +70,7 @@
 					text-anchor="middle">{i}</text
 				>
 			{/each}
-			<path d={starPath} fill="none" />
+			<polygon points={starPoints} fill="none" />
 		</g>
 	</defs>
 	<path
