@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { φ, anglesArray, radialPoint, radialPointString } from '$lib/geometry';
-
+	import { useSaveFile } from '$lib/save-svg';
+	import { onMount } from 'svelte';
 	const size = 1024;
 	const angles = anglesArray(30);
 	const radii = [...Array(4).keys()].map((k) => size * 0.45 * φ ** k);
@@ -12,7 +13,6 @@
 			.join('L'),
 		'Z'
 	].join('');
-
 	const dPath = [
 		'M',
 		radialPointString(angles[0], radii[0]),
@@ -46,10 +46,16 @@
 		radialPointString(angles[27], radii[2]),
 		'Z'
 	].join(' ');
-	console.log(rPath);
+	let svg: SVGSVGElement;
+	onMount(() => useSaveFile(svg));
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox={`${-size / 2} ${-size / 2} ${size} ${size}`}>
+<svg
+	bind:this={svg}
+	id="DR-Logo"
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox={`${-size / 2} ${-size / 2} ${size} ${size}`}
+>
 	<defs>
 		<g id="guide">
 			{#each radii as r, i}
