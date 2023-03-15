@@ -1,16 +1,11 @@
 <script lang="ts">
-	import { φ, anglesArray, radialPoint, radialPointString } from '$lib/geometry';
+	import { φ, anglesArray, radialPoint, radialPointString, starPoints } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import { onMount } from 'svelte';
 	const size = 1024;
 	const angles = anglesArray(30);
 	const radii = [...Array(4).keys()].map((k) => size * 0.45 * φ ** k);
 	const strokeWidth = radii[2] - radii[3];
-	const starPoints = [
-		...anglesArray(10)
-			.map((a, i) => radialPointString(a, i % 2 == 0 ? radii[0] : radii[2]))
-			.join(' ')
-	].join('');
 	const dPath = [
 		'M',
 		radialPointString(angles[0], radii[0]),
@@ -70,7 +65,7 @@
 					text-anchor="middle">{i}</text
 				>
 			{/each}
-			<polygon points={starPoints} fill="none" />
+			<polygon points={starPoints(radii[0])} fill="none" />
 		</g>
 	</defs>
 	<path

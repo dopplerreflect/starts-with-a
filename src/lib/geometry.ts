@@ -89,3 +89,14 @@ export function starPath(radius: number, options?: GeometryOptions): string {
 			.join() + 'Z'
 	);
 }
+
+/** Points for a 5-pointed star
+ * @params radius
+ * @param options
+ * @returns string svg polygon points
+ */
+export function starPoints(radius: number, options?: GeometryOptions): string {
+	return anglesArray(10)
+		.map((a, i) => radialPointString(a, i % 2 === 0 ? radius : radius * φ ** 2, options))
+		.join(' ');
+}
