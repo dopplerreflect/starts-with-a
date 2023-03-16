@@ -2,10 +2,10 @@ import type { Writable } from 'svelte/store';
 
 function configKeyHandler(event: KeyboardEvent, configIndex: Writable<number>, configs: object[]) {
 	switch (event.key) {
-		case 'ArrowDown':
+		case 'ArrowRight':
 			configIndex.update((i) => (i === 0 || i < configs.length - 1 ? i + 1 : 0));
 			break;
-		case 'ArrowUp':
+		case 'ArrowLeft':
 			configIndex.update((i) => (i === 0 ? configs.length - 1 : i - 1));
 			break;
 		default:
