@@ -1,20 +1,35 @@
 <script lang="ts">
 	import { anglesArray, radialPointString, starPoints, φ } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
+	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
-	const size = 1024;
+	const size = 8092;
 	const radii = [...Array(13).keys()].map((k) => (size / 2) * φ ** (k * 0.5));
 	const gradientStops = [...Array(6).keys()].map((k) => Math.round(100 * φ ** k));
 	const angles = anglesArray(60);
 	let svg: SVGSVGElement;
-	onMount(() => useSaveFile(svg));
+	onMount(() => {
+		const unMountUseZoomableViewbox = useZoomableViewbox(svg);
+		const unMountSaveFile = useSaveFile(svg);
+		return () => {
+			unMountSaveFile();
+			unMountUseZoomableViewbox();
+		};
+	});
 </script>
 
 <svg bind:this={svg} id="wings" viewBox={`${-size / 2} ${-size / 2} ${size} ${size}`}>
 	<defs>
+		<style>
+			path,
+			circle,
+			polygon {
+				stroke-width: 8px;
+			}
+		</style>
 		<radialGradient id="gradient">
 			{#each gradientStops as stop, i}
-				<stop offset={`${100 - stop}%`} stop-color={`hsl(${60 - (60 / 6) * i}, 100%, 50%)`} />
+				<stop offset={`${100 - stop}%`} stop-color={`hsl(${300 - (60 / 6) * i}, 100%, 50%)`} />
 			{/each}
 		</radialGradient>
 		<mask id="bgMask">
@@ -41,7 +56,7 @@
 		<circle
 			{r}
 			fill={`hsla(210, 100%, ${(100 / 12) * i}%, 0.33)`}
-			stroke={`hsl(210, 100%, ${100 - (100 / 12) * i}%)`}
+			stroke={`hsl(210, 100%, ${50 - (100 / 12) * i}%)`}
 		/>
 	{/each}
 	<use href="#guide" stroke="hsla(0, 0%, 75%, 0.25)" />
