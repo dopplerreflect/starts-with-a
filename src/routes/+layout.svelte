@@ -28,7 +28,7 @@
 			default:
 				return;
 		}
-		goto(data.pages[pageIndex]);
+		data.pages[pageIndex] && goto(data.pages[pageIndex]);
 	}
 	onMount(() => {
 		document.addEventListener('keydown', handleKeyDown);
