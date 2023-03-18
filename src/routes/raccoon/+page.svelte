@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Φ, φ, radialPoint } from '$lib/geometry';
+	import { Phi, phi, radialPoint } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import { onMount } from 'svelte';
 	import RaccoonFace from './raccoonFace.svelte';
 	const size = 8092;
 	const count = 360;
-	const angles = [...Array(count).keys()].map((k) => k * (360 * φ));
+	const angles = [...Array(count).keys()].map((k) => k * (360 * phi));
 	const hues = { start: 0, end: 180 };
 	function hue(i: number) {
 		return Math.floor(hues.start - Math.abs(((hues.start - hues.end) / count) * i));
@@ -27,7 +27,7 @@
 	/>
 	{#each angles as a, i}
 		<RaccoonFace
-			size={i < 15 ? size / 80.92 : size / 80.92 + i * (size / Φ ** 17.3)}
+			size={i < 15 ? size / 80.92 : size / 80.92 + i * (size / Phi ** 17.3)}
 			rotate={Math.round(a + 90)}
 			center={radialPoint(a, (size / 1.4 / count) * i)}
 			hue={hue(i)}

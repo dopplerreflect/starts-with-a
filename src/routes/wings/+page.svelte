@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { anglesArray, radialPointString, starPoints, φ } from '$lib/geometry';
+	import { arrayMap, radialPointString, starPoints, phi } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
 	const size = 8092;
-	const radii = [...Array(13).keys()].map((k) => (size / 2) * φ ** (k * 0.5));
-	const gradientStops = [...Array(6).keys()].map((k) => Math.round(100 * φ ** k));
-	const angles = anglesArray(60);
+	const radii = arrayMap(13, (k) => (size / 2) * phi ** (k * 0.5));
+	const angles = arrayMap(60, (i) => 6 * i - 90);
+	const gradientStops = arrayMap(6, (k) => Math.round(100 * phi ** k));
 	let svg: SVGSVGElement;
 	onMount(() => {
 		const unMountUseZoomableViewbox = useZoomableViewbox(svg);
@@ -67,7 +67,7 @@
 		<polygon points={starPoints(radii[8])} fill="none" />
 		<polygon points={starPoints(radii[12])} fill="white" />
 	</g>
-	{#each [...Array(12).keys()].map((k) => k) as k, i}
+	{#each arrayMap(12, (k) => k) as k, i}
 		<path
 			d={[
 				'M',

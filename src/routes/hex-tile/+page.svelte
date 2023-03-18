@@ -2,10 +2,10 @@
 
 <script lang="ts">
 	import BorderedPath from '$lib/components/BorderedPath.svelte';
-	import { φ, polygonPath, SQRT3 } from '$lib/geometry';
+	import { phi, polygonPath, SQRT3 } from '$lib/geometry';
 	let size = 4096;
 	let hex_radius = size / 20 / SQRT3;
-	let hex_gap = hex_radius * φ;
+	let hex_gap = hex_radius * phi;
 	let y_offsets: number[] = [];
 	for (let y = -size / 2; y <= size / 2 + hex_radius; y += (3 / 2) * hex_radius + hex_gap) {
 		y_offsets.push(y);

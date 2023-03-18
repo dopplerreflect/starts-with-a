@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { Φ } from '$lib/geometry';
+import { Phi } from '$lib/geometry';
 export const configIndex = writable(0);
 
 type Config = {
@@ -26,7 +26,7 @@ type Config = {
 export const configs: Config[] = [
 	{
 		count: 233,
-		zoom: Φ,
+		zoom: Phi,
 		gradient: {
 			offset1: { hue: 90, sat: 100, lit: 20 },
 			offset2: { hue: 120, sat: 100, lit: 50 }
@@ -46,7 +46,7 @@ export const configs: Config[] = [
 	},
 	{
 		count: 180,
-		zoom: Φ,
+		zoom: Phi,
 		gradient: {
 			offset1: { hue: 0, sat: 100, lit: 50 },
 			offset2: { hue: 30, sat: 100, lit: 5 }

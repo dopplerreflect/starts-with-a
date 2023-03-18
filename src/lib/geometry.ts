@@ -1,5 +1,5 @@
-export const Φ = (Math.sqrt(5) + 1) / 2;
-export const φ = Φ - 1;
+export const Phi = (Math.sqrt(5) + 1) / 2;
+export const phi = Phi - 1;
 export const SQRT3 = Math.sqrt(3);
 
 /**
@@ -82,7 +82,7 @@ export function starPath(radius: number, options?: GeometryOptions): string {
 			.map((angle, i) => {
 				return `${i === 0 ? 'M' : 'L'}${radialPointString(
 					angle,
-					i % 2 === 1 ? radius * φ ** 2 : radius,
+					i % 2 === 1 ? radius * phi ** 2 : radius,
 					options
 				)}`;
 			})
@@ -97,6 +97,15 @@ export function starPath(radius: number, options?: GeometryOptions): string {
  */
 export function starPoints(radius: number, options?: GeometryOptions): string {
 	return anglesArray(10)
-		.map((a, i) => radialPointString(a, i % 2 === 0 ? radius : radius * φ ** 2, options))
+		.map((a, i) => radialPointString(a, i % 2 === 0 ? radius : radius * phi ** 2, options))
 		.join(' ');
+}
+
+export function arrayMap(count: number, fn: (n: number) => number): number[] {
+	return [...Array(count).keys()].map((n) => fn(n));
+}
+
+export function viewBox(width: number, height?: number): string {
+	if (!height) height = width;
+	return `${-width / 2} ${-height / 2} ${width} ${height}`;
 }

@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { φ, radialPoint, radialPointString } from '$lib/geometry';
+	import { phi, radialPoint, radialPointString } from '$lib/geometry';
 	export let size = 512;
 	export let rotate = 0;
 	export let center = { x: 0, y: 0 };
 	export let hue = 0;
 	export let saturation = 100;
 	const angles = [...Array(36).keys()].map((k) => 10 * k);
-	const radii = [...Array(5).keys()].map((k) => Number(((size / 2) * φ ** k).toFixed(2)));
+	const radii = [...Array(5).keys()].map((k) => Number(((size / 2) * phi ** k).toFixed(2)));
 	const eyeRadius = Number(((radii[2] - radii[3]) / 2).toFixed(2));
 	const noseRadius = Number(((radii[1] - radii[2]) / 2).toFixed(2));
 </script>
@@ -115,9 +115,9 @@
 		fill="hsl(0, 0%, 0%)"
 	/>
 	<circle
-		cx={radialPoint(angles[15], radii[3] + eyeRadius * φ, { center }).x}
-		cy={radialPoint(angles[15], radii[3] + eyeRadius * φ, { center }).y}
-		r={Number((eyeRadius * φ ** 2).toFixed(2))}
+		cx={radialPoint(angles[15], radii[3] + eyeRadius * phi, { center }).x}
+		cy={radialPoint(angles[15], radii[3] + eyeRadius * phi, { center }).y}
+		r={Number((eyeRadius * phi ** 2).toFixed(2))}
 		fill="white"
 	/>
 	<path
@@ -149,9 +149,9 @@
 		fill="hsl(0, 0%, 0%, 1)"
 	/>
 	<circle
-		cx={radialPoint(angles[3], radii[3] + eyeRadius * φ, { center }).x}
-		cy={radialPoint(angles[3], radii[3] + eyeRadius * φ, { center }).y}
-		r={Number((eyeRadius * φ ** 2).toFixed(2))}
+		cx={radialPoint(angles[3], radii[3] + eyeRadius * phi, { center }).x}
+		cy={radialPoint(angles[3], radii[3] + eyeRadius * phi, { center }).y}
+		r={Number((eyeRadius * phi ** 2).toFixed(2))}
 		fill="white"
 	/>
 	<path

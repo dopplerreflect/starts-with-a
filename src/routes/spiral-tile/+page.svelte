@@ -2,7 +2,7 @@
 
 <script lang="ts">
 	import { useSaveFile } from '$lib/save-svg';
-	import { radialPoint, φ } from '$lib/geometry';
+	import { radialPoint, phi } from '$lib/geometry';
 	import { polygonScale } from 'geometric';
 	import { onMount, onDestroy } from 'svelte';
 	import { configs, configIndex } from './configs';
@@ -16,7 +16,7 @@
 	const unsubscribe = configIndex.subscribe((value) => {
 		config = configs[value];
 		let points = [...Array(config.count).keys()].map((k) => {
-			let angle = k * (360 - 360 * φ);
+			let angle = k * (360 - 360 * phi);
 			let radius = (outerRadius / config.count) * k;
 			return radialPoint(angle, radius);
 		});
@@ -55,9 +55,9 @@
 	bind:this={svg}
 	id="spiral-tile"
 	xmlns="http://www.w3.org/2000/svg"
-	viewBox={`${-size / (config.zoom * 2)} ${(-size / (config.zoom * 2)) * φ} ${size / config.zoom} ${
-		(size / config.zoom) * φ
-	}`}
+	viewBox={`${-size / (config.zoom * 2)} ${(-size / (config.zoom * 2)) * phi} ${
+		size / config.zoom
+	} ${(size / config.zoom) * phi}`}
 >
 	<defs>
 		<radialGradient id="rGradient">
@@ -100,7 +100,7 @@
 		{/each}
 	</g>
 	<g id="level2" filter="url(#blur)">
-		{#each scaledPolygonPaths(φ) as path, i}
+		{#each scaledPolygonPaths(phi) as path, i}
 			<path
 				d={path}
 				fill={`hsla(${(i % 55) + config.level2.fill.hue}, ${config.level2.fill.sat}%, ${
@@ -115,7 +115,7 @@
 		{/each}
 	</g>
 	<g id="level3" filter="url(#blur)">
-		{#each scaledPolygonPaths(φ ** 2) as path, i}
+		{#each scaledPolygonPaths(phi ** 2) as path, i}
 			<path
 				d={path}
 				fill={`hsla(${(i % 21) + config.level3.fill.hue}, ${config.level3.fill.sat}%, ${
