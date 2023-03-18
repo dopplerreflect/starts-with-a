@@ -89,8 +89,6 @@
 			stroke={`hsl(210, 50%, ${50}%)`}
 			fill={`hsla(210, 50%, ${100 - (100 / 12) * i}%, 0.75)`}
 		/>
-	{/each}
-	{#each [...Array(12).keys()].map((k) => k) as k, i}
 		<path
 			d={[
 				'M',
