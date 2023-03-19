@@ -1,4 +1,7 @@
 <script lang="ts">
+	import type { PageData } from './$types';
+	export let data: PageData;
+
 	import Background from '$lib/components/Background.svelte';
 	import {
 		anglesArray,
@@ -8,16 +11,15 @@
 		viewBox,
 		phi,
 		radialPointString,
-		intersection,
-		polygon
+		intersection
 	} from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
 
-	const size = 512;
+	const size = 1920;
 	const strokeWidth = size / 1024;
-	const hue = 0;
+	const hue = 333;
 	const angles = anglesArray(120);
 	const radii = arrayMap(3, (n) => Math.round((size / 2) * phi ** n));
 	const referenceLine: Line = [
@@ -49,6 +51,14 @@
 			unmountSaveFile();
 		};
 	});
+	const sourceLines: { leadingSpaces: number; text: string }[] = data.source
+		.split(/\n/)
+		.map((text) => {
+			const match = text.match(/(^[ ]+)/);
+			let leadingSpaces = (match && match[0].length) || 0;
+			return { leadingSpaces, text };
+		});
+	const maxLineLength = Math.max(...sourceLines.map((l) => l.text.length));
 </script>
 
 <svg bind:this={svg} id="x" viewBox={viewBox(size)}>
@@ -94,14 +104,33 @@
 			/>
 		{/each}
 	</g>
+	<g id="sourceCode">
+		<text
+			font-family="monospace"
+			x={-size / 2}
+			y={-size / 2}
+			fill="white"
+			font-size={`${size / sourceLines.length}`}
+		>
+			{#each sourceLines as line}
+				<tspan
+					x={-size / 2 +
+						10 * line.leadingSpaces +
+						size -
+						maxLineLength * (size / sourceLines.length)}
+					dy="1em">{line.text}</tspan
+				>
+			{/each}
+		</text>
+	</g>
 	<g mask="url(#mask2)">
 		{#each phylotaxicPoints as p, i}
 			<circle
 				r={((radii[0] / 610) * i) / 21 + 2 * strokeWidth}
 				cx={p.x}
 				cy={p.y}
-				fill={`hsla(${(i % 13) * (60 / 13) + hue}, 100%, 50%, 0.5)`}
-				stroke={`hsla(${(i % 13) * (60 / 13) + hue}, 50%, 15%, 1)`}
+				fill={`hsla(${(i % 13) * (30 / 13) + hue + 60}, 100%, 50%, 1)`}
+				stroke={`hsla(${(i % 13) * (30 / 13) + hue + 60}, 50%, 25%, 1)`}
 				stroke-width={strokeWidth}
 			/>
 		{/each}
