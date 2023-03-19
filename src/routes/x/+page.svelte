@@ -13,7 +13,7 @@
 	import { onMount } from 'svelte';
 
 	const size = 1024;
-	const hue = 270;
+	const hue = 240;
 	const angles = anglesArray(120);
 	const radii = arrayMap(4, (n) => Math.round((size / 2) * phi ** n));
 	const refLine: { x1: number; y1: number; x2: number; y2: number } = {
@@ -42,8 +42,7 @@
 
 		return { x, y };
 	});
-	console.log(intersections);
-	const iRadii = [radii[0], ...intersections.map((i) => Math.sqrt(i.x ** 2 + i.y ** 2)), radii[2]];
+	const iRadii = [radii[2], ...intersections.map((i) => Math.sqrt(i.x ** 2 + i.y ** 2)), radii[0]];
 	let svg: SVGSVGElement;
 	onMount(() => useZoomableViewbox(svg));
 </script>
@@ -56,7 +55,7 @@
 		</mask>
 	</defs>
 	<Background width={size} fill={`hsl(${hue}, 50%, 15%)`} />
-	<g mask="url(#mask1)">
+	<g mask="url(#mask1)" transform="rotate(6)">
 		{#each angles as a, i}
 			<path
 				d={`M${radialPointString(a, i % 2 === 0 ? radii[0] : iRadii[11])}L${radialPointString(
@@ -73,7 +72,7 @@
 			<polygon
 				points={starPoints(radii[0], { rotate: 6 * i })}
 				stroke=""
-				fill={`hsla(${i % 2 === 0 ? hue : hue + 30}, 50%, 50%, ${1 / 6})`}
+				fill={`hsla(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%, ${1 / 6})`}
 			/>
 		{/each}
 	</g>
