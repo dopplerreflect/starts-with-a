@@ -109,3 +109,24 @@ export function viewBox(width: number, height?: number): string {
 	if (!height) height = width;
 	return `${-width / 2} ${-height / 2} ${width} ${height}`;
 }
+
+/**
+ * Return x, y coordinates of intersection of two lines
+ * @params line1 Line
+ * @params line2 Line
+ * @returns Point
+ */
+export const intersection = (line1: Line, line2: Line): Point => {
+	const [{ x: x1, y: y1 }, { x: x2, y: y2 }] = line1;
+	const [{ x: x3, y: y3 }, { x: x4, y: y4 }] = line2;
+	const denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+	let x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denominator;
+
+	let y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denominator;
+
+	if (x === -0) x = 0;
+	if (y === -0) y = 0;
+
+	return { x, y };
+};
