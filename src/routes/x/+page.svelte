@@ -8,12 +8,15 @@
 		viewBox,
 		phi,
 		radialPointString,
-		intersection
+		intersection,
+		polygon
 	} from '$lib/geometry';
+	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
 
-	const size = 1024;
+	const size = 512;
+	const strokeWidth = size / 1024;
 	const hue = 0;
 	const angles = anglesArray(120);
 	const radii = arrayMap(3, (n) => Math.round((size / 2) * phi ** n));
@@ -38,7 +41,14 @@
 		return radialPoint((360 - 360 * phi) * k, r);
 	});
 	let svg: SVGSVGElement;
-	onMount(() => useZoomableViewbox(svg));
+	onMount(() => {
+		let unmountViewbox = useZoomableViewbox(svg);
+		let unmountSaveFile = useSaveFile(svg);
+		return () => {
+			unmountViewbox();
+			unmountSaveFile();
+		};
+	});
 </script>
 
 <svg bind:this={svg} id="x" viewBox={viewBox(size)}>
@@ -69,27 +79,30 @@
 					radii[2]
 				)}`}
 				stroke={`hsla(${hue}, 50%, 50%, 0.5)`}
+				stroke-width={strokeWidth}
 			/>
 		{/each}
 		{#each iRadii as r, i}
-			<circle {r} stroke={`hsla(${hue}, 50%, 50%, 0.5)`} fill="none" />
+			<circle {r} stroke={`hsla(${hue}, 50%, 50%, 0.5)`} fill="none" stroke-width={strokeWidth} />
 		{/each}
 		{#each anglesArray(12) as a, i}
 			<polygon
 				points={starPoints(radii[0], { rotate: 6 * i })}
 				fill={`hsla(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%, ${1 / 6})`}
 				stroke={`hsla(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%, ${1 / 3})`}
+				stroke-width={strokeWidth}
 			/>
 		{/each}
 	</g>
 	<g mask="url(#mask2)">
 		{#each phylotaxicPoints as p, i}
 			<circle
-				r={((radii[0] / 610) * i) / 21 + 2}
+				r={((radii[0] / 610) * i) / 21 + 2 * strokeWidth}
 				cx={p.x}
 				cy={p.y}
 				fill={`hsla(${(i % 13) * (60 / 13) + hue}, 100%, 50%, 0.5)`}
 				stroke={`hsla(${(i % 13) * (60 / 13) + hue}, 50%, 15%, 1)`}
+				stroke-width={strokeWidth}
 			/>
 		{/each}
 	</g>
