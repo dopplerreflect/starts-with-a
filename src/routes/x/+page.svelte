@@ -98,6 +98,7 @@
 			/>
 		{/each}
 	</g>
+	<SourceCode {source} {size} fill="hsl(240, 100%, 20%, 0.5)" />
 	<g mask="url(#mask2)">
 		{#each phylotaxicPoints as p, i}
 			<circle
@@ -110,5 +111,4 @@
 			/>
 		{/each}
 	</g>
-	<SourceCode {source} {size} />
 </svg>
