@@ -20,7 +20,7 @@
 
 	const size = 1920;
 	const strokeWidth = size / 1024;
-	const hue = 333;
+	const hue = 0;
 	const angles = anglesArray(120);
 	const radii = arrayMap(3, (n) => Math.round((size / 2) * phi ** n));
 	const { source } = data;

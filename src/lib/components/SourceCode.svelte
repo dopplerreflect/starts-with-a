@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { phi } from '$lib/geometry';
-	import { text } from 'svelte/internal';
 
 	export let size: number;
 	export let source: string;
@@ -17,18 +16,19 @@
 
 	const fontSize = size / (sourceLines.length - 4);
 
-	const shadeWidth = maxLineLength * fontSize * phi;
-	const shadeX = -size / 2 + (maxLineLength * fontSize * phi) / 2;
+	const textBlockWidth = maxLineLength * fontSize * phi;
 </script>
 
 <g id="sourceCode">
 	<path
-		d={`M${-shadeWidth / 2} ${-size / 2}H${shadeWidth / 2}V${size / 2}H${-shadeWidth / 2}Z`}
+		d={`M${-textBlockWidth / 2} ${-size / 2}H${textBlockWidth / 2}V${size / 2}H${
+			-textBlockWidth / 2
+		}Z`}
 		{fill}
 	/>
 	<text font-family="monospace" x={-size / 2} y={-size / 2} fill={color} font-size={fontSize}>
 		{#each sourceLines as line}
-			<tspan x={`${-shadeWidth / 2 + line.leadingSpaces * fontSize * phi}`} dy="1em"
+			<tspan x={`${-textBlockWidth / 2 + line.leadingSpaces * fontSize * phi}`} dy="1em"
 				>{line.text}</tspan
 			>
 		{/each}
