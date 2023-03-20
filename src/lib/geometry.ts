@@ -130,3 +130,26 @@ export const intersection = (line1: Line, line2: Line): Point => {
 
 	return { x, y };
 };
+
+type Circle = {
+	x: number;
+	y: number;
+	r: number;
+};
+
+export const circleIntersections = (c1: Circle, c2: Circle): Line => {
+	let dx = c2.x - c1.x;
+	let dy = c2.y - c1.y;
+	const d = Math.sqrt(dx ** 2 + dy ** 2);
+	dx /= d;
+	dy /= d;
+	const a = (c1.r ** 2 - c2.r ** 2 + d ** 2) / (2 * d);
+	const px = c1.x + a * dx;
+	const py = c1.y + a * dy;
+	const h = Math.sqrt(c1.r ** 2 - a ** 2);
+
+	return [
+		{ x: px + h * dy, y: py - h * dx },
+		{ x: px - h * dy, y: py + h * dx }
+	];
+};
