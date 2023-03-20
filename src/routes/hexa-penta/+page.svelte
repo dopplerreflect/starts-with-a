@@ -11,15 +11,16 @@
 	const c2 = { x: 0, y: radialPoint(120, r, { center: c0 }).y };
 	const c3 = { x: radialPoint(252, r, { center: c0 }).x, y: radialPoint(252, r, { center: c0 }).y };
 	const c4 = { x: radialPoint(288, r, { center: c1 }).x, y: radialPoint(288, r, { center: c1 }).y };
-	const i1 = circleIntersections({ r, ...c0 }, { r, ...c1 });
-	const i2 = circleIntersections({ r, ...c0 }, { r, ...c1 });
-	const i3 = circleIntersections({ r, ...c0 }, { r, ...c2 });
-	const i4 = circleIntersections({ r, ...c0 }, { r, ...c3 });
-	const i5 = circleIntersections({ r, ...c0 }, { r, ...c4 });
-	const i6 = circleIntersections({ r, ...c1 }, { r, ...c2 });
-	const i7 = circleIntersections({ r, ...c1 }, { r, ...c3 });
-	const i8 = circleIntersections({ r, ...c1 }, { r, ...c4 });
-	const i9 = circleIntersections({ r, ...c3 }, { r, ...c4 });
+	const intersections = [
+		circleIntersections({ r, ...c0 }, { r, ...c1 }),
+		circleIntersections({ r, ...c0 }, { r, ...c2 }),
+		circleIntersections({ r, ...c0 }, { r, ...c3 }),
+		circleIntersections({ r, ...c0 }, { r, ...c4 }),
+		circleIntersections({ r, ...c1 }, { r, ...c2 }),
+		circleIntersections({ r, ...c1 }, { r, ...c3 }),
+		circleIntersections({ r, ...c1 }, { r, ...c4 }),
+		circleIntersections({ r, ...c3 }, { r, ...c4 })
+	];
 
 	let svg: SVGSVGElement;
 	onMount(() => {
@@ -113,9 +114,9 @@
 		/>
 		<use href="#penta-hexa" fill="hsla(240, 100%, 50%, 0.25)" stroke="white" />
 	</g>
-	{#each [i1, i2, i3, i4, i5, i6, i7, i8, i9] as iN}
-		{#each iN as i, h}
-			<circle cx={i.x} cy={i.y} r={r * phi ** 5} stroke={`hsl(${(360 / 5) * h}, 100%, 50%)`} />
+	{#each intersections as intersection}
+		{#each intersection as point}
+			<circle cx={point.x} cy={point.y} r={r * phi ** 5} />
 		{/each}
 	{/each}
 </svg>
