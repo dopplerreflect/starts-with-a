@@ -16,12 +16,14 @@
 	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
+	import SourceCode from '$lib/components/SourceCode.svelte';
 
 	const size = 1920;
 	const strokeWidth = size / 1024;
 	const hue = 333;
 	const angles = anglesArray(120);
 	const radii = arrayMap(3, (n) => Math.round((size / 2) * phi ** n));
+	const { source } = data;
 	const referenceLine: Line = [
 		radialPoint(angles[10], radii[2]),
 		radialPoint(angles[22], radii[0])
@@ -51,14 +53,6 @@
 			unmountSaveFile();
 		};
 	});
-	const sourceLines: { leadingSpaces: number; text: string }[] = data.source
-		.split(/\n/)
-		.map((text) => {
-			const match = text.match(/(^[ ]+)/);
-			let leadingSpaces = (match && match[0].length) || 0;
-			return { leadingSpaces, text };
-		});
-	const maxLineLength = Math.max(...sourceLines.map((l) => l.text.length));
 </script>
 
 <svg bind:this={svg} id="x" viewBox={viewBox(size)}>
@@ -104,25 +98,6 @@
 			/>
 		{/each}
 	</g>
-	<g id="sourceCode">
-		<text
-			font-family="monospace"
-			x={-size / 2}
-			y={-size / 2}
-			fill="white"
-			font-size={`${size / sourceLines.length}`}
-		>
-			{#each sourceLines as line}
-				<tspan
-					x={-size / 2 +
-						10 * line.leadingSpaces +
-						size -
-						maxLineLength * (size / sourceLines.length)}
-					dy="1em">{line.text}</tspan
-				>
-			{/each}
-		</text>
-	</g>
 	<g mask="url(#mask2)">
 		{#each phylotaxicPoints as p, i}
 			<circle
@@ -135,4 +110,5 @@
 			/>
 		{/each}
 	</g>
+	<SourceCode {source} {size} />
 </svg>
