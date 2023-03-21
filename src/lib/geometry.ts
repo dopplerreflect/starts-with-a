@@ -125,12 +125,18 @@ export const intersection = (line1: Line, line2: Line): Point => {
 
 	let y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denominator;
 
-	if (x === -0) x = 0;
-	if (y === -0) y = 0;
+	// if (x === -0) x = 0;
+	// if (y === -0) y = 0;
 
 	return { x, y };
 };
 
+/**
+ *
+ * @param c1
+ * @param c2
+ * @returns Line ending at each of two intersections
+ */
 export const circleIntersections = (c1: Circle, c2: Circle): Line => {
 	let dx = c2.x - c1.x;
 	let dy = c2.y - c1.y;
@@ -148,6 +154,12 @@ export const circleIntersections = (c1: Circle, c2: Circle): Line => {
 	];
 };
 
+/**
+ *
+ * @param circle
+ * @param line
+ * @returns zero to two Points where Line intesects Circle
+ */
 export const circleLineIntersections = (circle: Circle, line: Line): Point[] => {
 	let v1 = {
 		x: line[1].x - line[0].x,
@@ -178,3 +190,13 @@ export const circleLineIntersections = (circle: Circle, line: Line): Point[] => 
 	}
 	return points;
 };
+
+export const phylotaxicPoints = (
+	count: number,
+	outerRadius: number,
+	radialPointOptions?: GeometryOptions
+): Point[] =>
+	[...Array(count).keys()].map((k) => {
+		let r = (outerRadius / count) * k;
+		return radialPoint((360 - 360 * phi) * k, r, radialPointOptions);
+	});

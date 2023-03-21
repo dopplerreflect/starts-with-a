@@ -11,7 +11,8 @@
 		viewBox,
 		phi,
 		radialPointString,
-		intersection
+		intersection,
+		phylotaxicPoints
 	} from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
@@ -40,10 +41,6 @@
 		...intersections.map((intersection) => Math.sqrt(intersection.x ** 2 + intersection.y ** 2)),
 		radii[0]
 	].reverse();
-	const phylotaxicPoints = [...Array(610).keys()].map((k) => {
-		let r = (radii[0] / 610) * k;
-		return radialPoint((360 - 360 * phi) * k, r);
-	});
 	let svg: SVGSVGElement;
 	onMount(() => {
 		let unmountViewbox = useZoomableViewbox(svg);
@@ -100,7 +97,7 @@
 	</g>
 	<SourceCode {source} {size} fill="hsl(240, 100%, 20%, 0.5)" />
 	<g mask="url(#mask2)">
-		{#each phylotaxicPoints as p, i}
+		{#each phylotaxicPoints(610, radii[0]) as p, i}
 			<circle
 				r={((radii[0] / 610) * i) / 21 + 2 * strokeWidth}
 				cx={p.x}
