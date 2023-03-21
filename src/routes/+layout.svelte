@@ -36,6 +36,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>{path}</title>
+</svelte:head>
+
 <div id="container">
 	<nav bind:this={nav} class="">
 		<ul>
