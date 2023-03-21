@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Phi, phi, radialPoint } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
+	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
 	import RaccoonFace from './raccoonFace.svelte';
 	const size = 8092;
@@ -12,7 +13,14 @@
 		// return (i % 8) * ((hues.end - hues.start) / 8) + hues.start;
 	}
 	let svg: SVGSVGElement;
-	onMount(() => useSaveFile(svg));
+	onMount(() => {
+		const unmountSave = useSaveFile(svg);
+		const unmountZoom = useZoomableViewbox(svg);
+		return () => {
+			unmountSave();
+			unmountZoom();
+		};
+	});
 </script>
 
 <svg
@@ -36,4 +44,5 @@
 	<g style="opacity: 1">
 		<RaccoonFace size={size / 2} rotate={0} center={{ x: 0, y: 0 }} hue={45} saturation={15} />
 	</g>
+	<image href="/DR-Logo.svg" width={size / 20} x={size / 2 - size / 20} y={size / 2 - size / 20} />
 </svg>

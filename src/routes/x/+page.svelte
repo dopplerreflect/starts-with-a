@@ -108,4 +108,5 @@
 			/>
 		{/each}
 	</g>
+	<image href="/DR-Logo.svg" width={size / 20} x={size / 2 - size / 20} y={size / 2 - size / 20} />
 </svg>

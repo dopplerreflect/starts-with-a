@@ -111,4 +111,5 @@
 			fill={`hsla(210, 50%, ${100 - (100 / 12) * i}%, 0.75)`}
 		/>
 	{/each}
+	<image href="/DR-Logo.svg" width={size / 20} x={size / 2 - size / 20} y={size / 2 - size / 20} />
 </svg>
