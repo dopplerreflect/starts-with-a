@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
-	import { circleIntersections, phi, radialPoint, radialPointString, viewBox } from '$lib/geometry';
+	import { phi, radialPoint, radialPointString, viewBox } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
+	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
 
 	const width = 1024;
@@ -11,39 +12,27 @@
 	const c2 = { x: 0, y: radialPoint(120, r, { center: c0 }).y };
 	const c3 = { x: radialPoint(252, r, { center: c0 }).x, y: radialPoint(252, r, { center: c0 }).y };
 	const c4 = { x: radialPoint(288, r, { center: c1 }).x, y: radialPoint(288, r, { center: c1 }).y };
-	const intersections = [
-		circleIntersections({ r, ...c0 }, { r, ...c1 }),
-		circleIntersections({ r, ...c0 }, { r, ...c2 }),
-		circleIntersections({ r, ...c0 }, { r, ...c3 }),
-		circleIntersections({ r, ...c0 }, { r, ...c4 }),
-		circleIntersections({ r, ...c1 }, { r, ...c2 }),
-		circleIntersections({ r, ...c1 }, { r, ...c3 }),
-		circleIntersections({ r, ...c1 }, { r, ...c4 }),
-		circleIntersections({ r, ...c3 }, { r, ...c4 })
+	const qlLine: [Point, Point] = [
+		{ x: radialPoint(180, r, { center: c2 }).x, y: radialPoint(180, r, { center: c2 }).y },
+		{ x: c4.x, y: c4.y }
 	];
-
+	const qrLine: [Point, Point] = [
+		{ x: radialPoint(0, r, { center: c2 }).x, y: radialPoint(0, r, { center: c2 }).y },
+		{ x: c3.x, y: c3.y }
+	];
 	let svg: SVGSVGElement;
 	onMount(() => {
 		const unMountSaveFile = useSaveFile(svg);
+		const unMountZoomable = useZoomableViewbox(svg);
 		return () => {
 			unMountSaveFile();
+			unMountZoomable();
 		};
 	});
 </script>
 
 <svg bind:this={svg} id="hexa-penta" viewBox={viewBox(width)}>
 	<defs>
-		<style>
-			circle,
-			path,
-			line {
-				stroke-width: 2;
-				stroke: hsl(249, 100%, 100%);
-			}
-			circle {
-				fill: none;
-			}
-		</style>
 		<g id="penta-hexa">
 			<path
 				class="penta"
@@ -86,37 +75,28 @@
 		</mask>
 	</defs>
 	<Background {width} fill="hsl(240, 100%, 20%)" />
-	<g id="drawing" mask="url(#mask)">
-		<circle cx={c1.x} {r} />
-		<circle cx={c0.x} {r} />
-		<circle cy={c2.y} {r} />
-		<circle cx={c3.x} cy={c3.y} {r} />
-		<circle cx={c4.x} cy={c4.y} {r} />
+	<g id="drawing" mask="url(#mask)" display="">
+		<circle stroke="white" stroke-width={2} fill="none" cx={c1.x} {r} />
+		<circle stroke="white" stroke-width={2} fill="none" cx={c0.x} {r} />
+		<circle stroke="white" stroke-width={2} fill="none" cy={c2.y} {r} />
+		<circle stroke="white" stroke-width={2} fill="none" cx={c3.x} cy={c3.y} {r} />
+		<circle stroke="white" stroke-width={2} fill="none" cx={c4.x} cy={c4.y} {r} />
 		<line
-			class="horizontal axis"
-			x1={radialPoint(180, r, { center: c0 }).x}
-			x2={radialPoint(0, r, { center: c1 }).x}
-		/>
-		<line class="vertical axis" y1={c2.y} y2={radialPoint(240, r, { center: c1 }).y} />
-		<line
-			class="quarter left"
-			x1={radialPoint(180, r, { center: c2 }).x}
-			y1={radialPoint(180, r, { center: c2 }).y}
-			x2={c4.x}
-			y2={c4.y}
+			stroke="white"
+			stroke-width={2}
+			x1={qlLine[0].x}
+			y1={qlLine[0].y}
+			x2={qlLine[1].x}
+			y2={qlLine[1].y}
 		/>
 		<line
-			class="quarter right"
-			x1={radialPoint(0, r, { center: c2 }).x}
-			y1={radialPoint(0, r, { center: c2 }).y}
-			x2={c3.x}
-			y2={c3.y}
+			stroke="white"
+			stroke-width={2}
+			x1={qrLine[0].x}
+			y1={qrLine[0].y}
+			x2={qrLine[1].x}
+			y2={qrLine[1].y}
 		/>
 		<use href="#penta-hexa" fill="hsla(240, 100%, 50%, 0.25)" stroke="white" />
 	</g>
-	{#each intersections as intersection}
-		{#each intersection as point}
-			<circle cx={point.x} cy={point.y} r={r * phi ** 5} />
-		{/each}
-	{/each}
 </svg>

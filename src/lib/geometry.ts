@@ -143,7 +143,38 @@ export const circleIntersections = (c1: Circle, c2: Circle): Line => {
 	const h = Math.sqrt(c1.r ** 2 - a ** 2);
 
 	return [
-		{ x: px + h * dy, y: py - h * dx },
-		{ x: px - h * dy, y: py + h * dx }
+		{ x: Number((px + h * dy).toFixed(2)), y: Number((py - h * dx).toFixed(2)) },
+		{ x: Number((px - h * dy).toFixed(2)), y: Number((py + h * dx).toFixed(2)) }
 	];
+};
+
+export const circleLineIntersections = (circle: Circle, line: Line): Point[] => {
+	let v1 = {
+		x: line[1].x - line[0].x,
+		y: line[1].y - line[0].y
+	};
+	let v2 = {
+		x: line[0].x - circle.x,
+		y: line[0].y - circle.y
+	};
+	let b = (v1.x * v2.x + v1.y * v2.y) * -2;
+	let c = (v1.x ** 2 + v1.y ** 2) * 2;
+	let d = Math.sqrt(b ** 2 - 2 * c * (v2.x ** 2 + v2.y ** 2 - circle.r ** 2));
+	if (isNaN(d)) return [];
+	let u1 = (b - d) / c;
+	let u2 = (b + d) / c;
+	let points = [];
+	if (u1 <= 1 && u1 >= 0) {
+		points.push({
+			x: Number((line[0].x + v1.x * u1).toFixed(2)),
+			y: Number((line[0].y + v1.y * u1).toFixed(2))
+		});
+	}
+	if (u2 <= 1 && u2 >= 0) {
+		points.push({
+			x: Number((line[0].x + v1.x * u2).toFixed(2)),
+			y: Number((line[0].y + v1.y * u2).toFixed(2))
+		});
+	}
+	return points;
 };
