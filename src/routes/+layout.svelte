@@ -8,21 +8,24 @@
 	$: path = $page.url.pathname.replace('/', '');
 	let pageIndex = -1;
 	let nav: HTMLElement;
-	function toggleNav() {
+	function toggleNav(page?: string) {
+		if (page) pageIndex = data.pages.indexOf(page);
 		nav.classList.toggle('open');
 	}
+
 	function handleKeyDown(event: KeyboardEvent) {
 		let { key } = event;
 		switch (key) {
-			case 'ArrowDown':
+			case 'j':
 				if (!nav.classList.contains('open')) break;
 				pageIndex = pageIndex === data.pages.length - 1 ? 0 : pageIndex + 1;
 				break;
-			case 'ArrowUp':
+			case 'k':
 				if (!nav.classList.contains('open')) break;
 				pageIndex = pageIndex < 1 ? data.pages.length - 1 : pageIndex - 1;
 				break;
-			case 'm':
+			case 'Enter':
+			case 'Escape':
 				toggleNav();
 				break;
 			default:
@@ -31,6 +34,7 @@
 		data.pages[pageIndex] && goto(data.pages[pageIndex]);
 	}
 	onMount(() => {
+		pageIndex = data.pages.indexOf(path);
 		document.addEventListener('keydown', handleKeyDown);
 		return () => document.removeEventListener('keydown', handleKeyDown);
 	});
@@ -47,7 +51,7 @@
 				{#if path === page}
 					<li class="active">{page}</li>
 				{:else}
-					<li><a href="/{page}">{page}</a></li>
+					<li><a href="/{page}" on:click={() => toggleNav(page)}>{page}</a></li>
 				{/if}
 			{/each}
 		</ul>

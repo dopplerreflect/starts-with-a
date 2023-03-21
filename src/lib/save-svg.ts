@@ -78,13 +78,14 @@ const savePng = debounce(async (svg: SVGSVGElement) => {
 export function useSaveFile(svg: SVGSVGElement) {
 	document.addEventListener('keydown', handleKeypress);
 	async function handleKeypress(event: KeyboardEvent) {
+		// if (event.key === 'S') {
+		// 	await showSize(svg);
+		// }
 		if (event.key === 'S') {
 			await showSize(svg);
-		}
-		if (event.key === 's') {
 			await saveSvg(svg);
 		}
-		if (event.key === 'p') {
+		if (event.key === 'P') {
 			await savePng(svg);
 		}
 	}
