@@ -102,8 +102,8 @@
 				r={((radii[0] / 610) * i) / 21 + 2 * strokeWidth}
 				cx={p.x}
 				cy={p.y}
-				fill={`hsla(${(i % 13) * (30 / 13) + hue + 60}, 100%, 50%, 1)`}
-				stroke={`hsla(${(i % 13) * (30 / 13) + hue + 60}, 50%, 25%, 1)`}
+				fill={`hsla(${Math.round((i % 13) * (30 / 13) + hue + 60) % 360}, 100%, 50%, 1)`}
+				stroke={`hsla(${Math.round((i % 13) * (30 / 13) + hue + 60) % 360}, 50%, 25%, 1)`}
 				stroke-width={strokeWidth}
 			/>
 		{/each}
