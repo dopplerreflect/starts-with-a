@@ -91,7 +91,10 @@
 			</filter>
 		</g>
 	</defs>
-	<path d={`M${-size / 2} ${-size / 2}H${size / 2}V${size / 2}H${-size / 2}Z`} fill="none" />
+	<path
+		d={`M${-size / 2} ${-size / 2}H${size / 2}V${size / 2}H${-size / 2}Z`}
+		fill="hsl(225, 100%, 15%)"
+	/>
 	<g id="dr" filter="url(#outline)">
 		<path d={dPath} stroke="hsl(225, 100%, 50%)" fill="none" stroke-width={strokeWidth} />
 		<path d={rPath} stroke="hsl(45, 100%, 50%)" fill="none" stroke-width={strokeWidth} />
