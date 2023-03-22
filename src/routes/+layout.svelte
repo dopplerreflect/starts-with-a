@@ -99,6 +99,9 @@
 		justify-content: center;
 		overflow: hidden;
 	}
+	svg {
+		height: 100vmin;
+	}
 	a {
 		text-decoration: none;
 	}
