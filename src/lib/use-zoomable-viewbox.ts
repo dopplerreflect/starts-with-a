@@ -1,9 +1,14 @@
-export function useZoomableViewbox(svg: SVGSVGElement) {
+export function useZoomableViewbox(
+	svg: SVGSVGElement,
+	zoom: number = 0,
+	xPan: number = 0,
+	yPan: number = 0
+) {
 	// console.log('using zoomable viewbox');
 	const { x, y, width, height } = svg.viewBox.baseVal;
-	let zoom = 0;
-	let xPan = 0;
-	let yPan = 0;
+	// let zoom = 0;
+	// let xPan = 0;
+	// let yPan = 0;
 	function setViewbox() {
 		svg.viewBox.baseVal.x = (x / 10) * (10 - zoom) + (x / 10) * xPan;
 		svg.viewBox.baseVal.y = (y / 10) * (10 - zoom) + (x / 10) * yPan;
@@ -66,6 +71,7 @@ export function useZoomableViewbox(svg: SVGSVGElement) {
 	};
 
 	document.addEventListener('keydown', handleKeydown);
+	setViewbox();
 	return () => {
 		document.removeEventListener('keydown', handleKeydown);
 		// console.log('unmounting useZoomableViewbox');
