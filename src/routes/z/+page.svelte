@@ -7,16 +7,20 @@
 		circleIntersections,
 		radialPointString,
 		phylotaxicPoints,
-		polygonPath
+		phi,
+		Phi
 	} from '$lib/geometry';
+	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
 
 	let svg: SVGSVGElement;
 	onMount(() => {
 		const unmountZoomable = useZoomableViewbox(svg);
+		const unMountSave = useSaveFile(svg);
 		return () => {
 			unmountZoomable();
+			unMountSave();
 		};
 	});
 	const size = 1080;
@@ -33,15 +37,12 @@
 			.map((n) => circleIntersections(circles[0], circles[n + 1])[0])
 			.map((intersection) => Math.sqrt(intersection.x ** 2 + intersection.y ** 2))
 	];
+	// const rm = radii[9] / 5;
+	const rm = arrayMap(5, (n) => (radii[9] / 5) * n + 1);
 </script>
 
 <svg bind:this={svg} id="z" viewBox={viewBox(size)}>
 	<defs>
-		<style>
-			#phyloDots {
-				display: inline;
-			}
-		</style>
 		<radialGradient id="gradient1" cy="44%">
 			<stop offset="0%" stop-color="hsla(300, 100%, 50%, 0.5)" />
 			<stop offset="50%" stop-color="hsla(270, 50%, 50%, 0.5)" />
@@ -242,11 +243,79 @@
 				<use href="#petal" transform={`rotate(${a})`} fill="white" />
 			{/each}
 		</mask>
+		<g id="metatronSixth" fill="none">
+			<!-- <circle cx={rm[2]} r={rm[1]} /> -->
+			<!-- <circle cx={rm[4]} r={rm[1]} /> -->
+			<path d={`M0 0H${rm[4]}`} />
+			<path
+				d={[
+					'M',
+					radialPointString(angles6[0], rm[4]),
+					'L',
+					radialPointString(angles6[2], rm[2])
+				].join(' ')}
+			/>
+			<path
+				d={[
+					'M',
+					radialPointString(angles6[0], rm[4]),
+					'L',
+					radialPointString(angles6[4], rm[2])
+				].join(' ')}
+			/>
+			<path
+				d={[
+					'M',
+					radialPointString(angles6[0], rm[4]),
+					'L',
+					radialPointString(angles6[1], rm[2])
+				].join(' ')}
+			/>
+			<path
+				d={[
+					'M',
+					radialPointString(angles6[0], rm[4]),
+					'L',
+					radialPointString(angles6[5], rm[2])
+				].join(' ')}
+			/>
+			<path
+				d={[
+					'M',
+					radialPointString(angles6[0], rm[4]),
+					'L',
+					radialPointString(angles6[1], rm[4])
+				].join(' ')}
+			/>
+			<path
+				d={[
+					'M',
+					radialPointString(angles6[0], rm[2]),
+					'L',
+					radialPointString(angles6[1], rm[2])
+				].join(' ')}
+			/>
+			<path
+				d={[
+					'M',
+					radialPointString(angles6[0], rm[2]),
+					'L',
+					radialPointString(angles6[2], rm[2])
+				].join(' ')}
+			/>
+		</g>
+		<g id="metatron" transform="rotate(30)">
+			{#each angles6 as a}
+				<use href="#metatronSixth" transform={`rotate(${a})`} />
+			{/each}
+		</g>
 	</defs>
 	<Background width={size} fill="hsl(240, 50%, 0%)" />
 	<use href="#guide" mask="url(#path4path5mask)" />
 
 	<!-- <use href="#guide" /> -->
+	<use href="#metatron" stroke="hsl(0, 100%, 50%)" stroke-width="3" transform={`scale(${Phi})`} />
+	<use href="#metatron" stroke="hsl(60, 100%, 50%)" transform={`scale(${Phi})`} />
 	<g mask="">
 		{#each angles12 as a, i}
 			<use href="#petal" transform={`rotate(${a})`} stroke="white" fill="url(#gradient1)" />
