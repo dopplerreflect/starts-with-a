@@ -7,7 +7,7 @@
 		circleIntersections,
 		radialPointString,
 		phylotaxicPoints,
-		phi
+		polygonPath
 	} from '$lib/geometry';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
@@ -22,9 +22,10 @@
 	const size = 1080;
 	const r0 = (size / 2) * 0.9;
 	const r1 = r0 / 2;
-	const angles48 = arrayMap(48, (n) => (360 / 48) * n);
-	const angles24 = arrayMap(24, (n) => (360 / 24) * n - 105);
+	const angles6 = arrayMap(6, (n) => (360 / 6) * n);
 	const angles12 = arrayMap(12, (n) => (360 / 12) * n);
+	const angles24 = arrayMap(24, (n) => (360 / 24) * n - 105);
+	const angles48 = arrayMap(48, (n) => (360 / 48) * n);
 	const circles: Circle[] = angles24.map((a, i) => ({ r: r1, ...radialPoint(a + 15, r1) }));
 	const radii = [
 		r0,
@@ -46,15 +47,19 @@
 			<stop offset="50%" stop-color="hsla(270, 50%, 50%, 0.5)" />
 			<stop offset="100%" stop-color="black" />
 		</radialGradient>
+		<linearGradient id="gradient2" gradientTransform="rotate(90)">
+			<stop offset="0%" stop-color="hsla(60, 100%, 50%, 0.75)" />
+			<stop offset="50%" stop-color="hsla(30, 100%, 50%, 0.75)" />
+			<stop offset="100%" stop-color="hsla(0, 100%, 50%, 0.5" />
+		</linearGradient>
+		<radialGradient id="gradient3" r="66%" cy="60%">
+			<stop offset="0%" stop-color="hsla(300, 100%, 50%, 0.5)" />
+			<stop offset="50%" stop-color="hsla(270, 100%, 50%, 0.5)" />
+			<stop offset="100%" stop-color="hsla(240, 100%, 00%, 0.5" />
+		</radialGradient>
 		<g id="guide">
 			{#each circles as circle, i}
-				<circle
-					cx={circle.x}
-					cy={circle.y}
-					r={circle.r}
-					stroke={i % 2 === 0 ? 'orange' : 'yellow'}
-					fill="none"
-				/>
+				<circle cx={circle.x} cy={circle.y} r={circle.r} stroke={'white'} fill="none" />
 			{/each}
 
 			{#each radii as r, i}
@@ -72,64 +77,152 @@
 				>
 			{/each}
 		</g>
-		<g id="petal">
-			<path
-				d={[
-					'M',
-					radialPointString(angles24[0], radii[4]),
-					'A',
-					r1,
-					r1,
-					'0 0 1',
-					radialPointString(angles24[1], radii[2]),
-					'A',
-					r1,
-					r1,
-					'0 0 1',
-					radialPointString(angles24[2], radii[4]),
-					'A',
-					r1,
-					r1,
-					'0 0 0',
-					radialPointString(angles24[1], radii[6]),
-					'A',
-					r1,
-					r1,
-					'0 0 0',
-					radialPointString(angles24[0], radii[4]),
-					'Z'
-				].join(' ')}
-			/>
+		<path
+			id="petal"
+			d={[
+				'M',
+				radialPointString(angles24[0], radii[4]),
+				'A',
+				r1,
+				r1,
+				'0 0 1',
+				radialPointString(angles24[1], radii[2]),
+				'A',
+				r1,
+				r1,
+				'0 0 1',
+				radialPointString(angles24[2], radii[4]),
+				'A',
+				r1,
+				r1,
+				'0 0 0',
+				radialPointString(angles24[1], radii[6]),
+				'A',
+				r1,
+				r1,
+				'0 0 0',
+				radialPointString(angles24[0], radii[4]),
+				'Z'
+			].join(' ')}
+		/>
+		<path
+			id="path2"
+			d={[
+				'M',
+				radialPointString(angles48[1], radii[6]),
+				'A',
+				r1,
+				r1,
+				'0 0 1',
+				radialPointString(angles48[2], radii[5]),
+				'A',
+				r1,
+				r1,
+				'0 0 1',
+				radialPointString(angles48[3], radii[6]),
+				'A',
+				r1,
+				r1,
+				'0 0 0',
+				radialPointString(angles48[2], radii[7]),
+				'A',
+				r1,
+				r1,
+				'0 0 0',
+				radialPointString(angles48[1], radii[6]),
+				'Z'
+			].join(' ')}
+		/>
+		<path
+			id="path4"
+			d={[
+				'M',
+				radialPointString(angles48[36], radii[6]),
+				'A',
+				r1,
+				r1,
+				'0 0 1',
+				radialPointString(angles48[38], radii[8]),
+				'A',
+				r1,
+				r1,
+				'0 0 0',
+				radialPointString(angles48[37], radii[9]),
+				'A',
+				r1,
+				r1,
+				'0 0 0',
+				radialPointString(angles48[35], radii[9]),
+				'A',
+				r1,
+				r1,
+				'0 0 0',
+				radialPointString(angles48[34], radii[8]),
+				'A',
+				r1,
+				r1,
+				'0 0 1',
+				radialPointString(angles48[36], radii[6]),
+				'Z'
+			].join(' ')}
+		/>
+		<path
+			id="path5"
+			d={[
+				'M',
+				radialPointString(angles48[40], radii[6]),
+				'A',
+				r1,
+				r1,
+				'0 0 1',
+				radialPointString(angles48[41], radii[7]),
+				'A',
+				r1,
+				r1,
+				'0 0 0',
+				radialPointString(angles48[39], radii[9]),
+				'A',
+				r1,
+				r1,
+				'0 0 1',
+				radialPointString(angles48[41], radii[9]),
+				'A',
+				r1,
+				r1,
+				'0 0 0',
+				radialPointString(angles48[39], radii[7]),
+				'A',
+				r1,
+				r1,
+				'0 0 1',
+				radialPointString(angles48[40], radii[6]),
+				'Z'
+			].join(' ')}
+		/>
+		<g id="path4path5">
+			{#each angles6 as a}
+				<use href="#path4" stroke="white" fill="url(#gradient2)" transform={`rotate(${a})`} />
+				<use href="#path5" stroke="white" fill="url(#gradient3)" transform={`rotate(${a})`} />
+			{/each}
+			{#each angles12 as a}
+				<use
+					href="#path2"
+					stroke="white"
+					fill="hsla(270, 25%, 75%, 0.5)"
+					transform={`rotate(${a}) scale(1.02)`}
+				/>
+				<use
+					href="#path2"
+					stroke="white"
+					fill="hsla(240, 25%, 50%, 0.5)"
+					transform={`rotate(${a}) scale(0.98)`}
+				/>
+			{/each}
 		</g>
-		<g id="path2">
-			<path
-				d={[
-					'M',
-					radialPointString(angles48[1], radii[6]),
-					'A',
-					r1,
-					r1,
-					'0 0 1',
-					radialPointString(angles48[2], radii[5]),
-					'A',
-					r1,
-					r1,
-					'0 0 1',
-					radialPointString(angles48[3], radii[6]),
-					'A',
-					r1,
-					r1,
-					'0 0 0',
-					radialPointString(angles48[2], radii[7]),
-					'A',
-					r1,
-					r1,
-					'0 0 0',
-					radialPointString(angles48[1], radii[6]),
-					'Z'
-				].join(' ')}
-			/>
-		</g>
+		<mask id="path4path5mask">
+			<Background width={size} fill="black" />
+			<use href="#path4path5" filter="white" />
+		</mask>
 		<g id="phyloDots">
 			{#each phylotaxicPoints( 540, radii[2] - radii[6], { center: radialPoint(angles24[1], radii[4]) } ) as p, i}
 				<g>
@@ -137,7 +230,7 @@
 						cx={p.x}
 						cy={p.y}
 						r={size / 768}
-						fill={`hsl(0, 0%, ${100 - (i % 8) * 10}%)`}
+						fill={`hsl(270, 0%, ${100 - (i % 8) * 10}%)`}
 						mask="url(#petalMask)"
 					/>
 				</g>
@@ -150,24 +243,24 @@
 			{/each}
 		</mask>
 	</defs>
-	<Background width={size} fill="hsl(240, 50%, 10%)" />
+	<Background width={size} fill="hsl(240, 50%, 0%)" />
+	<use href="#guide" mask="url(#path4path5mask)" />
+
+	<!-- <use href="#guide" /> -->
 	<g mask="">
 		{#each angles12 as a, i}
 			<use href="#petal" transform={`rotate(${a})`} stroke="white" fill="url(#gradient1)" />
 			<use href="#phyloDots" transform={`rotate(${a})`} />
-			<use
-				href="#path2"
+		{/each}
+		<use href="#path4path5" />
+		{#each angles48 as a, i}
+			<circle
+				cx={radialPoint(a, radii[8]).x}
+				cy={radialPoint(a, radii[8]).y}
+				r={radii[0] - radii[1]}
 				stroke="white"
-				fill="hsla(270, 25%, 75%, 0.5)"
-				transform={`rotate(${a}) scale(1.02)`}
-			/>
-			<use
-				href="#path2"
-				stroke="white"
-				fill="hsla(240, 25%, 50%, 0.5)"
-				transform={`rotate(${a}) scale(0.98)`}
+				fill={`hsla(45, 100%, 50%, 0.5)`}
 			/>
 		{/each}
 	</g>
-	<use href="#guide" />
 </svg>
