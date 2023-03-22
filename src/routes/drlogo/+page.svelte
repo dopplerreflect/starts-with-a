@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { phi, anglesArray, radialPoint, radialPointString, starPoints } from '$lib/geometry';
+	import Background from '$lib/components/Background.svelte';
+	import {
+		phi,
+		anglesArray,
+		radialPoint,
+		radialPointString,
+		starPoints,
+		viewBox
+	} from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import { onMount } from 'svelte';
 	const size = 1024;
@@ -43,12 +51,7 @@
 	onMount(() => useSaveFile(svg));
 </script>
 
-<svg
-	bind:this={svg}
-	id="DR-Logo"
-	xmlns="http://www.w3.org/2000/svg"
-	viewBox={`${-size / 2} ${-size / 2} ${size} ${size}`}
->
+<svg bind:this={svg} id="DR-Logo" xmlns="http://www.w3.org/2000/svg" viewBox={viewBox(size)}>
 	<defs>
 		<g id="guide">
 			{#each radii as r, i}
@@ -91,10 +94,7 @@
 			</filter>
 		</g>
 	</defs>
-	<path
-		d={`M${-size / 2} ${-size / 2}H${size / 2}V${size / 2}H${-size / 2}Z`}
-		fill="hsl(225, 100%, 15%)"
-	/>
+	<Background width={size} fill="hsl(240, 50%, 15%)" />
 	<g id="dr" filter="url(#outline)">
 		<path d={dPath} stroke="hsl(225, 100%, 50%)" fill="none" stroke-width={strokeWidth} />
 		<path d={rPath} stroke="hsl(45, 100%, 50%)" fill="none" stroke-width={strokeWidth} />
