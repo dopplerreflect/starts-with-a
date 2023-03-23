@@ -18,6 +18,7 @@
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
 	import SourceCode from '$lib/components/SourceCode.svelte';
+	import DrLogo from '$lib/components/DRLogo.svelte';
 
 	const size = 1920;
 	const strokeWidth = size / 1024;
@@ -79,7 +80,8 @@
 					a,
 					radii[2]
 				)}`}
-				stroke={`hsla(${hue}, 50%, 50%, 0.5)`}
+				stroke={`hsl(${hue}, 50%, 50%)`}
+				stroke-opacity={0.5}
 				stroke-width={strokeWidth}
 			/>
 		{/each}
@@ -89,24 +91,30 @@
 		{#each anglesArray(12) as a, i}
 			<polygon
 				points={starPoints(radii[0], { rotate: 6 * i })}
-				fill={`hsla(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%, ${1 / 6})`}
-				stroke={`hsla(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%, ${1 / 3})`}
+				fill={`hsl(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%)`}
+				fill-opacity={0.16}
+				stroke={`hsl(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%)`}
+				stroke-opacity={0.33}
 				stroke-width={strokeWidth}
 			/>
 		{/each}
 	</g>
-	<SourceCode {source} {size} fill="hsl(240, 100%, 20%, 0.5)" />
+	<SourceCode {source} {size} fill="hsl(240, 100%, 20%)" fillOpacity={0.5} />
 	<g mask="url(#mask2)">
 		{#each phylotaxicPoints(610, radii[0]) as p, i}
 			<circle
 				r={((radii[0] / 610) * i) / 21 + 2 * strokeWidth}
 				cx={p.x}
 				cy={p.y}
-				fill={`hsla(${Math.round((i % 13) * (30 / 13) + hue + 60) % 360}, 100%, 50%, 1)`}
-				stroke={`hsla(${Math.round((i % 13) * (30 / 13) + hue + 60) % 360}, 50%, 25%, 1)`}
+				fill={`hsl(${Math.round((i % 13) * (30 / 13) + hue + 60) % 360}, 100%, 50%)`}
+				stroke={`hsl(${Math.round((i % 13) * (30 / 13) + hue + 60) % 360}, 50%, 25%)`}
 				stroke-width={strokeWidth}
 			/>
 		{/each}
 	</g>
-	<image href="/DR-Logo.svg" width={size / 20} x={size / 2 - size / 20} y={size / 2 - size / 20} />
+	<DrLogo
+		size={120}
+		stroke="hsl(240, 100%, 20%, 1)"
+		transform={`translate(${size / 2 - 70}, ${size / 2 - 70})`}
+	/>
 </svg>

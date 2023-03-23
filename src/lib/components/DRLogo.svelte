@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { phi, anglesArray, radialPointString, starPoints } from '$lib/geometry';
 	export let size = 128;
-	export let stroke = 'hsla(45, 100%, 100%, 0.25)';
+	export let stroke = 'hsl(45, 100%, 100%';
+	export let strokeOpacity = 0.5;
 	export let transform = '';
 	const angles = anglesArray(30);
 	const radii = [...Array(4).keys()].map((k) => (size / 2) * phi ** k);
@@ -42,9 +43,9 @@
 </script>
 
 <g id="DRLogo" {transform}>
-	<path d={dPath} {stroke} fill="none" stroke-width={strokeWidth} />
-	<path d={rPath} {stroke} fill="none" stroke-width={strokeWidth} />
-	<g id="guide" {stroke} stroke-width={strokeWidth * phi ** 4}>
+	<path d={dPath} {stroke} stroke-opacity={strokeOpacity} fill="none" stroke-width={strokeWidth} />
+	<path d={rPath} {stroke} stroke-opacity={strokeOpacity} fill="none" stroke-width={strokeWidth} />
+	<g id="guide" {stroke} stroke-opacity={strokeOpacity} stroke-width={strokeWidth * phi ** 4}>
 		{#each radii as r, i}
 			<circle {r} fill="none" />
 		{/each}
