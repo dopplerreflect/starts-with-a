@@ -25,6 +25,7 @@
 		};
 	});
 	const size = 1080;
+	const strokeWidth = size / 1080;
 	const r0 = (size / 2) * 0.9;
 	const r1 = r0 / 2;
 	const angles6 = arrayMap(6, (n) => (360 / 6) * n);
@@ -61,15 +62,22 @@
 		</radialGradient>
 		<g id="guide">
 			{#each circles as circle, i}
-				<circle cx={circle.x} cy={circle.y} r={circle.r} stroke={'white'} fill="none" />
+				<circle
+					cx={circle.x}
+					cy={circle.y}
+					r={circle.r}
+					stroke="white"
+					stroke-width={strokeWidth}
+					fill="none"
+				/>
 			{/each}
 
 			{#each radii as r, i}
-				<circle {r} stroke="white" fill="none" />
+				<circle {r} stroke="white" stroke-width={strokeWidth} fill="none" />
 				<text x={r} fill="white" text-anchor="middle">{i}</text>
 			{/each}
 			{#each angles48 as a, i}
-				<path d={`M0,0L${radialPointString(a, r0)}`} stroke="white" />
+				<path d={`M0,0L${radialPointString(a, r0)}`} stroke="white" stroke-width={strokeWidth} />
 				<text
 					x={radialPoint(a, r0).x}
 					y={radialPoint(a, r0).y}
@@ -203,19 +211,33 @@
 		/>
 		<g id="path4path5">
 			{#each angles6 as a}
-				<use href="#path4" stroke="white" fill="url(#gradient2)" transform={`rotate(${a})`} />
-				<use href="#path5" stroke="white" fill="url(#gradient3)" transform={`rotate(${a})`} />
+				<use
+					href="#path4"
+					stroke="white"
+					stroke-width={strokeWidth}
+					fill="url(#gradient2)"
+					transform={`rotate(${a})`}
+				/>
+				<use
+					href="#path5"
+					stroke="white"
+					stroke-width={strokeWidth}
+					fill="url(#gradient3)"
+					transform={`rotate(${a})`}
+				/>
 			{/each}
 			{#each angles12 as a}
 				<use
 					href="#path2"
 					stroke="white"
+					stroke-width={strokeWidth}
 					fill="hsla(270, 25%, 75%, 0.5)"
 					transform={`rotate(${a}) scale(1.02)`}
 				/>
 				<use
 					href="#path2"
 					stroke="white"
+					stroke-width={strokeWidth}
 					fill="hsla(240, 25%, 50%, 0.5)"
 					transform={`rotate(${a}) scale(0.98)`}
 				/>
@@ -325,11 +347,34 @@
 	<g id="hextiles" mask="url(#hextileMask)">
 		<HexTiles {size} innerColor="hsl(270, 50%, 50%)" outerColor="hsl(240, 50%, 30%)" />
 	</g>
-	<use href="#metatron" stroke="hsl(0, 100%, 50%)" stroke-width="3" transform={`scale(${Phi})`} />
+	<g id="outerRing" stroke="white">
+		<circle r={radii[0]} fill="none" />
+		<circle r={radii[2]} fill="none" />
+		{#each arrayMap(144, (k) => (360 / 144) * k) as a, i}
+			<circle
+				cx={radialPoint(a, radii[2] + (radii[0] - radii[2]) / 2).x}
+				cy={radialPoint(a, radii[2] + (radii[0] - radii[2]) / 2).y}
+				r={(radii[0] - radii[2]) / 2 - 2 * strokeWidth}
+				fill={`hsl(${300 - (i % 12) * 3}, 100%, 25%)`}
+			/>
+		{/each}
+	</g>
+	<use
+		href="#metatron"
+		stroke="hsl(0, 100%, 50%)"
+		stroke-width={strokeWidth * 2}
+		transform={`scale(${Phi})`}
+	/>
 	<use href="#metatron" stroke="hsl(60, 100%, 50%)" transform={`scale(${Phi})`} />
 	<g mask="">
 		{#each angles12 as a, i}
-			<use href="#petal" transform={`rotate(${a})`} stroke="white" fill="url(#gradient1)" />
+			<use
+				href="#petal"
+				transform={`rotate(${a})`}
+				stroke="white"
+				stroke-width={strokeWidth}
+				fill="url(#gradient1)"
+			/>
 			<use href="#phyloDots" transform={`rotate(${a})`} />
 		{/each}
 		<use href="#path4path5" />
@@ -339,6 +384,7 @@
 				cy={radialPoint(a, radii[8]).y}
 				r={radii[0] - radii[1]}
 				stroke="white"
+				stroke-width={strokeWidth}
 				fill={`hsla(45, 100%, 50%, 0.5)`}
 			/>
 		{/each}
