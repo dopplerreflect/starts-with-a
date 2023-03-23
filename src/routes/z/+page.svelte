@@ -13,7 +13,8 @@
 	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
-	import HexTiles from './HexTiles.svelte';
+	import HexTiles from '$lib/components/HexTiles.svelte';
+	import DrLogo from '$lib/components/DRLogo.svelte';
 
 	let svg: SVGSVGElement;
 	onMount(() => {
@@ -24,9 +25,12 @@
 			unMountSave();
 		};
 	});
-	const size = 1080;
+	const square = false;
+	const size = 1920 * 2;
+	const width = size;
+	const height = square ? width : width * phi;
 	const strokeWidth = size / 1080;
-	const r0 = (size / 2) * 0.9;
+	const r0 = (height / 2) * 0.9;
 	const r1 = r0 / 2;
 	const angles6 = arrayMap(6, (n) => (360 / 6) * n);
 	const angles12 = arrayMap(12, (n) => (360 / 12) * n);
@@ -43,7 +47,7 @@
 	const rm = arrayMap(5, (n) => (radii[9] / 5) * n + 1);
 </script>
 
-<svg bind:this={svg} id="z" viewBox={viewBox(size)}>
+<svg bind:this={svg} id="z" viewBox={viewBox(width, height)}>
 	<defs>
 		<radialGradient id="gradient1" cy="44%">
 			<stop offset="0%" stop-color="hsla(300, 100%, 50%, 0.5)" />
@@ -244,7 +248,7 @@
 			{/each}
 		</g>
 		<mask id="path4path5mask">
-			<Background width={size} fill="black" />
+			<Background {width} {height} fill="black" />
 			<use href="#path4path5" filter="white" />
 		</mask>
 		<g id="phyloDots">
@@ -337,15 +341,15 @@
 				<stop offset="0%" stop-color="hsla(270, 100%, 100%, 1)" />
 				<stop offset="100%" stop-color="hsla(270, 100%, 66%, 0.5)" />
 			</radialGradient>
-			<Background width={size} fill="url(#hextileGradient)" />
+			<Background {width} {height} fill="url(#hextileGradient)" />
 		</mask>
 	</defs>
-	<Background width={size} fill="hsl(240, 50%, 0%)" />
+	<Background {width} {height} fill="hsl(240, 50%, 0%)" />
 	<use href="#guide" mask="url(#path4path5mask)" />
 
 	<!-- <use href="#guide" /> -->
-	<g id="hextiles" mask="url(#hextileMask)">
-		<HexTiles {size} innerColor="hsl(270, 50%, 50%)" outerColor="hsl(240, 50%, 30%)" />
+	<g id="hextiles" mask="url(#hextileMask)" transform="translate(2 -6)">
+		<HexTiles {size} count={72} innerColor="hsl(270, 50%, 50%)" outerColor="hsl(240, 50%, 30%)" />
 	</g>
 	<g id="outerRing" stroke="white">
 		<circle r={radii[0]} fill="none" />
@@ -365,7 +369,12 @@
 		stroke-width={strokeWidth * 2}
 		transform={`scale(${Phi})`}
 	/>
-	<use href="#metatron" stroke="hsl(60, 100%, 50%)" transform={`scale(${Phi})`} />
+	<use
+		href="#metatron"
+		stroke="hsl(60, 100%, 50%)"
+		stroke-width={strokeWidth}
+		transform={`scale(${Phi})`}
+	/>
 	<g mask="">
 		{#each angles12 as a, i}
 			<use
@@ -389,4 +398,9 @@
 			/>
 		{/each}
 	</g>
+	<DrLogo
+		size={size / 20}
+		stroke="hsla(0, 100%, 100%, 0.125"
+		transform={`translate(${width / 2 - size / 20 / 1.5} ${height / 2 - size / 20 / 1.5})`}
+	/>
 </svg>
