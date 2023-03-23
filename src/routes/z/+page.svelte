@@ -13,6 +13,7 @@
 	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
+	import HexTiles from './HexTiles.svelte';
 
 	let svg: SVGSVGElement;
 	onMount(() => {
@@ -309,11 +310,21 @@
 				<use href="#metatronSixth" transform={`rotate(${a})`} />
 			{/each}
 		</g>
+		<mask id="hextileMask">
+			<radialGradient id="hextileGradient">
+				<stop offset="0%" stop-color="hsla(270, 100%, 100%, 1)" />
+				<stop offset="100%" stop-color="hsla(270, 100%, 66%, 0.5)" />
+			</radialGradient>
+			<Background width={size} fill="url(#hextileGradient)" />
+		</mask>
 	</defs>
 	<Background width={size} fill="hsl(240, 50%, 0%)" />
 	<use href="#guide" mask="url(#path4path5mask)" />
 
 	<!-- <use href="#guide" /> -->
+	<g id="hextiles" mask="url(#hextileMask)">
+		<HexTiles {size} innerColor="hsl(270, 50%, 50%)" outerColor="hsl(240, 50%, 30%)" />
+	</g>
 	<use href="#metatron" stroke="hsl(0, 100%, 50%)" stroke-width="3" transform={`scale(${Phi})`} />
 	<use href="#metatron" stroke="hsl(60, 100%, 50%)" transform={`scale(${Phi})`} />
 	<g mask="">
