@@ -25,8 +25,8 @@
 			unMountSave();
 		};
 	});
-	const square = false;
-	const size = 1920 * 2;
+	const square = true;
+	const size = 1920;
 	const width = size;
 	const height = square ? width : width * phi;
 	const strokeWidth = size / 1080;
@@ -50,19 +50,19 @@
 <svg bind:this={svg} id="z" viewBox={viewBox(width, height)}>
 	<defs>
 		<radialGradient id="gradient1" cy="44%">
-			<stop offset="0%" stop-color="hsla(300, 100%, 50%, 0.5)" />
-			<stop offset="50%" stop-color="hsla(270, 50%, 50%, 0.5)" />
+			<stop offset="0%" stop-color="hsl(300, 100%, 50%)" stop-opacity={0.5} />
+			<stop offset="50%" stop-color="hsl(270, 50%, 50%)" stop-opacity={0.5} />
 			<stop offset="100%" stop-color="black" />
 		</radialGradient>
 		<linearGradient id="gradient2" gradientTransform="rotate(90)">
-			<stop offset="0%" stop-color="hsla(60, 100%, 50%, 0.75)" />
-			<stop offset="50%" stop-color="hsla(30, 100%, 50%, 0.75)" />
-			<stop offset="100%" stop-color="hsla(0, 100%, 50%, 0.5" />
+			<stop offset="0%" stop-color="hsl(60, 100%, 50%)" stop-opacity={0.75} />
+			<stop offset="50%" stop-color="hsl(30, 100%, 50%)" stop-opacity={0.75} />
+			<stop offset="100%" stop-color="hsl(0, 100%, 50%)" stop-opacity={0.5} />
 		</linearGradient>
 		<radialGradient id="gradient3" r="66%" cy="60%">
-			<stop offset="0%" stop-color="hsla(300, 100%, 50%, 0.5)" />
-			<stop offset="50%" stop-color="hsla(270, 100%, 50%, 0.5)" />
-			<stop offset="100%" stop-color="hsla(240, 100%, 00%, 0.5" />
+			<stop offset="0%" stop-color="hsl(300, 100%, 50%)" stop-opacity={0.5} />
+			<stop offset="50%" stop-color="hsl(270, 100%, 50%)" stop-opacity={0.5} />
+			<stop offset="100%" stop-color="hsl(240, 100%, 00%" stop-opacity={0.5} />
 		</radialGradient>
 		<g id="guide">
 			{#each circles as circle, i}
@@ -216,14 +216,14 @@
 		<g id="path4path5">
 			{#each angles6 as a}
 				<use
-					href="#path4"
+					xlink:href="#path4"
 					stroke="white"
 					stroke-width={strokeWidth}
 					fill="url(#gradient2)"
 					transform={`rotate(${a})`}
 				/>
 				<use
-					href="#path5"
+					xlink:href="#path5"
 					stroke="white"
 					stroke-width={strokeWidth}
 					fill="url(#gradient3)"
@@ -232,24 +232,26 @@
 			{/each}
 			{#each angles12 as a}
 				<use
-					href="#path2"
+					xlink:href="#path2"
 					stroke="white"
 					stroke-width={strokeWidth}
-					fill="hsla(270, 25%, 75%, 0.5)"
+					fill="hsl(270, 25%, 75%)"
+					fill-opacity={0.5}
 					transform={`rotate(${a}) scale(1.02)`}
 				/>
 				<use
-					href="#path2"
+					xlink:href="#path2"
 					stroke="white"
 					stroke-width={strokeWidth}
-					fill="hsla(240, 25%, 50%, 0.5)"
+					fill="hsl(240, 25%, 50%)"
+					fill-opacity={0.5}
 					transform={`rotate(${a}) scale(0.98)`}
 				/>
 			{/each}
 		</g>
 		<mask id="path4path5mask">
 			<Background {width} {height} fill="black" />
-			<use href="#path4path5" filter="white" />
+			<use xlink:href="#path4path5" filter="white" />
 		</mask>
 		<g id="phyloDots">
 			{#each phylotaxicPoints( 540, radii[2] - radii[6], { center: radialPoint(angles24[1], radii[4]) } ) as p, i}
@@ -267,7 +269,7 @@
 		<mask id="petalMask">
 			<Background width={size} fill="black" />
 			{#each angles12 as a, i}
-				<use href="#petal" transform={`rotate(${a})`} fill="white" />
+				<use xlink:href="#petal" transform={`rotate(${a})`} fill="white" />
 			{/each}
 		</mask>
 		<g id="metatronSixth" fill="none">
@@ -333,21 +335,21 @@
 		</g>
 		<g id="metatron" transform="rotate(30)">
 			{#each angles6 as a}
-				<use href="#metatronSixth" transform={`rotate(${a})`} />
+				<use xlink:href="#metatronSixth" transform={`rotate(${a})`} />
 			{/each}
 		</g>
 		<mask id="hextileMask">
 			<radialGradient id="hextileGradient">
-				<stop offset="0%" stop-color="hsla(270, 100%, 100%, 1)" />
-				<stop offset="100%" stop-color="hsla(270, 100%, 66%, 0.5)" />
+				<stop offset="0%" stop-color="hsl(270, 100%, 100%)" />
+				<stop offset="100%" stop-color="hsl(270, 100%, 66%)" stop-opacity={0.5} />
 			</radialGradient>
 			<Background {width} {height} fill="url(#hextileGradient)" />
 		</mask>
 	</defs>
 	<Background {width} {height} fill="hsl(240, 50%, 0%)" />
-	<use href="#guide" mask="url(#path4path5mask)" />
+	<use xlink:href="#guide" mask="url(#path4path5mask)" />
 
-	<!-- <use href="#guide" /> -->
+	<!-- <use xlink:href="#guide" /> -->
 	<g id="hextiles" mask="url(#hextileMask)" transform="translate(2 -6)">
 		<HexTiles {size} count={72} innerColor="hsl(270, 50%, 50%)" outerColor="hsl(240, 50%, 30%)" />
 	</g>
@@ -364,13 +366,13 @@
 		{/each}
 	</g>
 	<use
-		href="#metatron"
+		xlink:href="#metatron"
 		stroke="hsl(0, 100%, 50%)"
 		stroke-width={strokeWidth * 2}
 		transform={`scale(${Phi})`}
 	/>
 	<use
-		href="#metatron"
+		xlink:href="#metatron"
 		stroke="hsl(60, 100%, 50%)"
 		stroke-width={strokeWidth}
 		transform={`scale(${Phi})`}
@@ -378,15 +380,15 @@
 	<g mask="">
 		{#each angles12 as a, i}
 			<use
-				href="#petal"
+				xlink:href="#petal"
 				transform={`rotate(${a})`}
 				stroke="white"
 				stroke-width={strokeWidth}
 				fill="url(#gradient1)"
 			/>
-			<use href="#phyloDots" transform={`rotate(${a})`} />
+			<use xlink:href="#phyloDots" transform={`rotate(${a})`} />
 		{/each}
-		<use href="#path4path5" />
+		<use xlink:href="#path4path5" />
 		{#each angles48 as a, i}
 			<circle
 				cx={radialPoint(a, radii[8]).x}
@@ -394,13 +396,15 @@
 				r={radii[0] - radii[1]}
 				stroke="white"
 				stroke-width={strokeWidth}
-				fill={`hsla(45, 100%, 50%, 0.5)`}
+				fill={`hsl(45, 100%, 50%)`}
+				fill-opacity={0.5}
 			/>
 		{/each}
 	</g>
 	<DrLogo
 		size={size / 20}
-		stroke="hsla(0, 100%, 100%, 0.125"
+		stroke="hsl(0, 100%, 100%)"
+		strokeOpacity={0.125}
 		transform={`translate(${width / 2 - size / 20 / 1.5} ${height / 2 - size / 20 / 1.5})`}
 	/>
 </svg>
