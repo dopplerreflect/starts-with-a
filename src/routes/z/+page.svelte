@@ -26,7 +26,8 @@
 		};
 	});
 	const square = true;
-	const size = 2 ** 13;
+	const masked = true;
+	const size = 2 ** 10;
 	const width = size;
 	const height = square ? width : width * phi;
 	const strokeWidth = size / 1080;
@@ -332,12 +333,20 @@
 		<mask id="hextileMask">
 			<radialGradient id="hextileGradient">
 				<stop offset="0%" stop-color="hsl(270, 100%, 100%)" />
-				<stop offset="100%" stop-color="hsl(270, 100%, 66%)" stop-opacity={0.5} />
+				<stop
+					offset="100%"
+					stop-color={`hsl(270, 100%, ${masked ? 0 : 66}%)`}
+					stop-opacity={masked ? 1 : 0.5}
+				/>
 			</radialGradient>
 			<Background {width} {height} fill="url(#hextileGradient)" />
 		</mask>
 	</defs>
-	<Background {width} {height} fill="hsl(240, 50%, 0%)" />
+	{#if masked}
+		<circle r={radii[2]} fill="hsl(240, 50%, 0%)" />
+	{:else}
+		<Background {width} {height} fill="hsl(240, 50%, 0%)" />
+	{/if}
 	<use xlink:href="#guide" mask="url(#path4path5mask)" />
 
 	<!-- <use xlink:href="#guide" /> -->
@@ -345,8 +354,8 @@
 		<HexTiles {size} count={72} innerColor="hsl(270, 50%, 50%)" outerColor="hsl(240, 50%, 30%)" />
 	</g>
 	<g id="outerRing" stroke="white">
-		<circle r={radii[0]} fill="none" stroke-width={strokeWidth} />
-		<circle r={radii[2]} fill="none" stroke-width={strokeWidth} />
+		<circle r={radii[0]} stroke={masked ? 'black' : null} fill="none" stroke-width={strokeWidth} />
+		<circle r={radii[2]} stroke={masked ? 'black' : null} fill="none" stroke-width={strokeWidth} />
 		{#each arrayMap(144, (k) => (360 / 144) * k) as a, i}
 			<circle
 				cx={radialPoint(a, radii[2] + (radii[0] - radii[2]) / 2).x}
