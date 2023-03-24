@@ -1,5 +1,6 @@
 <script lang="ts">
-	export let width: number;
+	export let size: number = 0;
+	export let width: number = size;
 	export let height: number = width;
 	export let fill: string;
 </script>
