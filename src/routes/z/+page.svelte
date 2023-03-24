@@ -15,6 +15,7 @@
 	import { onMount } from 'svelte';
 	import HexTiles from '$lib/components/HexTiles.svelte';
 	import DrLogo from '$lib/components/DRLogo.svelte';
+	import SaturationFilter from '$lib/components/SaturationFilter.svelte';
 
 	let svg: SVGSVGElement;
 	onMount(() => {
@@ -49,6 +50,7 @@
 
 <svg bind:this={svg} id="z" viewBox={viewBox(width, height)}>
 	<defs>
+		<SaturationFilter values="0.0" />
 		<radialGradient id="gradient1" cy="44%">
 			<stop offset="0%" stop-color="hsl(300, 100%, 50%)" stop-opacity={0.5} />
 			<stop offset="50%" stop-color="hsl(270, 50%, 50%)" stop-opacity={0.5} />
@@ -342,65 +344,78 @@
 			<Background {width} {height} fill="url(#hextileGradient)" />
 		</mask>
 	</defs>
-	{#if masked}
-		<circle r={radii[2]} fill="hsl(240, 50%, 0%)" />
-	{:else}
-		<Background {width} {height} fill="hsl(240, 50%, 0%)" />
-	{/if}
-	<use xlink:href="#guide" mask="url(#path4path5mask)" />
 
-	<!-- <use xlink:href="#guide" /> -->
-	<g id="hextiles" mask="url(#hextileMask)" transform="translate(2 -6)">
-		<HexTiles {size} count={72} innerColor="hsl(270, 50%, 50%)" outerColor="hsl(240, 50%, 30%)" />
-	</g>
-	<g id="outerRing" stroke="white">
-		<circle r={radii[0]} stroke={masked ? 'black' : null} fill="none" stroke-width={strokeWidth} />
-		<circle r={radii[2]} stroke={masked ? 'black' : null} fill="none" stroke-width={strokeWidth} />
-		{#each arrayMap(144, (k) => (360 / 144) * k) as a, i}
+	<g id="graphic" filter="url(#SaturationFilter)">
+		{#if masked}
+			<circle r={radii[2]} fill="hsl(240, 50%, 0%)" />
+		{:else}
+			<Background {width} {height} fill="hsl(240, 50%, 0%)" />
+		{/if}
+		<use xlink:href="#guide" mask="url(#path4path5mask)" />
+
+		<!-- <use xlink:href="#guide" /> -->
+		<g id="hextiles" mask="url(#hextileMask)" transform="translate(2 -6)">
+			<HexTiles {size} count={72} innerColor="hsl(270, 50%, 50%)" outerColor="hsl(240, 50%, 30%)" />
+		</g>
+		<g id="outerRing" stroke="white">
 			<circle
-				cx={radialPoint(a, radii[2] + (radii[0] - radii[2]) / 2).x}
-				cy={radialPoint(a, radii[2] + (radii[0] - radii[2]) / 2).y}
-				r={(radii[0] - radii[2]) / 2 - 2 * strokeWidth}
-				fill={`hsl(${300 - (i % 12) * 3}, 100%, 25%)`}
+				r={radii[0]}
+				stroke={masked ? 'black' : null}
+				fill="none"
 				stroke-width={strokeWidth}
 			/>
-		{/each}
-	</g>
-	<use
-		xlink:href="#metatron"
-		stroke="hsl(0, 100%, 50%)"
-		stroke-width={strokeWidth * 2}
-		transform={`scale(${Phi})`}
-	/>
-	<use
-		xlink:href="#metatron"
-		stroke="hsl(60, 100%, 50%)"
-		stroke-width={strokeWidth}
-		transform={`scale(${Phi})`}
-	/>
-	<g mask="">
-		{#each angles12 as a, i}
-			<use
-				xlink:href="#petal"
-				transform={`rotate(${a})`}
-				stroke="white"
-				stroke-width={strokeWidth}
-				fill="url(#gradient1)"
-			/>
-			<use xlink:href="#phyloDots" transform={`rotate(${a})`} />
-		{/each}
-		<use xlink:href="#path4path5" />
-		{#each angles48 as a, i}
 			<circle
-				cx={radialPoint(a, radii[8]).x}
-				cy={radialPoint(a, radii[8]).y}
-				r={radii[0] - radii[1]}
-				stroke="white"
+				r={radii[2]}
+				stroke={masked ? 'black' : null}
+				fill="none"
 				stroke-width={strokeWidth}
-				fill={`hsl(45, 100%, 50%)`}
-				fill-opacity={0.5}
 			/>
-		{/each}
+			{#each arrayMap(144, (k) => (360 / 144) * k) as a, i}
+				<circle
+					cx={radialPoint(a, radii[2] + (radii[0] - radii[2]) / 2).x}
+					cy={radialPoint(a, radii[2] + (radii[0] - radii[2]) / 2).y}
+					r={(radii[0] - radii[2]) / 2 - 2 * strokeWidth}
+					fill={`hsl(${300 - (i % 12) * 3}, 100%, 25%)`}
+					stroke-width={strokeWidth}
+				/>
+			{/each}
+		</g>
+		<use
+			xlink:href="#metatron"
+			stroke="hsl(0, 100%, 50%)"
+			stroke-width={strokeWidth * 2}
+			transform={`scale(${Phi})`}
+		/>
+		<use
+			xlink:href="#metatron"
+			stroke="hsl(60, 100%, 50%)"
+			stroke-width={strokeWidth}
+			transform={`scale(${Phi})`}
+		/>
+		<g mask="">
+			{#each angles12 as a, i}
+				<use
+					xlink:href="#petal"
+					transform={`rotate(${a})`}
+					stroke="white"
+					stroke-width={strokeWidth}
+					fill="url(#gradient1)"
+				/>
+				<use xlink:href="#phyloDots" transform={`rotate(${a})`} />
+			{/each}
+			<use xlink:href="#path4path5" />
+			{#each angles48 as a, i}
+				<circle
+					cx={radialPoint(a, radii[8]).x}
+					cy={radialPoint(a, radii[8]).y}
+					r={radii[0] - radii[1]}
+					stroke="white"
+					stroke-width={strokeWidth}
+					fill={`hsl(45, 100%, 50%)`}
+					fill-opacity={0.5}
+				/>
+			{/each}
+		</g>
 	</g>
 	<DrLogo
 		size={size / 20}
