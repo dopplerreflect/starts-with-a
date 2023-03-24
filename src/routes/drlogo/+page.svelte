@@ -1,16 +1,11 @@
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
-	import {
-		phi,
-		anglesArray,
-		radialPoint,
-		radialPointString,
-		starPoints,
-		viewBox
-	} from '$lib/geometry';
+	import SourceCode from '$lib/components/SourceCode.svelte';
+	import { phi, anglesArray, radialPointString, starPoints, viewBox } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import { onMount } from 'svelte';
 	const size = 1024;
+	const solidColor = null;
 	const angles = anglesArray(30);
 	const radii = [...Array(4).keys()].map((k) => size * 0.45 * phi ** k);
 	const strokeWidth = radii[2] - radii[3];
@@ -55,49 +50,30 @@
 	<defs>
 		<g id="guide">
 			{#each radii as r, i}
-				<!-- <text x={-size / 2 + 10} y={-r} text-anchor="middle" alignment-baseline="middle">{i}</text> -->
-				<!-- <path d={`M${-size / 2 + 20} ${-r}H0`} /> -->
 				<circle {r} fill="none" />
 			{/each}
 			{#each angles as a, i}
 				<path d={`M${radialPointString(a, radii[2])}L${radialPointString(a, radii[0])}`} />
-				<!-- <text
-					x={radialPoint(a, radii[0]).x}
-					y={radialPoint(a, radii[0]).y}
-					alignment-baseline="middle"
-					text-anchor="middle">{i}</text
-				> -->
 			{/each}
 			<polygon points={starPoints(radii[0])} fill="none" />
-			<filter id="outline" x={-size / 2} width={size}>
-				<feMorphology
-					in="SourceAlpha"
-					result="DILATED"
-					operator="dilate"
-					radius={radii[3] * phi ** 8}
-				/>
-				<feFlood flood-color="white" flood-opacity="1" result="WHITE" />
-				<feComposite in="WHITE" in2="DILATED" operator="in" result="OUTLINE" />
-				<feMorphology
-					in="OUTLINE"
-					result="DILATED2"
-					operator="dilate"
-					radius={radii[3] * phi ** 8}
-				/>
-				<feFlood flood-color="black" flood-opacity="1" result="BLACK" />
-				<feComposite in="BLACK" in2="DILATED2" operator="in" result="OUTLINE2" />
-				<feMerge>
-					<feMergeNode in="OUTLINE2" />
-					<feMergeNode in="OUTLINE" />
-					<feMergeNode in="SourceGraphic" />
-				</feMerge>
-			</filter>
 		</g>
 	</defs>
-	<Background width={size} fill="hsl(240, 50%, 15%)" />
-	<g id="dr" filter="url(#outline)">
-		<path d={dPath} stroke="hsl(225, 100%, 50%)" fill="none" stroke-width={strokeWidth} />
-		<path d={rPath} stroke="hsl(45, 100%, 50%)" fill="none" stroke-width={strokeWidth} />
-	</g>
-	<use href="#guide" stroke="hsl(180, 100%, 75%)" />
+	<Background width={size} fill={solidColor ? 'none' : 'hsl(240, 50%, 15%)'} />
+	<use
+		href="#guide"
+		stroke={solidColor ? solidColor : 'hsl(225, 100%, 75%)'}
+		stroke-width={strokeWidth * phi ** 4}
+	/>
+	<path
+		d={dPath}
+		stroke={solidColor ? solidColor : 'hsl(225, 100%, 50%)'}
+		fill="none"
+		stroke-width={strokeWidth}
+	/>
+	<path
+		d={rPath}
+		stroke={solidColor ? solidColor : 'hsl(45, 100%, 50%)'}
+		fill="none"
+		stroke-width={strokeWidth}
+	/>
 </svg>
