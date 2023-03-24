@@ -5,20 +5,24 @@
 	import { onMount } from 'svelte';
 
 	let size = browser ? Math.min(window.innerHeight, window.innerWidth) : 2 ** 8;
+	let r = 0;
+	let a = 0;
 
 	let fill = 'hsl(220, 50%, 50%)';
 
-	const angles = arrayMap(10, (n) => (360 / 10) * n);
-	const radii = arrayMap(8, (n) => Math.round((size / 2) * phi ** n));
+	const angles = arrayMap(8, (n) => (360 / 8) * n);
+	const radii = arrayMap(8, (n) => Math.round((size / 2) * phi * phi ** n));
 
 	const intersections = angles
 		.map((a, ai) => [...radii.map((r, ri) => radialPoint(angles[ai], radii[ri]))])
 		.flatMap((p) => p);
 
-	let mouseCoords: Point | null = null;
+	let mouse: Point | null = null;
 	function handleMouseMove(event: MouseEvent) {
-		console.log(event);
-		mouseCoords = { x: -size / 2 + event.offsetX, y: -size / 2 + event.offsetY };
+		mouse = { x: -size / 2 + event.offsetX, y: -size / 2 + event.offsetY };
+		r = Math.sqrt(mouse.x ** 2 + mouse.y ** 2);
+		a = -(Math.atan2(mouse.x, mouse.y) * 180) / Math.PI + 90;
+		if (mouse.x > 0 && mouse.y < 0) a = 270 + 90 + a;
 	}
 
 	onMount(() => {
@@ -40,6 +44,9 @@
 			d={`M${radialPointString(a, radii[0])}L${radialPointString(a, radii[radii.length - 1])}`}
 			stroke="white"
 		/>
+		<text x={radialPoint(a, radii[0]).x} y={radialPoint(a, radii[0]).y} fill="white" font-size="2em"
+			>{a}</text
+		>
 	{/each}
 	{#each intersections as intersection, i}
 		<text
@@ -51,7 +58,10 @@
 			alignment-baseline="middle">{i}</text
 		>
 	{/each}
-	{#if mouseCoords}
-		<circle cx={mouseCoords.x} cy={mouseCoords.y} r={10} stroke="white" fill="none" />
+	{#if mouse}
+		<circle cx={mouse.x} cy={mouse.y} r={10} stroke="white" fill="none" />
+		<circle {r} stroke="yellow" fill="none" />
+		<path d={`M0 0L${radialPointString(a, r)}`} stroke="yellow" />
+		<text x={mouse.x} y={mouse.y} font-size="3em" fill="yellow">{Math.round(a)}</text>
 	{/if}
 </svg>
