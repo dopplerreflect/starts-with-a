@@ -26,7 +26,7 @@
 		};
 	});
 	const square = true;
-	const size = 1920;
+	const size = 2 ** 13;
 	const width = size;
 	const height = square ? width : width * phi;
 	const strokeWidth = size / 1080;
@@ -43,7 +43,6 @@
 			.map((n) => circleIntersections(circles[0], circles[n + 1])[0])
 			.map((intersection) => Math.sqrt(intersection.x ** 2 + intersection.y ** 2))
 	];
-	// const rm = radii[9] / 5;
 	const rm = arrayMap(5, (n) => (radii[9] / 5) * n + 1);
 </script>
 
@@ -78,17 +77,9 @@
 
 			{#each radii as r, i}
 				<circle {r} stroke="white" stroke-width={strokeWidth} fill="none" />
-				<text x={r} fill="white" text-anchor="middle">{i}</text>
 			{/each}
 			{#each angles48 as a, i}
 				<path d={`M0,0L${radialPointString(a, r0)}`} stroke="white" stroke-width={strokeWidth} />
-				<text
-					x={radialPoint(a, r0).x}
-					y={radialPoint(a, r0).y}
-					text-anchor="middle"
-					alignment-baseline="middle"
-					fill="white">{i}</text
-				>
 			{/each}
 		</g>
 		<path
@@ -354,14 +345,15 @@
 		<HexTiles {size} count={72} innerColor="hsl(270, 50%, 50%)" outerColor="hsl(240, 50%, 30%)" />
 	</g>
 	<g id="outerRing" stroke="white">
-		<circle r={radii[0]} fill="none" />
-		<circle r={radii[2]} fill="none" />
+		<circle r={radii[0]} fill="none" stroke-width={strokeWidth} />
+		<circle r={radii[2]} fill="none" stroke-width={strokeWidth} />
 		{#each arrayMap(144, (k) => (360 / 144) * k) as a, i}
 			<circle
 				cx={radialPoint(a, radii[2] + (radii[0] - radii[2]) / 2).x}
 				cy={radialPoint(a, radii[2] + (radii[0] - radii[2]) / 2).y}
 				r={(radii[0] - radii[2]) / 2 - 2 * strokeWidth}
 				fill={`hsl(${300 - (i % 12) * 3}, 100%, 25%)`}
+				stroke-width={strokeWidth}
 			/>
 		{/each}
 	</g>

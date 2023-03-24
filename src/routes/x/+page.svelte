@@ -20,7 +20,7 @@
 	import SourceCode from '$lib/components/SourceCode.svelte';
 	import DrLogo from '$lib/components/DRLogo.svelte';
 
-	const size = 1920;
+	const size = 2 ** 13;
 	const strokeWidth = size / 1024;
 	const hue = 0;
 	const angles = anglesArray(120);
@@ -72,7 +72,7 @@
 			<circle r={radii[0]} fill="url(#gradient2)" />
 		</mask>
 	</defs>
-	<Background width={size} fill={`hsl(${hue - 120}, 100%, 25%)`} />
+	<Background width={size} fill={`hsl(${hue - 120}, 50%, 10%)`} />
 	<g mask="url(#mask1)" transform="rotate(6)">
 		{#each angles as a, i}
 			<path
@@ -94,7 +94,7 @@
 				fill={`hsl(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%)`}
 				fill-opacity={0.16}
 				stroke={`hsl(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%)`}
-				stroke-opacity={0.33}
+				stroke-opacity={0.66}
 				stroke-width={strokeWidth}
 			/>
 		{/each}
@@ -113,8 +113,8 @@
 		{/each}
 	</g>
 	<DrLogo
-		size={120}
-		stroke="hsl(240, 100%, 20%, 1)"
-		transform={`translate(${size / 2 - 70}, ${size / 2 - 70})`}
+		size={2 ** 9}
+		stroke="hsl(240, 50%, 18%)"
+		transform={`translate(${size / 2 - 2 ** 9 / 2 - 70}, ${size / 2 - 2 ** 9 / 2 - 70})`}
 	/>
 </svg>
