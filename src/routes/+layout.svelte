@@ -13,6 +13,14 @@
 		nav.classList.toggle('open');
 	}
 
+	let blackBg = 'background-color: rgb(0,0,0)';
+	let whiteBg = 'background-color: hsl(255,255,255)';
+	let style = blackBg;
+
+	function toggleStyle() {
+		style = style === blackBg ? whiteBg : blackBg;
+	}
+
 	function handleKeyDown(event: KeyboardEvent) {
 		let { key } = event;
 		switch (key) {
@@ -27,6 +35,9 @@
 			case 'Enter':
 			case 'Escape':
 				toggleNav();
+				break;
+			case 't':
+				toggleStyle();
 				break;
 			default:
 				return;
@@ -57,7 +68,7 @@
 		</ul>
 	</nav>
 
-	<main>
+	<main {style}>
 		<slot />
 	</main>
 </div>
@@ -75,7 +86,6 @@
 	}
 	#container {
 		position: relative;
-		background-color: hsl(220, 100%, 5%);
 	}
 	nav {
 		background-color: hsla(220, 50%, 5%, 0.75);
@@ -97,6 +107,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		background-color: hsl(220, 100%, 100%);
 		overflow: hidden;
 	}
 	svg {
