@@ -5,6 +5,7 @@
 	export let size = 2 ** 10;
 	export let angles: number[] = [];
 	export let radii: number[] = [];
+	export let rotate: number | null = null;
 
 	let nearestPoint: Point = { x: 0, y: 0 };
 	let mouseAngle = 0;
@@ -27,7 +28,7 @@
 		let nearestRadius = radii.reduce((prev, curr) =>
 			Math.abs(curr - mouseRadius) < Math.abs(prev - mouseRadius) ? curr : prev
 		);
-		if (mouse.x > 0 && mouse.y < 0) mouseAngle = 270 + 90 + mouseAngle;
+		if (mouse.x > 0 && mouse.y < 0) mouseAngle = 270 + (rotate ? -270 : 90) + mouseAngle;
 		let nearestAngle = angles.reduce((prev, curr) =>
 			Math.abs(curr - mouseAngle) < Math.abs(prev - mouseAngle) ? curr : prev
 		);
@@ -65,7 +66,7 @@
 			pathArray = [...pathArray.slice(0, pathArray.length - 1)];
 		}
 		console.log(pathCode.join(','));
-		console.log(pathArray.join(''));
+		console.log(pathArray.join(' '));
 	}
 
 	onMount(() => {
@@ -107,5 +108,5 @@
 		stroke="yellow"
 		fill="white"
 	/>
-	<path d={pathArray.length > 3 ? pathArray.join('') : null} stroke="yellow" fill="none" />
+	<path d={pathArray.length > 3 ? pathArray.join(' ') : null} stroke="yellow" fill="none" />
 </g>
