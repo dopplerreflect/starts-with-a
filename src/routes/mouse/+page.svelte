@@ -9,6 +9,7 @@
 	let a = 0;
 	let closestAngle = 0;
 	let closestRadius = 0;
+	let closestIntersection: Point = { x: 0, y: 0 };
 
 	let fill = 'hsl(220, 50%, 50%)';
 
@@ -31,6 +32,7 @@
 		closestAngle = angles.reduce((prev, curr) =>
 			Math.abs(curr - a) < Math.abs(prev - a) ? curr : prev
 		);
+		closestIntersection = radialPoint(closestAngle, closestRadius);
 	}
 
 	onMount(() => {
@@ -74,4 +76,5 @@
 	{/if}
 	<circle r={closestRadius} stroke="red" fill="none" />
 	<path d={`M0 0L${radialPointString(closestAngle, radii[0])}`} stroke="red" />
+	<circle r={10} cx={closestIntersection.x} cy={closestIntersection.y} stroke="red" fill="none" />
 </svg>
