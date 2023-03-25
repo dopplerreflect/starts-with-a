@@ -7,29 +7,65 @@
 	export let radii: number[] = [];
 
 	let nearestPoint: Point = { x: 0, y: 0 };
+	let mouseAngle = 0;
+	let mouseRadius = 0;
 	let nearestAngle = 0;
 	let nearestRadius = 0;
+	let pathCode: string[] = [];
+	let pathArray: string[] = [];
 
 	function intesectionNearestMouse(event: MouseEvent): {
 		nearestPoint: Point;
 		nearestAngle: number;
 		nearestRadius: number;
+		mouseAngle: number;
+		mouseRadius: number;
 	} {
 		let mouse = { x: -size / 2 + event.offsetX, y: -size / 2 + event.offsetY };
-		let nearestRadius = Math.sqrt(mouse.x ** 2 + mouse.y ** 2);
-		let nearestAngle = -(Math.atan2(mouse.x, mouse.y) * 180) / Math.PI + 90;
-		let closestRadius = radii.reduce((prev, curr) =>
-			Math.abs(curr - nearestRadius) < Math.abs(prev - nearestRadius) ? curr : prev
+		let mouseRadius = Math.sqrt(mouse.x ** 2 + mouse.y ** 2);
+		let mouseAngle = -(Math.atan2(mouse.x, mouse.y) * 180) / Math.PI + 90;
+		let nearestRadius = radii.reduce((prev, curr) =>
+			Math.abs(curr - mouseRadius) < Math.abs(prev - mouseRadius) ? curr : prev
 		);
-		if (mouse.x > 0 && mouse.y < 0) nearestAngle = 270 + 90 + nearestAngle;
-		let closestAngle = angles.reduce((prev, curr) =>
-			Math.abs(curr - nearestAngle) < Math.abs(prev - nearestAngle) ? curr : prev
+		if (mouse.x > 0 && mouse.y < 0) mouseAngle = 270 + 90 + mouseAngle;
+		let nearestAngle = angles.reduce((prev, curr) =>
+			Math.abs(curr - mouseAngle) < Math.abs(prev - mouseAngle) ? curr : prev
 		);
-		return { nearestPoint: radialPoint(closestAngle, closestRadius), nearestAngle, nearestRadius };
+		return {
+			nearestPoint: radialPoint(nearestAngle, nearestRadius),
+			mouseAngle,
+			mouseRadius,
+			nearestAngle,
+			nearestRadius
+		};
 	}
 
 	function handleMouseMove(event: MouseEvent) {
 		({ nearestPoint, nearestAngle, nearestRadius } = intesectionNearestMouse(event));
+	}
+
+	function handleMouseDown(event: MouseEvent) {
+		pathCode.push(
+			`radialPointString(angles[${angles.indexOf(nearestAngle)}], radii[${radii.indexOf(
+				nearestRadius
+			)}])`
+		);
+		pathArray = [...pathArray, radialPointString(nearestAngle, nearestRadius)];
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		const pathStrings = ['a', 'c', 'l', 'm', 's', 'q', 'z'];
+		const { key } = event;
+		if (pathStrings.includes(key)) {
+			pathCode.push(`"${key.toUpperCase()}"`);
+			pathArray = [...pathArray, key.toUpperCase()];
+		}
+		if (key === 'Backspace') {
+			pathCode.pop();
+			pathArray = [...pathArray.slice(0, pathArray.length - 1)];
+		}
+		console.log(pathCode.join(','));
+		console.log(pathArray.join(''));
 	}
 
 	onMount(() => {
@@ -37,13 +73,18 @@
 			window.location.reload();
 		}
 		window.addEventListener('resize', handleWindowResize);
-		return () => window.removeEventListener('resize', handleWindowResize);
+		document.addEventListener('keydown', handleKeydown);
+		return () => {
+			window.removeEventListener('resize', handleWindowResize);
+			document.removeEventListener('keydown', handleKeydown);
+		};
 	});
 </script>
 
 <g id="PathBuilder">
 	<path
 		on:mousemove={handleMouseMove}
+		on:mousedown={handleMouseDown}
 		d={`M${-size / 2} ${-size / 2}H${size / 2}V${size / 2}H${-size / 2}Z`}
 		fill="hsla(0, 50%, 50%, 0.0)"
 	/>
@@ -66,4 +107,5 @@
 		stroke="yellow"
 		fill="white"
 	/>
+	<path d={pathArray.length > 3 ? pathArray.join('') : null} stroke="yellow" fill="none" />
 </g>
