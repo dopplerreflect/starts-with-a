@@ -1,45 +1,30 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import Background from '$lib/components/Background.svelte';
-	import { arrayMap, phi, radialPoint, radialPointString, viewBox } from '$lib/geometry';
+	import {
+		arrayMap,
+		phi,
+		radialPointString,
+		viewBox,
+		intesectionNearestMouse
+	} from '$lib/geometry';
 	import { onMount } from 'svelte';
 
 	let size = browser ? Math.min(window.innerHeight, window.innerWidth) : 2 ** 8;
-	let r = 0;
-	let a = 0;
-	// let closestAngle = 0;
-	// let closestRadius = 0;
-	let closestIntersection: Point = { x: 0, y: 0 };
+	let nearestAngle = 0;
+	let nearestRadius = 0;
+	let nearestPoint: Point = { x: 0, y: 0 };
 
 	let fill = 'hsl(220, 50%, 50%)';
 
-	const angles = arrayMap(108, (n) => (360 / 108) * n);
-	const radii = arrayMap(10, (n) => Math.round((size / 2) * phi ** (n * 0.5)));
-
-	// const intersections = angles
-	// 	.map((a, ai) => [...radii.map((r, ri) => radialPoint(angles[ai], radii[ri]))])
-	// 	.flatMap((p) => p);
-
-	function intesectionNearestMouse(
-		mouse: { x: number; y: number },
-		angles: number[],
-		radii: number[]
-	) {
-		let closestRadius = radii.reduce((prev, curr) =>
-			Math.abs(curr - r) < Math.abs(prev - r) ? curr : prev
-		);
-		if (mouse.x > 0 && mouse.y < 0) a = 270 + 90 + a;
-		let closestAngle = angles.reduce((prev, curr) =>
-			Math.abs(curr - a) < Math.abs(prev - a) ? curr : prev
-		);
-		return radialPoint(closestAngle, closestRadius);
-	}
+	const angles = arrayMap(30, (n) => (360 / 30) * n);
+	const radii = arrayMap(5, (n) => Math.round((size / 2) * phi ** n));
 
 	function handleMouseMove(event: MouseEvent) {
-		let mouse = { x: -size / 2 + event.offsetX, y: -size / 2 + event.offsetY };
-		r = Math.sqrt(mouse.x ** 2 + mouse.y ** 2);
-		a = -(Math.atan2(mouse.x, mouse.y) * 180) / Math.PI + 90;
-		closestIntersection = intesectionNearestMouse(mouse, angles, radii);
+		let i = intesectionNearestMouse(event, size, angles, radii);
+		nearestPoint = i.nearestPoint;
+		nearestAngle = i.nearestAngle;
+		nearestRadius = i.nearestRadius;
 	}
 
 	onMount(() => {
@@ -62,7 +47,7 @@
 			stroke="white"
 		/>
 	{/each}
-	<circle {r} stroke="yellow" fill="none" />
-	<path d={`M0 0L${radialPointString(a, r)}`} stroke="yellow" />
-	<circle r={10} cx={closestIntersection.x} cy={closestIntersection.y} stroke="red" fill="none" />
+	<!-- <circle r={nearestRadius} stroke="yellow" fill="none" /> -->
+	<!-- <path d={`M0 0L${radialPointString(nearestAngle, nearestRadius)}`} stroke="yellow" /> -->
+	<circle r={2} cx={nearestPoint.x} cy={nearestPoint.y} stroke="red" fill="none" />
 </svg>
