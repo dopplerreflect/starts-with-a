@@ -13,7 +13,7 @@
 	let nearestAngle = 0;
 	let nearestRadius = 0;
 	let pathCode: string[] = [];
-	let pathArray: string[] = [];
+	let path = '';
 
 	function intesectionNearestMouse(event: MouseEvent): {
 		nearestPoint: Point;
@@ -51,7 +51,7 @@
 				nearestRadius
 			)}])`
 		);
-		pathArray = [...pathArray, radialPointString(nearestAngle, nearestRadius)];
+		buildPath();
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -59,16 +59,17 @@
 		const { key } = event;
 		if (pathStrings.includes(key)) {
 			pathCode.push(`"${key.toUpperCase()}"`);
-			pathArray = [...pathArray, key.toUpperCase()];
 		}
 		if (key === 'Backspace') {
 			pathCode.pop();
-			pathArray = [...pathArray.slice(0, pathArray.length - 1)];
 		}
 		console.log(pathCode.join(','));
-		console.log(pathArray.join(' '));
+		buildPath();
 	}
 
+	function buildPath() {
+		path = eval(`[${pathCode.join(',')}].join(' ')`);
+	}
 	onMount(() => {
 		function handleWindowResize() {
 			window.location.reload();
@@ -108,5 +109,5 @@
 		stroke="yellow"
 		fill="white"
 	/>
-	<path d={pathArray.length > 3 ? pathArray.join(' ') : null} stroke="yellow" fill="none" />
+	<path d={path} stroke="yellow" fill="none" />
 </g>
