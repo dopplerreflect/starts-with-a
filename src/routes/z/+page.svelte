@@ -27,7 +27,7 @@
 		};
 	});
 	const square = true;
-	const masked = true;
+	const masked = false;
 	const size = 2 ** 10;
 	const width = size;
 	const height = square ? width : width * phi;
@@ -50,7 +50,7 @@
 
 <svg bind:this={svg} id="z" viewBox={viewBox(width, height)}>
 	<defs>
-		<SaturationFilter values="0.0" />
+		<SaturationFilter values="1" />
 		<radialGradient id="gradient1" cy="44%">
 			<stop offset="0%" stop-color="hsl(300, 100%, 50%)" stop-opacity={0.5} />
 			<stop offset="50%" stop-color="hsl(270, 50%, 50%)" stop-opacity={0.5} />
