@@ -200,22 +200,3 @@ export const phylotaxicPoints = (
 		let r = (outerRadius / count) * k;
 		return radialPoint((360 - 360 * phi) * k, r, radialPointOptions);
 	});
-
-export function intesectionNearestMouse(
-	event: MouseEvent,
-	size: number,
-	angles: number[],
-	radii: number[]
-): { nearestPoint: Point; nearestAngle: number; nearestRadius: number } {
-	let mouse = { x: -size / 2 + event.offsetX, y: -size / 2 + event.offsetY };
-	let nearestRadius = Math.sqrt(mouse.x ** 2 + mouse.y ** 2);
-	let nearestAngle = -(Math.atan2(mouse.x, mouse.y) * 180) / Math.PI + 90;
-	let closestRadius = radii.reduce((prev, curr) =>
-		Math.abs(curr - nearestRadius) < Math.abs(prev - nearestRadius) ? curr : prev
-	);
-	if (mouse.x > 0 && mouse.y < 0) nearestAngle = 270 + 90 + nearestAngle;
-	let closestAngle = angles.reduce((prev, curr) =>
-		Math.abs(curr - nearestAngle) < Math.abs(prev - nearestAngle) ? curr : prev
-	);
-	return { nearestPoint: radialPoint(closestAngle, closestRadius), nearestAngle, nearestRadius };
-}
