@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { radialPoint, polygonPath, radialPointString } from '$lib/geometry';
 	import { onMount } from 'svelte';
 
@@ -48,12 +49,12 @@
 	}
 
 	function handleMouseDown(event: MouseEvent) {
-		pathCode.push(
-			`radialPointString(angles[${angles.indexOf(nearestAngle)}], radii[${radii.indexOf(
-				nearestRadius
-			)}])`
-		);
+		let text = `radialPointString(angles[${angles.indexOf(nearestAngle)}], radii[${radii.indexOf(
+			nearestRadius
+		)}])`;
+		pathCode.push(text);
 		buildPath();
+		copyTextToClipboard(text);
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -71,7 +72,12 @@
 			buildPath();
 		}
 		console.log(pathCode.join(','));
-		// buildPath();
+	}
+
+	function copyTextToClipboard(text: string) {
+		if (browser) {
+			navigator.clipboard.writeText(text);
+		}
 	}
 
 	let p: SVGPathElement;
