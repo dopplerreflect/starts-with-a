@@ -61,6 +61,9 @@
 		if (pathStrings.includes(key)) {
 			pathCode.push(`"${key.toUpperCase()}"`);
 		}
+		if (key === 'a') {
+			pathCode.push(`"${nearestRadius} ${nearestRadius} 0 0 0"`);
+		}
 		if (key === 'Backspace') {
 			pathCode.pop();
 		}
