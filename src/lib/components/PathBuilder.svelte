@@ -76,6 +76,7 @@
 
 	let p: SVGPathElement;
 	function buildPath() {
+		if (pathCode[0].toUpperCase() !== '"M"') return;
 		path = eval(`[${pathCode.join(',')}].join(' ')`);
 		p.setAttribute('d', path);
 		console.log(path);
