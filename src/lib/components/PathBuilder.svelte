@@ -15,6 +15,8 @@
 	let pathCode: string[] = [];
 	let path = '';
 
+	const pathStrings = ['a', 'c', 'l', 'm', 's', 'q', 'z'];
+
 	function intesectionNearestMouse(event: MouseEvent): {
 		nearestPoint: Point;
 		nearestAngle: number;
@@ -55,7 +57,6 @@
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
-		const pathStrings = ['a', 'c', 'l', 'm', 's', 'q', 'z'];
 		const { key } = event;
 		if (pathStrings.includes(key)) {
 			pathCode.push(`"${key.toUpperCase()}"`);
@@ -64,12 +65,16 @@
 			pathCode.pop();
 		}
 		console.log(pathCode.join(','));
-		buildPath();
+		// buildPath();
 	}
 
+	let p: SVGPathElement;
 	function buildPath() {
 		path = eval(`[${pathCode.join(',')}].join(' ')`);
+		p.setAttribute('d', path);
+		console.log(path);
 	}
+
 	onMount(() => {
 		function handleWindowResize() {
 			window.location.reload();
@@ -109,5 +114,5 @@
 		stroke="yellow"
 		fill="white"
 	/>
-	<path d={path} stroke="yellow" fill="none" />
+	<path bind:this={p} stroke="yellow" fill="none" />
 </g>
