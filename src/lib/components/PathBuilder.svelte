@@ -67,6 +67,9 @@
 		if (key === 'Backspace') {
 			pathCode.pop();
 		}
+		if (key === 'z') {
+			buildPath();
+		}
 		console.log(pathCode.join(','));
 		// buildPath();
 	}
