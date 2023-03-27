@@ -12,6 +12,7 @@
 	import { onMount } from 'svelte';
 
 	let size = 2 ** 10;
+	let hue = 345;
 
 	let r0 = (size / 2) * 0.9;
 	let r1 = r0 / 2;
@@ -335,23 +336,29 @@
 			].join(' ')}
 		/>
 	</defs>
-	<Background {size} fill="hsl(15, 50%, 25%)" />
+	<Background {size} fill={`hsl(${hue + 35}, 50%, 25%)`} />
 	<g id="figure" stroke-width={size * phi ** 13} fill-opacity="0.75">
 		{#each circles as circle, i}
-			<circle cx={circle.x} cy={circle.y} r={r1} stroke="hsl(15, 50%, 33%)" fill="none" />
+			<circle
+				cx={circle.x}
+				cy={circle.y}
+				r={r1}
+				stroke={`hsl(${hue + 15}, 50%, 33%)`}
+				fill="none"
+			/>
 		{/each}
 
 		{#each arrayMap(6, (n) => (360 / 6) * n) as a}
 			<use
 				href="#bigsquare"
 				stroke="black"
-				fill="hsl(52.5, 100%, 50%)"
+				fill={`hsl(${hue + 52}.5, 100%, 50%)`}
 				transform={`rotate(${a})`}
 			/>
 			<use
 				href="#littlesquare"
 				stroke="black"
-				fill="hsl(52.5, 100%, 50%)"
+				fill={`hsl(${hue + 52}.5, 100%, 50%)`}
 				transform={`rotate(${a})`}
 			/>
 		{/each}
@@ -360,34 +367,34 @@
 			<use
 				href="#xthing"
 				stroke="black"
-				fill="hsl(30, 100%, 50%)"
+				fill={`hsl(${hue + 30}, 100%, 50%)`}
 				transform={`rotate(${a - 7.5})`}
 			/>
 			<use
 				href="#xthing2"
 				stroke="black"
-				fill="hsl(37.5, 100%, 50%)"
+				fill={`hsl(${hue + 37}.5, 100%, 50%)`}
 				transform={`rotate(${a - 7.5})`}
 			/>
 			<use
 				href="#square1"
 				stroke="black"
-				fill="hsl(22.5, 100%, 50%)"
+				fill={`hsl(${hue + 22}.5, 100%, 50%)`}
 				transform={`rotate(${a - 7.5})`}
 			/>
 			<use
 				href="#square2"
 				stroke="black"
-				fill="hsl(45, 100%, 50%)"
+				fill={`hsl(${hue + 45}, 100%, 50%)`}
 				transform={`rotate(${a - 7.5})`}
 			/>
 			<use
 				href="#diamonds"
 				stroke="black"
-				fill="hsl(60, 100%, 50%)"
+				fill={`hsl(${hue + 60}, 100%, 50%)`}
 				transform={`rotate(${a - 7.5})`}
 			/>
 		{/each}
-		<circle r={radii[11]} stroke="black" fill="hsl(60, 100%, 50%)" fill-opacity="1" />
+		<circle r={radii[11]} stroke="black" fill={`hsl(${hue + 60}, 100%, 50%)`} fill-opacity="1" />
 	</g>
 </svg>
