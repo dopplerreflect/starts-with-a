@@ -22,6 +22,7 @@
 	}
 
 	function handleKeyDown(event: KeyboardEvent) {
+		if (event.ctrlKey) return;
 		let { key } = event;
 		switch (key) {
 			case 'j':

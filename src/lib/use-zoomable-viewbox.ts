@@ -40,6 +40,7 @@ export function useZoomableViewbox(
 		setViewbox();
 	}
 	const handleKeydown = (e: KeyboardEvent) => {
+		if (e.ctrlKey) return;
 		switch (e.key) {
 			case '=':
 				zoomIn();
