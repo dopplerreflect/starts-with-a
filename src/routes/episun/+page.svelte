@@ -335,28 +335,38 @@
 				'Z'
 			].join(' ')}
 		/>
+		<linearGradient id="gradient0">
+			<stop offset="0.0" stop-color="hsl(60, 100%, 33%)" />
+			<stop offset="1.0" stop-color="hsl(15, 100%, 50%)" />
+		</linearGradient>
+		<radialGradient
+			id="gradient1"
+			xlink:href="#gradient0"
+			r={r0}
+			cx={0}
+			cy={0}
+			fx={0}
+			fy={0}
+			gradientUnits="userSpaceOnUse"
+		/>
 	</defs>
-	<Background {size} fill={`hsl(${hue + 35}, 50%, 25%)`} />
-	<g id="figure" stroke-width={size * phi ** 13} fill-opacity="0.75">
+	<Background {size} fill={`hsl(${hue + 35}, 50%, 20%)`} />
+	<g id="circles" stroke="url(#gradient1)" fill="none">
 		{#each circles as circle, i}
-			<circle
-				cx={circle.x}
-				cy={circle.y}
-				r={r1}
-				stroke={`hsl(${hue + 15}, 50%, 33%)`}
-				fill="none"
-			/>
+			<circle cx={circle.x} cy={circle.y} r={r1} />
 		{/each}
+	</g>
 
+	<g id="figure" stroke-width={size * phi ** 13} fill-opacity="0.75">
 		{#each arrayMap(6, (n) => (360 / 6) * n) as a}
 			<use
-				href="#bigsquare"
+				xlink:href="#bigsquare"
 				stroke="black"
 				fill={`hsl(${hue + 52}.5, 100%, 50%)`}
 				transform={`rotate(${a})`}
 			/>
 			<use
-				href="#littlesquare"
+				xlink:href="#littlesquare"
 				stroke="black"
 				fill={`hsl(${hue + 52}.5, 100%, 50%)`}
 				transform={`rotate(${a})`}
@@ -365,36 +375,36 @@
 
 		{#each arrayMap(6, (n) => (360 / 6) * n) as a}
 			<use
-				href="#xthing"
+				xlink:href="#xthing"
 				stroke="black"
 				fill={`hsl(${hue + 30}, 100%, 50%)`}
 				transform={`rotate(${a - 7.5})`}
 			/>
 			<use
-				href="#xthing2"
+				xlink:href="#xthing2"
 				stroke="black"
 				fill={`hsl(${hue + 37}.5, 100%, 50%)`}
 				transform={`rotate(${a - 7.5})`}
 			/>
 			<use
-				href="#square1"
+				xlink:href="#square1"
 				stroke="black"
 				fill={`hsl(${hue + 22}.5, 100%, 50%)`}
 				transform={`rotate(${a - 7.5})`}
 			/>
 			<use
-				href="#square2"
+				xlink:href="#square2"
 				stroke="black"
 				fill={`hsl(${hue + 45}, 100%, 50%)`}
 				transform={`rotate(${a - 7.5})`}
 			/>
 			<use
-				href="#diamonds"
+				xlink:href="#diamonds"
 				stroke="black"
 				fill={`hsl(${hue + 60}, 100%, 50%)`}
 				transform={`rotate(${a - 7.5})`}
 			/>
 		{/each}
-		<circle r={radii[11]} stroke="black" fill={`hsl(${hue + 60}, 100%, 50%)`} fill-opacity="1" />
+		<circle r={radii[11]} stroke="black" fill={`hsl(${hue + 60}, 100%, 50%)`} fill-opacity="0.75" />
 	</g>
 </svg>
