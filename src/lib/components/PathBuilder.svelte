@@ -6,6 +6,7 @@
 	export let size = 2 ** 10;
 	export let angles: number[] = [];
 	export let radii: number[] = [];
+	export let stroke = 'hsl(220, 100%, 75%)';
 
 	let currentAngle = 0;
 	let currentRadius = 0;
@@ -71,12 +72,12 @@
 		fill="hsla(0, 50%, 50%, 0.0)"
 	/>
 	{#each radii as r, i}
-		<circle {r} stroke="white" fill="none" />
+		<circle {r} {stroke} fill="none" />
 	{/each}
 	{#each angles as a, i}
 		<path
 			d={`M${radialPointString(a, radii[0])}L${radialPointString(a, radii[radii.length - 1])}`}
-			stroke="white"
+			{stroke}
 		/>
 	{/each}
 	<path
@@ -84,7 +85,7 @@
 			center: { x: currentPoint.x, y: currentPoint.y },
 			rotate: currentAngle
 		})}
-		stroke="yellow"
+		stroke="stroke"
 		fill="white"
 	/>
 	<path bind:this={p} stroke="yellow" fill="none" />
