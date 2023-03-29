@@ -1,58 +1,77 @@
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
-	import { phi, radialPointString, viewBox } from '$lib/geometry';
+	import DrLogo from '$lib/components/DRLogo.svelte';
+	import { phi, viewBox } from '$lib/geometry';
+	import { useSaveFile } from '$lib/save-svg';
+	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
 
 	let svg: SVGSVGElement;
 	const size = 2 ** 10;
 	let r = (size / 2) * 0.95;
-	let d = 0;
-	$: x = r * Math.cos(d * (Math.PI * 2));
-	$: y = r * Math.sin(d * (Math.PI * 2)) * phi ** 2;
-	// let y = r * phi ** 2;
 	let a = 0;
-	$: pendulum = { x, y };
-	let points: Point[] = [];
-	let path: string;
-	onMount(() => {
-		let timeout: number;
-		function step() {
-			points = [
-				...points,
-				{
-					x:
-						pendulum.x * Math.cos(a * (Math.PI / 180)) + pendulum.y * Math.sin(a * (Math.PI / 180)),
-					y:
-						-pendulum.x * Math.sin(a * (Math.PI / 180)) + pendulum.y * Math.cos(a * (Math.PI / 180))
-				}
-			];
-			path = `M${[...points.map((p) => `${p.x} ${p.y}`)].join('L')}`;
-			console.log(path);
-			timeout = setTimeout(() => {
-				d = d > 1 ? 0 : d + 1 / 24;
-				a = a > 360 ? 0 : a + 1 / (r / 24);
+	let d = 0;
+	let x = 0;
+	let y = 0;
+
+	let path =
+		'M' +
+		[...Array(4320).keys()]
+			.map((k, i) => {
 				r = r - size / (360 * 24);
-				if (a <= 360) step();
-			}, 0);
-		}
-		step();
-		const frame = window.requestAnimationFrame(step);
+				a = a + 1 / (r / 24);
+				d = d > 1 ? 0 : d + 1 / 360;
+				x = r * Math.cos(d * (Math.PI * 2));
+				y = r * Math.sin(d * (Math.PI * 2)) * phi ** 2;
+				return `${x * Math.cos(a * (Math.PI / 180)) + y * Math.sin(a * (Math.PI / 180))} ${
+					-x * Math.sin(a * (Math.PI / 180)) + y * Math.cos(a * (Math.PI / 180))
+				}`;
+			})
+			.join('L');
+	console.log(path);
+
+	onMount(() => {
+		const unmountZoomable = useZoomableViewbox(svg);
+		const unmountSaveFile = useSaveFile(svg);
 		return () => {
-			window.cancelAnimationFrame(frame);
-			clearTimeout(timeout);
+			unmountZoomable();
+			unmountSaveFile();
 		};
 	});
 </script>
 
 <svg bind:this={svg} id="pendulum" viewBox={viewBox(size)}>
 	<defs>
-		<radialGradient id="gradient">
-			<stop offset="0%" stop-color="red" />
-			<stop offset="90%" stop-color="yellow" />
+		<radialGradient id="gradient0">
+			<stop offset="0%" stop-color="hsl(240, 50%, 20%)" />
+			<stop offset="120%" stop-color="hsl(225, 100%, 40%)" />
+		</radialGradient>
+		<radialGradient id="gradient1">
+			<stop offset="0%" stop-color="hsl(240, 100%, 66%)" />
+			<stop offset="90%" stop-color="hsl(270, 100%, 50%)" />
+		</radialGradient>
+		<radialGradient id="gradient3">
+			<stop offset="0%" stop-color="hsl(240, 100%, 85%)" />
+			<stop offset="90%" stop-color="hsl(270, 100%, 75%)" />
 		</radialGradient>
 	</defs>
-	<Background {size} fill="hsl(220, 25%, 20%)" />
-	<g id="figure" transform={`rotate(${a})`}>
-		<path d={path} stroke="url(#gradient)" fill="none" fill-rule="evenodd" />
+	<Background {size} fill="url(#gradient0)" />
+	<g id="figure" transform={`rotate(${0})`}>
+		<path
+			d={path}
+			stroke-width="3"
+			stroke="url(#gradient1)"
+			fill="url(#gradient1)"
+			fill-opacity="0.25"
+			fill-rule="evenodd"
+		/>
 	</g>
+	<g id="figure" transform={`rotate(${0})`}>
+		<path d={path} stroke-width="1" stroke="url(#gradient3)" fill="none" />
+	</g>
+	<DrLogo
+		size={size / 15}
+		stroke="hsla(220, 100%, 75%, 0.5)"
+		transform={`translate(${size / 2 - size / 20} ${size / 2 - size / 20})`}
+	/>
 </svg>
