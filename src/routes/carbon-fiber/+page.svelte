@@ -6,11 +6,12 @@
 	import CarbonFiberPattern from '$lib/components/CarbonFiberPattern.svelte';
 
 	const size = 2 ** 13;
+	const bgsize = Math.sqrt(size ** 2 * 2);
 </script>
 
 <svg viewBox={viewBox(size)}>
 	<defs>
-		<CarbonFiberPattern {size} scale={0.075} />
+		<CarbonFiberPattern size={bgsize} scale={0.05} />
 	</defs>
-	<Background {size} fill="url(#CarbonFiberPattern)" />
+	<Background size={bgsize} transform={'rotate(45)'} fill="url(#CarbonFiberPattern)" />
 </svg>
