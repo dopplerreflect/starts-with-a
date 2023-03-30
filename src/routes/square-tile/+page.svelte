@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
-	import PathBuilder from '$lib/components/PathBuilder.svelte';
+	import DrLogo from '$lib/components/DRLogo.svelte';
 	import SaturationFilter from '$lib/components/SaturationFilter.svelte';
 	import {
 		arrayMap,
@@ -8,7 +8,6 @@
 		polygonPath,
 		radialPoint,
 		radialPointString,
-		starPath,
 		viewBox
 	} from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
@@ -18,7 +17,6 @@
 	let svg: SVGSVGElement;
 	onMount(() => {
 		const unmountSaveFile = useSaveFile(svg);
-		// const unmountZoomable = useZoomableViewbox(svg, 5, 5, 5);
 		const unmountZoomable = useZoomableViewbox(svg);
 		return () => {
 			unmountSaveFile();
@@ -55,11 +53,6 @@
 			<Background {size} fill="white" />
 		</mask>
 		<g id="corner" stroke-width={strokeWidth}>
-			<!-- <path d={polygonPath(3, r0radii[7])} stroke="white" fill="none" />
-			<path d={polygonPath(6, r0radii[8])} stroke="white" fill="none" />
-			<path d={polygonPath(3, r0radii[9])} stroke="white" fill="none" />
-			<path d={polygonPath(6, r0radii[9])} stroke="white" fill="none" /> -->
-
 			<path
 				id="point"
 				d={[
@@ -202,12 +195,6 @@
 		</g>
 
 		<g id="tile" mask="url(#boundary)">
-			<!-- {#each angles as a, i}
-				<path
-					d={`M${radialPointString(a, r0radii[r0radii.length - 1])}L${radialPointString(a, r1)}`}
-					stroke={`hsl(${a % 22.5 === 0 ? 30 : a % 18 === 0 ? 270 : 120}, 50%, 50%)`}
-				/>
-			{/each} -->
 			<g id="quadrant">
 				{#each arrayMap(4, (n) => n * 90) as a}
 					<use xlink:href="#corner" transform={`rotate(${a})`} />
@@ -234,5 +221,10 @@
 	<Background {size} fill="url(#tile-pattern)" />
 
 	<use xlink:href="#tile" filter="url(#SaturationFilte)" />
-	<!-- <PathBuilder {size} {angles} radii={r0radii} /> -->
+
+	<DrLogo
+		size={size / 20}
+		stroke="hsl(30, 100%, 100%)"
+		transform={`translate(${size / 2 - size / 40} ${size / 2 - size / 40})`}
+	/>
 </svg>
