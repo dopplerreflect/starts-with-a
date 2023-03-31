@@ -11,6 +11,7 @@
 	const size = 2 ** 10;
 	const bgsize = Math.sqrt(size ** 2 * 2);
 	const strokeWidth = size / 2 ** 9;
+	let hue = 200;
 
 	const r0 = (size / 2) * 0.95;
 	const angles = arrayMap(16, (n) => (360 / 16) * n - 90);
@@ -92,19 +93,19 @@
 	</defs>
 	<Background size={bgsize} transform={'rotate(45)'} fill="url(#CarbonFiberPattern)" />
 
-	<circle r={radii[6]} fill="hsl(225, 50%, 75%)" fill-opacity={0.25} />
+	<circle r={radii[6]} fill="hsl(${hue + 60}, 50%, 15%)" fill-opacity={0.5} />
 	<path
 		d={tesselatedOctagonPath}
 		stroke-width={strokeWidth}
 		stroke="black"
-		fill={`hsl(0, 50%, 90%)`}
+		fill={`hsl(${hue + 0}, 50%, 90%)`}
 		fill-rule="evenodd"
 	/>
 	<path
 		d={tesselatedOctagonPath2}
 		stroke-width={strokeWidth}
 		stroke="black"
-		fill={`hsl(22.5, 50%, 60%)`}
+		fill={`hsl(${hue + 22}.5, 50%, 60%)`}
 		fill-rule="evenodd"
 		filter="url(#f3)"
 	/>
@@ -112,7 +113,7 @@
 		d={tesselatedOctagonPath3}
 		stroke-width={strokeWidth}
 		stroke="black"
-		fill={`hsl(45, 50%,30%)`}
+		fill={`hsl(${hue + 45}, 50%,30%)`}
 		fill-rule="evenodd"
 		filter="url(#f3)"
 	/>
@@ -120,18 +121,18 @@
 		d={tesselatedOctagonPath4}
 		stroke-width={strokeWidth}
 		stroke="black"
-		fill={`hsl(60, 50%, 15%)`}
+		fill={`hsl(${hue + 60}, 50%, 15%)`}
 		fill-rule="evenodd"
 		filter="url(#f3)"
 	/>
 
-	<circle r={radii[12]} fill="hsl(225, 100%, 50%)" fill-opacity={0.25} />
+	<circle r={radii[12]} fill="hsl(${hue + 0}, 100%, 15%)" fill-opacity={0.5} />
 
 	<path
 		d={tesselatedOctagonPath4}
 		stroke-width={strokeWidth}
 		stroke="black"
-		fill={`hsl(0, 50%, 90%)`}
+		fill={`hsl(${hue + 0}, 50%, 90%)`}
 		fill-rule="evenodd"
 		filter="url(#f3)"
 		transform={`scale(${phi})`}
@@ -140,7 +141,7 @@
 		d={tesselatedOctagonPath3}
 		stroke-width={strokeWidth}
 		stroke="black"
-		fill={`hsl(22.5, 50%, 60%)`}
+		fill={`hsl(${hue + 22}.5, 50%, 60%)`}
 		fill-rule="evenodd"
 		filter="url(#f3)"
 		transform={`scale(${phi})`}
@@ -149,7 +150,7 @@
 		d={tesselatedOctagonPath2}
 		stroke-width={strokeWidth}
 		stroke="black"
-		fill={`hsl(45, 50%,30%)`}
+		fill={`hsl(${hue + 45}, 50%,30%)`}
 		fill-rule="evenodd"
 		filter="url(#f3)"
 		transform={`scale(${phi})`}
@@ -158,7 +159,7 @@
 		d={tesselatedOctagonPath}
 		stroke-width={strokeWidth}
 		stroke="black"
-		fill={`hsl(60, 50%, 15%)`}
+		fill={`hsl(${hue + 60}, 50%, 15%)`}
 		fill-rule="evenodd"
 		filter="url(#f3)"
 		transform={`scale(${phi})`}
@@ -166,8 +167,8 @@
 
 	<path
 		d={epicycloidPath()}
-		stroke="hsl(60, 25%, 75%)"
-		fill="hsl(30, 25%, 10%)"
+		stroke={`hsl(${hue + 60}, 25%, 75%)`}
+		fill={`hsl(${hue + 30}, 25%, 10%)`}
 		fill-opacity={0.25}
 		stroke-width={strokeWidth}
 		filter="url(#f3)"
@@ -176,7 +177,7 @@
 	<!-- <PathBuilder {angles} {radii} /> -->
 	<DrLogo
 		size={size / 20}
-		stroke={`hsl(0, 0%, 50%)`}
+		stroke={`hsl(${hue + 0}, 0%, 50%)`}
 		strokeOpacity={0.5}
 		transform={`translate(${size / 2 - size / 20} ${size / 2 - size / 20})`}
 	/>
