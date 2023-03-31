@@ -1,7 +1,7 @@
 <svelte:options namespace="svg" />
 
 <script lang="ts">
-	import { arrayMap, phi, radialPointString, viewBox } from '$lib/geometry';
+	import { arrayMap, phi, phylotaxicPoints, radialPointString, viewBox } from '$lib/geometry';
 	import Background from '$lib/components/Background.svelte';
 	import CarbonFiberPattern from '$lib/components/CarbonFiberPattern.svelte';
 	import DrLogo from '$lib/components/DRLogo.svelte';
@@ -11,7 +11,7 @@
 	const size = 2 ** 10;
 	const bgsize = Math.sqrt(size ** 2 * 2);
 	const strokeWidth = size / 2 ** 9;
-	let hue = 200;
+	let hue = 45;
 
 	const r0 = (size / 2) * 0.95;
 	const angles = arrayMap(16, (n) => (360 / 16) * n - 90);
@@ -93,7 +93,8 @@
 	</defs>
 	<Background size={bgsize} transform={'rotate(45)'} fill="url(#CarbonFiberPattern)" />
 
-	<circle r={radii[6]} fill="hsl(${hue + 60}, 50%, 15%)" fill-opacity={0.5} />
+	<circle r={radii[6]} fill="hsl(${hue + 60}, 100%, 50%)" fill-opacity={0.25} />
+
 	<path
 		d={tesselatedOctagonPath}
 		stroke-width={strokeWidth}
@@ -126,7 +127,16 @@
 		filter="url(#f3)"
 	/>
 
-	<circle r={radii[12]} fill="hsl(${hue + 0}, 100%, 15%)" fill-opacity={0.5} />
+	{#each phylotaxicPoints(2184, radii[12]) as p, i}
+		<circle
+			r={strokeWidth}
+			cx={p.x}
+			cy={p.y}
+			fill={`hsl(${hue + 30}, ${100 - Math.round((100 / 2184) * i)}%, 50%)`}
+		/>
+	{/each}
+
+	<circle r={radii[12]} fill={`hsl(${hue + 45}, 50%, 50%)`} fill-opacity={0.25} />
 
 	<path
 		d={tesselatedOctagonPath4}
@@ -168,10 +178,9 @@
 	<path
 		d={epicycloidPath()}
 		stroke={`hsl(${hue + 60}, 25%, 75%)`}
-		fill={`hsl(${hue + 30}, 25%, 10%)`}
-		fill-opacity={0.25}
+		fill={`hsl(${hue + 60}, 25%, 10%)`}
+		fill-opacity={0.5}
 		stroke-width={strokeWidth}
-		filter="url(#f3)"
 		transform="rotate(22.5)"
 	/>
 	<!-- <PathBuilder {angles} {radii} /> -->
