@@ -5,8 +5,10 @@
 	import Background from '$lib/components/Background.svelte';
 	import CarbonFiberPattern from '$lib/components/CarbonFiberPattern.svelte';
 	import DrLogo from '$lib/components/DRLogo.svelte';
+	import { onMount } from 'svelte';
+	import { useSaveFile } from '$lib/save-svg';
 
-	const size = 2 ** 9;
+	const size = 2 ** 10;
 	const bgsize = Math.sqrt(size ** 2 * 2);
 	const strokeWidth = size / 2 ** 9;
 
@@ -70,20 +72,27 @@
 			.map((r) => `L${epicycloid(r).x},${epicycloid(r).y}`)
 			.join(' ')}`;
 	};
+	let svg: SVGSVGElement;
+	onMount(() => {
+		const unmountSaveFile = useSaveFile(svg);
+		return () => {
+			unmountSaveFile();
+		};
+	});
 </script>
 
-<svg viewBox={viewBox(size)}>
+<svg id="octagonal-framed-epicycloid-on-carbon-fiber" bind:this={svg} viewBox={viewBox(size)}>
 	<defs>
 		<CarbonFiberPattern size={bgsize} scale={0.05} />
 		<filter id="f3" x="0" y="0" width="150%" height="150%">
-			<feOffset result="offOut" in="SourceAlpha" dx="1" dy="2" />
-			<feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+			<feOffset result="offOut" in="SourceAlpha" dx={strokeWidth} dy={strokeWidth * 2} />
+			<feGaussianBlur result="blurOut" in="offOut" stdDeviation={strokeWidth * 3} />
 			<feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
 		</filter>
 	</defs>
 	<Background size={bgsize} transform={'rotate(45)'} fill="url(#CarbonFiberPattern)" />
 
-	<circle r={radii[6]} fill="hsl(15, 15%, 45%)" />
+	<circle r={radii[6]} fill="hsl(225, 50%, 75%)" fill-opacity={0.25} />
 	<path
 		d={tesselatedOctagonPath}
 		stroke-width={strokeWidth}
@@ -116,7 +125,7 @@
 		filter="url(#f3)"
 	/>
 
-	<circle r={radii[12]} fill="hsl(45, 15%, 15%)" />
+	<circle r={radii[12]} fill="hsl(225, 100%, 50%)" fill-opacity={0.25} />
 
 	<path
 		d={tesselatedOctagonPath4}
@@ -159,6 +168,7 @@
 		d={epicycloidPath()}
 		stroke="hsl(60, 25%, 75%)"
 		fill="hsl(30, 25%, 10%)"
+		fill-opacity={0.25}
 		stroke-width={strokeWidth}
 		filter="url(#f3)"
 		transform="rotate(22.5)"
