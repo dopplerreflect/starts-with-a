@@ -10,51 +10,49 @@
 
 	const size = 2 ** 10;
 	const bgsize = Math.sqrt(size ** 2 * 2);
+
 	const strokeWidth = size / 2 ** 9;
 	let hue = 45;
 
 	const r0 = (size / 2) * 0.95;
 	const angles = arrayMap(16, (n) => (360 / 16) * n - 90);
-	const oRadii = [
-		r0,
-		...arrayMap(9, (n) => Number((r0 - r0 * phi ** n).toFixed(1))).sort((a, b) => b - a)
-	];
+	const phiArr = arrayMap(9, (n) => phi ** n);
+	const oRadii = [r0, ...phiArr.map((phiN) => Number((r0 - r0 * phiN).toFixed(1)))].sort(
+		(a, b) => b - a
+	);
 	const iRadii = oRadii.map((r) => oRadii[6] - (r0 - r) * 2);
-	const radii = [...new Set([...oRadii, ...iRadii].sort((a, b) => b - a).filter((n) => n > 0))];
+	const radii = [...new Set([...oRadii, ...iRadii].filter((n) => n > 0))].sort((a, b) => b - a);
 
-	const tesselatedOctagonPath4 =
-		'M' +
-		angles.map((a, i) => radialPointString(a, i % 2 === 0 ? radii[0] : radii[6])).join('L') +
-		'Z' +
-		'M' +
-		angles.map((a, i) => radialPointString(a, i % 2 === 0 ? radii[3] : radii[7])).join('L') +
-		'Z';
+	const tesselatedOctagonPathArr = [
+		radii.slice(0, 8),
+		radii.slice(3, 10),
+		radii.slice(4, 11),
+		radii.slice(5, 12)
+	];
 
-	const tesselatedOctagonPath3 =
-		'M' +
-		angles.map((a, i) => radialPointString(a, i % 2 === 0 ? radii[3] : radii[7])).join('L') +
-		'Z' +
-		'M' +
-		angles.map((a, i) => radialPointString(a, i % 2 === 0 ? radii[4] : radii[8])).join('L') +
-		'Z';
-
-	const tesselatedOctagonPath2 =
-		'M' +
-		angles.map((a, i) => radialPointString(a, i % 2 === 0 ? radii[4] : radii[8])).join('L') +
-		'Z' +
-		'M' +
-		angles.map((a, i) => radialPointString(a, i % 2 === 0 ? radii[5] : radii[9])).join('L') +
-		'Z';
-
-	const tesselatedOctagonPath =
-		'M' +
-		angles.map((a, i) => radialPointString(a, i % 2 === 0 ? radii[5] : radii[9])).join('L') +
-		'Z' +
-		'M' +
-		angles.map((a, i) => radialPointString(a, i % 2 === 0 ? radii[6] : radii[11])).join('L') +
-		'Z';
-
-	/** break */
+	const tesselatedOctagonPaths = tesselatedOctagonPathArr.map((radiiSlice, ri) =>
+		[
+			'M' +
+				angles
+					.map((a, i) =>
+						radialPointString(a, i % 2 === 0 ? radiiSlice[0] : radiiSlice[ri === 0 ? 6 : 4])
+					)
+					.join('L') +
+				'Z' +
+				'M' +
+				angles
+					.map((a, i) =>
+						radialPointString(
+							a,
+							i % 2 === 0
+								? radiiSlice[ri === 0 ? 3 : 1]
+								: radiiSlice[ri === 3 ? 6 : ri === 0 ? 7 : 5]
+						)
+					)
+					.join('L') +
+				'Z'
+		].join('')
+	);
 
 	const R = radii[13] / Math.PI;
 	const k = 8 / 13;
@@ -95,37 +93,15 @@
 
 	<circle r={radii[6]} fill="hsl(${hue + 60}, 100%, 50%)" fill-opacity={0.25} />
 
-	<path
-		d={tesselatedOctagonPath}
-		stroke-width={strokeWidth}
-		stroke="black"
-		fill={`hsl(${hue + 0}, 50%, 90%)`}
-		fill-rule="evenodd"
-	/>
-	<path
-		d={tesselatedOctagonPath2}
-		stroke-width={strokeWidth}
-		stroke="black"
-		fill={`hsl(${hue + 22}.5, 50%, 60%)`}
-		fill-rule="evenodd"
-		filter="url(#f3)"
-	/>
-	<path
-		d={tesselatedOctagonPath3}
-		stroke-width={strokeWidth}
-		stroke="black"
-		fill={`hsl(${hue + 45}, 50%,30%)`}
-		fill-rule="evenodd"
-		filter="url(#f3)"
-	/>
-	<path
-		d={tesselatedOctagonPath4}
-		stroke-width={strokeWidth}
-		stroke="black"
-		fill={`hsl(${hue + 60}, 50%, 15%)`}
-		fill-rule="evenodd"
-		filter="url(#f3)"
-	/>
+	{#each [...tesselatedOctagonPaths].reverse() as path, i}
+		<path
+			d={path}
+			stroke="black"
+			fill={`hsl(${hue + 15 * i}, 50%, ${90 - 25 * i}%)`}
+			fill-rule="evenodd"
+			filter="url(#f3)"
+		/>
+	{/each}
 
 	{#each phylotaxicPoints(2184, radii[12]) as p, i}
 		<circle
@@ -138,42 +114,16 @@
 
 	<circle r={radii[12]} fill={`hsl(${hue + 45}, 50%, 50%)`} fill-opacity={0.25} />
 
-	<path
-		d={tesselatedOctagonPath4}
-		stroke-width={strokeWidth}
-		stroke="black"
-		fill={`hsl(${hue + 0}, 50%, 90%)`}
-		fill-rule="evenodd"
-		filter="url(#f3)"
-		transform={`scale(${phi})`}
-	/>
-	<path
-		d={tesselatedOctagonPath3}
-		stroke-width={strokeWidth}
-		stroke="black"
-		fill={`hsl(${hue + 22}.5, 50%, 60%)`}
-		fill-rule="evenodd"
-		filter="url(#f3)"
-		transform={`scale(${phi})`}
-	/>
-	<path
-		d={tesselatedOctagonPath2}
-		stroke-width={strokeWidth}
-		stroke="black"
-		fill={`hsl(${hue + 45}, 50%,30%)`}
-		fill-rule="evenodd"
-		filter="url(#f3)"
-		transform={`scale(${phi})`}
-	/>
-	<path
-		d={tesselatedOctagonPath}
-		stroke-width={strokeWidth}
-		stroke="black"
-		fill={`hsl(${hue + 60}, 50%, 15%)`}
-		fill-rule="evenodd"
-		filter="url(#f3)"
-		transform={`scale(${phi})`}
-	/>
+	{#each [...tesselatedOctagonPaths] as path, i}
+		<path
+			d={path}
+			stroke="black"
+			fill={`hsl(${hue + 15 * i}, 50%, ${90 - 25 * i}%)`}
+			fill-rule="evenodd"
+			filter="url(#f3)"
+			transform={`scale(${phi})`}
+		/>
+	{/each}
 
 	<path
 		d={epicycloidPath()}
