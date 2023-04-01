@@ -28,7 +28,6 @@
 				}`;
 			})
 			.join('L');
-	console.log(path);
 
 	onMount(() => {
 		const unmountZoomable = useZoomableViewbox(svg);

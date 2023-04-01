@@ -24,8 +24,6 @@
 		(b, a) => a - b
 	);
 
-	console.log(radii);
-
 	let svg: SVGSVGElement;
 	onMount(() => {
 		const unmountZoomable = useZoomableViewbox(svg);
