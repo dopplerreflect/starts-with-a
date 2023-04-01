@@ -18,9 +18,61 @@
 		<stop offset="95%" stop-color="hsl(0, 0%, 10%)" />
 		<stop offset="100%" stop-color="hsl(0, 0%, 5%)" />
 	</linearGradient>
+
+	<filter id="x-grain">
+		<feTurbulence
+			seed={0}
+			baseFrequency="0.0004 1"
+			numOctaves={3}
+			type="fractalNoise"
+			result="turbulence"
+		/>
+		<feColorMatrix type="saturate" values="0" result="desaturate" />
+		<feComposite
+			in="SourceGraphic"
+			in2="desaturate"
+			operator="arithmetic"
+			k1="2"
+			k2="0.0"
+			k3="0.05"
+			result="composite"
+		/>
+		<feBlend in="composite" in2="SourceGraphic" mode="normal" result="blend" />
+		<feComposite in="blend" in2="SourceGraphic" operator="in" />
+	</filter>
+	<filter id="y-grain">
+		<feTurbulence
+			seed={0}
+			baseFrequency="1 0.0004"
+			numOctaves={3}
+			type="fractalNoise"
+			result="turbulence"
+		/>
+		<feColorMatrix type="saturate" values="0" result="desaturate" />
+		<feComposite
+			in="SourceGraphic"
+			in2="desaturate"
+			operator="arithmetic"
+			k1="2"
+			k2="0.0"
+			k3="0.05"
+			result="composite"
+		/>
+		<feBlend in="composite" in2="SourceGraphic" mode="normal" result="blend" />
+		<feComposite in="blend" in2="SourceGraphic" operator="in" />
+	</filter>
+
 	<g id="carbon-fiber-L">
-		<path d={`M0 0H${size / 4}V${size / 2}H0Z`} fill="url(#carbon-fiber-ygradient)" />
-		<path d={`M0 ${size / 2}H${size / 2}V${size * 0.75}H0Z`} fill="url(#carbon-fiber-xgradient)" />
+		<path
+			d={`M0 0H${size / 4}V${size / 2}H0Z`}
+			fill="url(#carbon-fiber-ygradient)"
+			filter="url(#y-grain)"
+		/>
+		<path
+			d={`M0 ${size / 2}H${size / 2}V${size * 0.75}H0Z`}
+			fill="url(#carbon-fiber-xgradient)"
+			filter="url(#x-grain)"
+		/>
 	</g>
 	<g id="carbon-fiber-tile" transform="">
 		<use xlink:href="#carbon-fiber-L" />

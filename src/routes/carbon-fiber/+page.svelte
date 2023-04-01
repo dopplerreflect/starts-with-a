@@ -14,6 +14,6 @@
 	<defs>
 		<CarbonFiberPattern size={bgsize} scale={0.05} />
 	</defs>
-	<Background size={bgsize} transform={'rotate(45)'} fill="url(#CarbonFiberPattern)" />
+	<Background size={bgsize} transform="rotate(45)" fill="url(#CarbonFiberPattern)" />
 	<DrLogo size={size * phi} stroke={`hsl(0, 0%, 0%)`} strokeOpacity={0.66} />
 </svg>
