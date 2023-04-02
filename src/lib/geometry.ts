@@ -121,9 +121,13 @@ export const intersection = (line1: Line, line2: Line): Point => {
 	const [{ x: x3, y: y3 }, { x: x4, y: y4 }] = line2;
 	const denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
-	let x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denominator;
+	let x = Number(
+		(((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denominator).toFixed(1)
+	);
 
-	let y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denominator;
+	let y = Number(
+		(((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denominator).toFixed(1)
+	);
 
 	// if (x === -0) x = 0;
 	// if (y === -0) y = 0;
