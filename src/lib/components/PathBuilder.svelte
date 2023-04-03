@@ -86,7 +86,7 @@
 			rotate: currentAngle
 		})}
 		stroke="stroke"
-		fill="white"
+		fill="red"
 	/>
 	<path bind:this={p} stroke="yellow" fill="none" />
 </g>

@@ -19,6 +19,7 @@
 	const r = (size / 2) * 0.95;
 
 	const angles = arrayMap(12, (n) => 30 * n - 90);
+	const angles6 = arrayMap(6, (n) => n * 60);
 
 	const lines = angles
 		.map((a) => [
@@ -52,7 +53,7 @@
 
 	const radii = [
 		...new Set(intersections.map((i) => Math.round(Math.sqrt(i.x ** 2 + i.y ** 2))))
-	].sort((a, b) => a - b);
+	].sort((a, b) => b - a);
 
 	const iAngles = [
 		...new Set(
@@ -62,15 +63,260 @@
 </script>
 
 <svg bind:this={svg} id="12" viewBox={viewBox(size)}>
+	<defs>
+		<g id="twelveth" stroke="black" stroke-width={size / 2 ** 11} fill-opacity="0.25">
+			<path
+				d={[
+					'M',
+					radialPointString(iAngles[35], radii[13]),
+					'C',
+					radialPointString(iAngles[34], radii[14]),
+					radialPointString(iAngles[30], radii[13]),
+					radialPointString(iAngles[29], radii[14]),
+					'A',
+					radii[14],
+					radii[14],
+					'0 0 1',
+					radialPointString(iAngles[41], radii[14]),
+					'C',
+					radialPointString(iAngles[40], radii[13]),
+					radialPointString(iAngles[36], radii[14]),
+					radialPointString(iAngles[35], radii[13]),
+					'Z'
+				].join(' ')}
+			/>
+			<path
+				d={[
+					'M',
+					radialPointString(iAngles[41], radii[11]),
+					'C',
+					radialPointString(iAngles[41], radii[12]),
+					radialPointString(iAngles[35], radii[12]),
+					radialPointString(iAngles[35], radii[13]),
+					'A',
+					radii[13],
+					radii[13],
+					'0 0 1',
+					radialPointString(iAngles[47], radii[13]),
+					'C',
+					radialPointString(iAngles[46], radii[12]),
+					radialPointString(iAngles[41], radii[12]),
+					radialPointString(iAngles[41], radii[11]),
+					'Z'
+				].join(' ')}
+			/>
+			<path
+				d={[
+					'M',
+					radialPointString(iAngles[35], radii[15]),
+					'Q',
+					radialPointString(iAngles[35], radii[16]),
+					radialPointString(iAngles[41], radii[17]),
+					'L',
+					radialPointString(iAngles[35], radii[18]),
+					'L',
+					radialPointString(iAngles[29], radii[17]),
+					'Q',
+					radialPointString(iAngles[35], radii[16]),
+					radialPointString(iAngles[35], radii[15]),
+					'Z'
+				].join(' ')}
+			/>
+			<!-- <path
+				d={[
+					'M',
+					radialPointString(iAngles[35], radii[0]),
+					'C',
+					radialPointString(iAngles[36], radii[4]),
+					radialPointString(iAngles[39], radii[2]),
+					radialPointString(iAngles[41], radii[6]),
+					'C',
+					radialPointString(iAngles[40], radii[7]),
+					radialPointString(iAngles[37], radii[8]),
+					radialPointString(iAngles[38], radii[10]),
+					'A',
+					radii[10],
+					radii[10],
+					'0 0 0',
+					radialPointString(iAngles[32], radii[10]),
+					'C',
+					radialPointString(iAngles[33], radii[8]),
+					radialPointString(iAngles[30], radii[7]),
+					radialPointString(iAngles[29], radii[6]),
+					'C',
+					radialPointString(iAngles[31], radii[2]),
+					radialPointString(iAngles[34], radii[4]),
+					radialPointString(iAngles[35], radii[0]),
+					'Z'
+				].join(' ')}
+				stroke="red"
+			/> -->
+		</g>
+		<g id="sixth" stroke="black" stroke-width={size / 2 ** 11} fill-opacity={0.25}>
+			<path
+				id="sixth1"
+				d={[
+					'M',
+					radialPointString(iAngles[35], radii[0]),
+					'L',
+					radialPointString(iAngles[47], radii[13]),
+					'A',
+					radii[0] / 5,
+					radii[0] / 5,
+					'0 0 0',
+					radialPointString(iAngles[35], radii[16]),
+					'A',
+					radii[0] / 5,
+					radii[0] / 5,
+					'0 0 0',
+					radialPointString(iAngles[23], radii[13]),
+					'Z'
+				].join(' ')}
+			/>
+
+			<path
+				id="sixth5"
+				d={[
+					'M',
+					radialPointString(iAngles[47], radii[19]),
+					'L',
+					radialPointString(iAngles[37], radii[3]),
+					'Q',
+					radialPointString(iAngles[43], radii[2]),
+					radialPointString(iAngles[47], radii[0]),
+					'Q',
+					radialPointString(iAngles[51], radii[2]),
+					radialPointString(iAngles[57], radii[3]),
+					'L',
+					radialPointString(iAngles[47], radii[19]),
+					'Z'
+				].join(' ')}
+			/>
+
+			<!-- <path
+				id="sixth5i"
+				d={[
+					'M',
+					radialPointString(iAngles[13], radii[19]),
+					'L',
+					radialPointString(iAngles[13], radii[3]),
+					'L',
+					radialPointString(iAngles[23], radii[13]),
+					'L',
+					radialPointString(iAngles[33], radii[3]),
+					'Z'
+				].join(' ')}
+			/> -->
+
+			<path
+				id="sixth4"
+				d={[
+					'M',
+					radialPointString(iAngles[47], radii[19]),
+					'L',
+					radialPointString(iAngles[40], radii[7]),
+					'C',
+					radialPointString(iAngles[39], radii[2]),
+					radialPointString(iAngles[45], radii[3]),
+					radialPointString(iAngles[47], radii[0]),
+					'C',
+					radialPointString(iAngles[49], radii[4]),
+					radialPointString(iAngles[55], radii[2]),
+					radialPointString(iAngles[54], radii[7]),
+					'L',
+					radialPointString(iAngles[47], radii[19]),
+					'Z'
+				].join(' ')}
+			/>
+
+			<!-- <path
+				id="sixth4i"
+				d={[
+					'M',
+					radialPointString(iAngles[16], radii[19]),
+					radialPointString(iAngles[16], radii[7]),
+					'L',
+					radialPointString(iAngles[23], radii[13]),
+					radialPointString(iAngles[30], radii[7]),
+					'Z'
+				].join(' ')}
+			/> -->
+			<path
+				id="sixth3"
+				d={[
+					'M',
+					radialPointString(iAngles[41], radii[11]),
+					'C',
+					radialPointString(iAngles[41], radii[6]),
+					radialPointString(iAngles[47], radii[6]),
+					radialPointString(iAngles[47], radii[5]),
+					'C',
+					radialPointString(iAngles[47], radii[6]),
+					radialPointString(iAngles[53], radii[6]),
+					radialPointString(iAngles[53], radii[11]),
+					'L',
+					radialPointString(iAngles[47], radii[19]),
+					'L',
+					radialPointString(iAngles[41], radii[11]),
+					'Z'
+				].join(' ')}
+			/>
+			<!-- <path
+				id="sixth3i"
+				d={[
+					'M',
+					radialPointString(iAngles[17], radii[19]),
+					'L',
+					radialPointString(iAngles[17], radii[11]),
+					'L',
+					radialPointString(iAngles[23], radii[13]),
+					'L',
+					radialPointString(iAngles[29], radii[11]),
+					'Z'
+				].join(' ')}
+			/> -->
+			<path
+				id="sixth2"
+				d={[
+					'M',
+					radialPointString(iAngles[47], radii[19]),
+					'L',
+					radialPointString(iAngles[43], radii[12]),
+					'C',
+					radialPointString(iAngles[44], radii[10]),
+					radialPointString(iAngles[47], radii[11]),
+					radialPointString(iAngles[47], radii[9]),
+					'C',
+					radialPointString(iAngles[47], radii[11]),
+					radialPointString(iAngles[50], radii[10]),
+					radialPointString(iAngles[51], radii[12]),
+					'Z'
+				].join(' ')}
+			/>
+			<!-- <path
+				id="sixth2i"
+				d={[
+					'M',
+					radialPointString(iAngles[19], radii[19]),
+					radialPointString(iAngles[19], radii[12]),
+					'L',
+					radialPointString(iAngles[23], radii[13]),
+					'L',
+					radialPointString(iAngles[27], radii[12]),
+					'Z'
+				].join(' ')}
+			/> -->
+		</g>
+	</defs>
 	<Background {size} fill={`hsl(225, 25%, 100%)`} />
 	<g stroke-width={size / 2 ** 11} font-size={size / 2 ** 7}>
 		<!-- {#each radii as r, i}
 			<circle {r} stroke={`hsl(0, 0%, 50%)`} fill="none" />
 			<text x={0} y={r}>{i}</text>
 		{/each} -->
-		{#each paths as path}
-			<path d={path} stroke={`hsl(300, 0%, 25%)`} />
-		{/each}
+		<!-- {#each paths as path}
+			<path d={path} stroke={`hsl(30, 0%, 50%)`} stroke-width={size / 2 ** 9} />
+		{/each} -->
 		<!-- {#each iAngles as a, i}
 			<path d={`M0 0L${radialPointString(a, r)}`} stroke={`hsl(0, 0%, 50%)`} />
 			<text
@@ -81,14 +327,26 @@
 				fill="black">{i}</text
 			>
 		{/each} -->
-		<PathBuilder angles={iAngles} {radii} stroke="black" />
-		{#each intersections as intersection}
+		{#each angles6 as a}
+			<use xlink:href="#sixth" transform={`rotate(${a})`} />
+		{/each}
+		{#each angles as a}
+			<use xlink:href="#twelveth" transform={`rotate(${a - 15})`} />
+			<use xlink:href="#twelveth" transform={`rotate(${a})`} />
+		{/each}
+
+		<!-- <circle r={radii[11]} stroke="black" stroke-width={size / 2 ** 9} fill="none" />
+
+		<circle r={radii[15]} stroke="black" stroke-width={size / 2 ** 9} fill="none" /> -->
+
+		<!-- <PathBuilder angles={iAngles} {radii} stroke="black" /> -->
+		<!-- {#each intersections as intersection}
 			<circle
 				cx={intersection.x}
 				cy={intersection.y}
 				r={(3 * size) / 2 ** 10}
-				fill={`hsl(60, 0%, 0%)`}
+				fill={`hsl(60, 100%, 50%)`}
 			/>
-		{/each}
+		{/each} -->
 	</g>
 </svg>
