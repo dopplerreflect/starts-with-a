@@ -7,6 +7,9 @@
 	import PathBuilder from '$lib/components/PathBuilder.svelte';
 	import DrLogo from '$lib/components/DRLogo.svelte';
 
+	let hue = 0;
+	let saturation = 50;
+
 	let svg: SVGSVGElement;
 	onMount(() => {
 		const unmountZoomable = useZoomableViewbox(svg);
@@ -65,7 +68,26 @@
 
 <svg bind:this={svg} id="12" viewBox={viewBox(size)}>
 	<defs>
-		<g id="twelveth" stroke="white" fill="white" stroke-width={size / 2 ** 11} fill-opacity="0.25">
+		<g id="twelveth" stroke="white" stroke-width={size / 2 ** 11} fill-opacity="0.5">
+			<path
+				id="innerpoint"
+				d={[
+					'M',
+					radialPointString(iAngles[35], radii[15]),
+					'Q',
+					radialPointString(iAngles[35], radii[16]),
+					radialPointString(iAngles[41], radii[17]),
+					'L',
+					radialPointString(iAngles[35], radii[18]),
+					'L',
+					radialPointString(iAngles[29], radii[17]),
+					'Q',
+					radialPointString(iAngles[35], radii[16]),
+					radialPointString(iAngles[35], radii[15]),
+					'Z'
+				].join(' ')}
+				fill={`hsl(${hue}, ${saturation}%, 25%)`}
+			/>
 			<path
 				id="innerpetals"
 				d={[
@@ -86,6 +108,7 @@
 					radialPointString(iAngles[35], radii[13]),
 					'Z'
 				].join(' ')}
+				fill={`hsl(${hue + 30}, ${saturation}%, 25%)`}
 			/>
 			<path
 				id="outerpetals"
@@ -107,24 +130,7 @@
 					radialPointString(iAngles[41], radii[11]),
 					'Z'
 				].join(' ')}
-			/>
-			<path
-				id="innerpoint"
-				d={[
-					'M',
-					radialPointString(iAngles[35], radii[15]),
-					'Q',
-					radialPointString(iAngles[35], radii[16]),
-					radialPointString(iAngles[41], radii[17]),
-					'L',
-					radialPointString(iAngles[35], radii[18]),
-					'L',
-					radialPointString(iAngles[29], radii[17]),
-					'Q',
-					radialPointString(iAngles[35], radii[16]),
-					radialPointString(iAngles[35], radii[15]),
-					'Z'
-				].join(' ')}
+				fill={`hsl(${hue + 45}, ${saturation}%, 25%)`}
 			/>
 		</g>
 		<g id="sixth" stroke="black" stroke-width={size / 2 ** 11} fill-opacity={0.25}>
@@ -147,6 +153,7 @@
 					radialPointString(iAngles[23], radii[13]),
 					'Z'
 				].join(' ')}
+				fill={`hsl(${hue + 30}, ${saturation}%, 25%)`}
 			/>
 
 			<path
@@ -166,6 +173,7 @@
 					radialPointString(iAngles[47], radii[19]),
 					'Z'
 				].join(' ')}
+				fill={`hsl(${hue + 45}, ${saturation}%, 25%)`}
 			/>
 			<path
 				id="sixth4"
@@ -186,6 +194,7 @@
 					radialPointString(iAngles[47], radii[19]),
 					'Z'
 				].join(' ')}
+				fill={`hsl(${hue + 30}, ${saturation}%, 25%)`}
 			/>
 			<path
 				id="sixth3"
@@ -206,6 +215,7 @@
 					radialPointString(iAngles[41], radii[11]),
 					'Z'
 				].join(' ')}
+				fill={`hsl(${hue + 15}, ${saturation}%, 25%)`}
 			/>
 			<path
 				id="sixth2"
@@ -224,10 +234,11 @@
 					radialPointString(iAngles[51], radii[12]),
 					'Z'
 				].join(' ')}
+				fill={`hsl(${hue}, ${saturation}%, 25%)`}
 			/>
 		</g>
 	</defs>
-	<Background {size} fill={`hsl(225, 25%, 100%)`} />
+	<Background {size} fill={`hsl(225, 100%, 100%)`} />
 	<g stroke-width={size / 2 ** 11} font-size={size / 2 ** 7}>
 		<!-- {#each paths as path}
 			<path d={path} stroke={`hsl(30, 0%, 50%)`} stroke-width={size / 2 ** 9} />
