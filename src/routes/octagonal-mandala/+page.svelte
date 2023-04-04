@@ -7,14 +7,15 @@
 	import DrLogo from '$lib/components/DRLogo.svelte';
 	import { onMount } from 'svelte';
 	import { useSaveFile } from '$lib/save-svg';
+	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 
-	const size = 2 ** 10;
+	const size = 2 ** 13;
 	const bgsize = Math.sqrt(size ** 2 * 2);
 
 	const strokeWidth = size / 2 ** 9;
-	let hue = 45;
+	let hue = 330;
 
-	const r0 = (size / 2) * 0.95;
+	const r0 = (size / 2) * 0.9;
 	const angles = arrayMap(16, (n) => (360 / 16) * n - 90);
 	const phiArr = arrayMap(9, (n) => phi ** n);
 	const oRadii = [r0, ...phiArr.map((phiN) => Number((r0 - r0 * phiN).toFixed(1)))].sort(
@@ -74,13 +75,15 @@
 	let svg: SVGSVGElement;
 	onMount(() => {
 		const unmountSaveFile = useSaveFile(svg);
+		const unmountZoomable = useZoomableViewbox(svg);
 		return () => {
 			unmountSaveFile();
+			unmountZoomable();
 		};
 	});
 </script>
 
-<svg id="octagonal-framed-epicycloid-on-carbon-fiber" bind:this={svg} viewBox={viewBox(size)}>
+<svg id={`octagonal-mandala-${hue}`} bind:this={svg} viewBox={viewBox(size)}>
 	<defs>
 		<CarbonFiberPattern size={bgsize} scale={0.05} />
 		<filter id="f3" x="0" y="0" width="150%" height="150%">
@@ -103,16 +106,17 @@
 		/>
 	{/each}
 
-	{#each phylotaxicPoints(2184, radii[12]) as p, i}
-		<circle
-			r={strokeWidth}
-			cx={p.x}
-			cy={p.y}
-			fill={`hsl(${hue + 30}, ${100 - Math.round((100 / 2184) * i)}%, 50%)`}
-		/>
-	{/each}
-
 	<circle r={radii[12]} fill={`hsl(${hue + 45}, 50%, 50%)`} fill-opacity={0.25} />
+	<g id="phylo" filter="url(#f3)">
+		{#each phylotaxicPoints(2184, radii[12]) as p, i}
+			<circle
+				r={strokeWidth}
+				cx={p.x}
+				cy={p.y}
+				fill={`hsl(${hue + 30}, ${100 - Math.round((100 / 2184) * i)}%, 50%)`}
+			/>
+		{/each}
+	</g>
 
 	{#each [...tesselatedOctagonPaths] as path, i}
 		<path
@@ -138,6 +142,6 @@
 		size={size / 20}
 		stroke={`hsl(${hue + 0}, 0%, 50%)`}
 		strokeOpacity={0.5}
-		transform={`translate(${size / 2 - size / 20} ${size / 2 - size / 20})`}
+		transform={`translate(${r0 - size / 40} ${r0 - size / 40})`}
 	/>
 </svg>
