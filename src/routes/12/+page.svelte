@@ -5,6 +5,7 @@
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { useSaveFile } from '$lib/save-svg';
 	import PathBuilder from '$lib/components/PathBuilder.svelte';
+	import DrLogo from '$lib/components/DRLogo.svelte';
 
 	let svg: SVGSVGElement;
 	onMount(() => {
@@ -64,8 +65,9 @@
 
 <svg bind:this={svg} id="12" viewBox={viewBox(size)}>
 	<defs>
-		<g id="twelveth" stroke="black" stroke-width={size / 2 ** 11} fill-opacity="0.25">
+		<g id="twelveth" stroke="white" fill="white" stroke-width={size / 2 ** 11} fill-opacity="0.25">
 			<path
+				id="innerpetals"
 				d={[
 					'M',
 					radialPointString(iAngles[35], radii[13]),
@@ -86,6 +88,7 @@
 				].join(' ')}
 			/>
 			<path
+				id="outerpetals"
 				d={[
 					'M',
 					radialPointString(iAngles[41], radii[11]),
@@ -106,6 +109,7 @@
 				].join(' ')}
 			/>
 			<path
+				id="innerpoint"
 				d={[
 					'M',
 					radialPointString(iAngles[35], radii[15]),
@@ -122,39 +126,10 @@
 					'Z'
 				].join(' ')}
 			/>
-			<!-- <path
-				d={[
-					'M',
-					radialPointString(iAngles[35], radii[0]),
-					'C',
-					radialPointString(iAngles[36], radii[4]),
-					radialPointString(iAngles[39], radii[2]),
-					radialPointString(iAngles[41], radii[6]),
-					'C',
-					radialPointString(iAngles[40], radii[7]),
-					radialPointString(iAngles[37], radii[8]),
-					radialPointString(iAngles[38], radii[10]),
-					'A',
-					radii[10],
-					radii[10],
-					'0 0 0',
-					radialPointString(iAngles[32], radii[10]),
-					'C',
-					radialPointString(iAngles[33], radii[8]),
-					radialPointString(iAngles[30], radii[7]),
-					radialPointString(iAngles[29], radii[6]),
-					'C',
-					radialPointString(iAngles[31], radii[2]),
-					radialPointString(iAngles[34], radii[4]),
-					radialPointString(iAngles[35], radii[0]),
-					'Z'
-				].join(' ')}
-				stroke="red"
-			/> -->
 		</g>
 		<g id="sixth" stroke="black" stroke-width={size / 2 ** 11} fill-opacity={0.25}>
 			<path
-				id="sixth1"
+				id="triangles"
 				d={[
 					'M',
 					radialPointString(iAngles[35], radii[0]),
@@ -192,22 +167,6 @@
 					'Z'
 				].join(' ')}
 			/>
-
-			<!-- <path
-				id="sixth5i"
-				d={[
-					'M',
-					radialPointString(iAngles[13], radii[19]),
-					'L',
-					radialPointString(iAngles[13], radii[3]),
-					'L',
-					radialPointString(iAngles[23], radii[13]),
-					'L',
-					radialPointString(iAngles[33], radii[3]),
-					'Z'
-				].join(' ')}
-			/> -->
-
 			<path
 				id="sixth4"
 				d={[
@@ -228,19 +187,6 @@
 					'Z'
 				].join(' ')}
 			/>
-
-			<!-- <path
-				id="sixth4i"
-				d={[
-					'M',
-					radialPointString(iAngles[16], radii[19]),
-					radialPointString(iAngles[16], radii[7]),
-					'L',
-					radialPointString(iAngles[23], radii[13]),
-					radialPointString(iAngles[30], radii[7]),
-					'Z'
-				].join(' ')}
-			/> -->
 			<path
 				id="sixth3"
 				d={[
@@ -261,20 +207,6 @@
 					'Z'
 				].join(' ')}
 			/>
-			<!-- <path
-				id="sixth3i"
-				d={[
-					'M',
-					radialPointString(iAngles[17], radii[19]),
-					'L',
-					radialPointString(iAngles[17], radii[11]),
-					'L',
-					radialPointString(iAngles[23], radii[13]),
-					'L',
-					radialPointString(iAngles[29], radii[11]),
-					'Z'
-				].join(' ')}
-			/> -->
 			<path
 				id="sixth2"
 				d={[
@@ -293,60 +225,26 @@
 					'Z'
 				].join(' ')}
 			/>
-			<!-- <path
-				id="sixth2i"
-				d={[
-					'M',
-					radialPointString(iAngles[19], radii[19]),
-					radialPointString(iAngles[19], radii[12]),
-					'L',
-					radialPointString(iAngles[23], radii[13]),
-					'L',
-					radialPointString(iAngles[27], radii[12]),
-					'Z'
-				].join(' ')}
-			/> -->
 		</g>
 	</defs>
 	<Background {size} fill={`hsl(225, 25%, 100%)`} />
 	<g stroke-width={size / 2 ** 11} font-size={size / 2 ** 7}>
-		<!-- {#each radii as r, i}
-			<circle {r} stroke={`hsl(0, 0%, 50%)`} fill="none" />
-			<text x={0} y={r}>{i}</text>
-		{/each} -->
 		<!-- {#each paths as path}
 			<path d={path} stroke={`hsl(30, 0%, 50%)`} stroke-width={size / 2 ** 9} />
-		{/each} -->
-		<!-- {#each iAngles as a, i}
-			<path d={`M0 0L${radialPointString(a, r)}`} stroke={`hsl(0, 0%, 50%)`} />
-			<text
-				x={radialPoint(a, r + size / 2 ** 6).x}
-				y={radialPoint(a, r + size / 2 ** 6).y}
-				text-anchor="middle"
-				alignment-baseline="middle"
-				fill="black">{i}</text
-			>
 		{/each} -->
 		{#each angles6 as a}
 			<use xlink:href="#sixth" transform={`rotate(${a})`} />
 		{/each}
 		{#each angles as a}
-			<use xlink:href="#twelveth" transform={`rotate(${a - 15})`} />
 			<use xlink:href="#twelveth" transform={`rotate(${a})`} />
+			<use xlink:href="#twelveth" transform={`rotate(${a - 15})`} />
 		{/each}
 
-		<!-- <circle r={radii[11]} stroke="black" stroke-width={size / 2 ** 9} fill="none" />
-
-		<circle r={radii[15]} stroke="black" stroke-width={size / 2 ** 9} fill="none" /> -->
-
 		<!-- <PathBuilder angles={iAngles} {radii} stroke="black" /> -->
-		<!-- {#each intersections as intersection}
-			<circle
-				cx={intersection.x}
-				cy={intersection.y}
-				r={(3 * size) / 2 ** 10}
-				fill={`hsl(60, 100%, 50%)`}
-			/>
-		{/each} -->
 	</g>
+	<DrLogo
+		stroke="black"
+		size={size / 20}
+		transform={`translate(${size / 2 - size / 18} ${size / 2 - size / 18})`}
+	/>
 </svg>
