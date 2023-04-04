@@ -28,7 +28,7 @@
 	});
 	const square = true;
 	const masked = false;
-	const size = 2 ** 10;
+	const size = 2 ** 13;
 	const width = size;
 	const height = square ? width : width * phi;
 	const strokeWidth = size / 1080;
@@ -337,7 +337,7 @@
 				<stop offset="0%" stop-color="hsl(270, 100%, 100%)" />
 				<stop
 					offset="100%"
-					stop-color={`hsl(270, 100%, ${masked ? 0 : 66}%)`}
+					stop-color={`hsl(270, 100%, ${masked ? 0 : 85}%)`}
 					stop-opacity={masked ? 1 : 0.5}
 				/>
 			</radialGradient>
@@ -421,6 +421,6 @@
 		size={size / 20}
 		stroke="hsl(0, 100%, 100%)"
 		strokeOpacity={0.125}
-		transform={`translate(${width / 2 - size / 20 / 1.5} ${height / 2 - size / 20 / 1.5})`}
+		transform={`translate(${r0 - size / 40} ${r0 - size / 40})`}
 	/>
 </svg>
