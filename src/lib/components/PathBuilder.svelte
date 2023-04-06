@@ -7,6 +7,7 @@
 	export let angles: number[] = [];
 	export let radii: number[] = [];
 	export let stroke = 'hsl(220, 100%, 75%)';
+	export let verbose = false;
 
 	let currentAngle = 0;
 	let currentRadius = 0;
@@ -58,11 +59,16 @@
 				currentRadius = currentRadius === 0 ? radii.length - 1 : currentRadius - 1;
 				break;
 		}
-		console.log(pathCode.join(','));
+		if (verbose) {
+			console.log(pathCode.join(','));
+		} else {
+			console.log(pathDSL);
+		}
 	}
 
 	function copyTextToClipboard(text: string) {
 		if (browser) {
+			console.log(text);
 			navigator.clipboard.writeText(text);
 		}
 	}
@@ -72,8 +78,11 @@
 		if (pathCode[0].toUpperCase() !== '"M"') return;
 		path = eval(`[${pathCode.join(',')}].join(' ')`);
 		p.setAttribute('d', path);
-		console.log(path);
-		console.log(pathDSL.replace(/(\d) ([A-Z])/g, '$1$2'));
+		if (verbose) {
+			copyTextToClipboard(path);
+		} else {
+			copyTextToClipboard(pathDSL.replace(/(\d) ([A-Z])/g, '$1$2'));
+		}
 	}
 
 	onMount(() => {
