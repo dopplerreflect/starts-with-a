@@ -13,6 +13,7 @@
 	$: currentPoint = radialPoint(angles[currentAngle], radii[currentRadius]);
 	let pathCode: string[] = [];
 	let path = '';
+	let pathDSL = '';
 
 	const pathStrings = ['a', 'c', 'h', 'l', 'm', 's', 't', 'q', 'v', 'z'];
 
@@ -22,25 +23,41 @@
 		// console.log(event);
 		const { key } = event;
 		key === 'r' && window.location.reload();
-		pathStrings.includes(key) && pathCode.push(`"${key.toUpperCase()}"`);
-		key === 'Enter' &&
-			pathCode.push(`radialPointString(angles[${currentAngle}], radii[${currentRadius}])`);
-		key === 'a' &&
-			(() => {
+		if (pathStrings.includes(key)) {
+			pathCode.push(`"${key.toUpperCase()}"`);
+			pathDSL += key.toUpperCase();
+		}
+		switch (key) {
+			case 'Enter':
+				pathCode.push(`radialPointString(angles[${currentAngle}], radii[${currentRadius}])`);
+				pathDSL += `${currentAngle} ${currentRadius} `;
+				break;
+			case 'a':
 				pathCode.push(`radii[${currentRadius}]`);
 				pathCode.push(`radii[${currentRadius}]`);
 				pathCode.push('"0 0 0"');
-			})();
-		key === 'Backspace' && pathCode.pop();
-		(key === 'z' || key === 'p') && buildPath();
-		key === 'ArrowRight' &&
-			(currentAngle = currentAngle === angles.length - 1 ? 0 : currentAngle + 1);
-		key === 'ArrowLeft' &&
-			(currentAngle = currentAngle === 0 ? angles.length - 1 : currentAngle - 1);
-		key === 'ArrowDown' &&
-			(currentRadius = currentRadius === radii.length - 1 ? 0 : currentRadius + 1);
-		key === 'ArrowUp' &&
-			(currentRadius = currentRadius === 0 ? radii.length - 1 : currentRadius - 1);
+				pathDSL += `${currentRadius} ${currentRadius} 0 0 0 `;
+				break;
+			case 'Backspace':
+				pathCode.pop();
+				break;
+			case 'z':
+			case 'p':
+				buildPath();
+				break;
+			case 'ArrowRight':
+				currentAngle = currentAngle === angles.length - 1 ? 0 : currentAngle + 1;
+				break;
+			case 'ArrowLeft':
+				currentAngle = currentAngle === 0 ? angles.length - 1 : currentAngle - 1;
+				break;
+			case 'ArrowDown':
+				currentRadius = currentRadius === radii.length - 1 ? 0 : currentRadius + 1;
+				break;
+			case 'ArrowUp':
+				currentRadius = currentRadius === 0 ? radii.length - 1 : currentRadius - 1;
+				break;
+		}
 		console.log(pathCode.join(','));
 	}
 
@@ -56,6 +73,7 @@
 		path = eval(`[${pathCode.join(',')}].join(' ')`);
 		p.setAttribute('d', path);
 		console.log(path);
+		console.log(pathDSL.replace(/(\d) ([A-Z])/g, '$1$2'));
 	}
 
 	onMount(() => {
@@ -80,13 +98,18 @@
 			{stroke}
 		/>
 	{/each}
-	<path
-		d={polygonPath(4, size / 100, {
-			center: { x: currentPoint.x, y: currentPoint.y },
-			rotate: currentAngle
-		})}
-		stroke="stroke"
-		fill="red"
-	/>
+	<g id="marker" stroke-width={size / 200}>
+		<path
+			d={polygonPath(4, size / 100, {
+				center: { x: currentPoint.x, y: currentPoint.y },
+				rotate: currentAngle
+			})}
+			stroke="stroke"
+			fill="red"
+		/>
+
+		<path d={`M${currentPoint.x} ${-size / 2}V${size}`} stroke="red" />
+		<path d={`M${-size / 2} ${currentPoint.y}H${size}`} stroke="red" />
+	</g>
 	<path bind:this={p} stroke="yellow" fill="none" />
 </g>

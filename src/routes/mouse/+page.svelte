@@ -27,30 +27,4 @@
 	<Background {size} fill="hsl(240, 50%, 20%)" />
 
 	<PathBuilder {size} {angles} {radii} />
-
-	<path
-		d={[
-			'M',
-			radialPointString(angles[0], radii[0]),
-			'L',
-			radialPointString(angles[0], radii[1]),
-			'A',
-			radii[1],
-			radii[1],
-			'0 0 0',
-			radialPointString(angles[3], radii[1]),
-			'L',
-			radialPointString(angles[3], radii[0]),
-			'A',
-			radii[0],
-			radii[0],
-			'0 0 0',
-			radialPointString(angles[0], radii[0]),
-			'Z'
-		].join(' ')}
-		stroke="yellow"
-		fill="none"
-	/>
-
-	<path d="M0,-50L0,-31A31 31 0 0 0 -31,0L-50,0A50 50 0 0 1 0,-50Z" stroke="red" fill="none" />
 </svg>
