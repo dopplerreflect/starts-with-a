@@ -7,7 +7,7 @@
 	import { pathFromDSL } from '$lib/path-parser';
 	import { useSaveFile } from '$lib/save-svg';
 	const size = 1200;
-	const radii0 = arrayMap(5, (n) => (size / 11) * (n + 1));
+	const radii0 = arrayMap(5, (n) => (size / 7) * (n + 1));
 	const radii1 = radii0.slice(0, 3).map((r) => SQRT3 * r);
 	const radii = [...radii0, ...radii1, Math.sqrt(radii0[0] ** 2 + radii1[1] ** 2)].sort(
 		(a, b) => a - b
@@ -33,7 +33,7 @@
 <svg id="hex-thing" bind:this={svg} viewBox={viewBox(size)}>
 	<Background {size} fill="hsl(270, 100%, 20%)" />
 	<g id="whole" transform="rotate(0)">
-		{#each angles as a, i}
+		<!-- {#each angles as a, i}
 			<path d={`M0 0L${radialPointString(a, radii[7])}`} stroke="white" />
 			<text
 				x={radialPoint(a, radii[8]).x}
@@ -49,7 +49,7 @@
 			<text x={-size / 2 + 20} y={-r} fill="white" alignment-baseline="middle" text-anchor="middle"
 				>{i}</text
 			>
-		{/each}
+		{/each} -->
 		{#each angles6 as a}
 			<circle
 				r={radii[0]}
@@ -103,7 +103,7 @@
 				fill="none"
 				transform={`rotate(${a})`}
 			/>
-			<path
+			<!-- <path
 				d={`M0 0V${-radii[1]}H${radii[2]}V0Z`}
 				stroke="red"
 				stroke-width="3"
@@ -114,6 +114,13 @@
 				d={`M0 0V${-radii[1]}H${-radii[2]}V0Z`}
 				stroke="red"
 				stroke-width="3"
+				fill="none"
+				transform={`rotate(${a})`}
+			/> -->
+			<path
+				d={`M${-radii[2]} ${-radii[1]}H${radii[2]}V0H${-radii[2]}Z`}
+				stroke="red"
+				stroke-width={3}
 				fill="none"
 				transform={`rotate(${a})`}
 			/>
