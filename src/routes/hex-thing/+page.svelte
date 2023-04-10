@@ -7,12 +7,17 @@
 	import { pathFromDSL } from '$lib/path-parser';
 	import { useSaveFile } from '$lib/save-svg';
 	const size = 1200;
-	const radii0 = arrayMap(5, (n) => (size / 7) * (n + 1));
+	const radii0 = arrayMap(5, (n) => (size / 11) * (n + 1));
+	let r3 = 2 * (radii0[1] / SQRT3);
 	const radii1 = radii0.slice(0, 3).map((r) => SQRT3 * r);
-	const radii = [...radii0, ...radii1, Math.sqrt(radii0[0] ** 2 + radii1[1] ** 2)].sort(
-		(a, b) => a - b
-	);
-	let a2 = 30 - Math.atan(radii[0] / radii[4]) * (180 / Math.PI);
+	const radii = [
+		...radii0,
+		...radii1,
+		Math.sqrt(radii0[0] ** 2 + radii1[1] ** 2),
+		2 * (radii0[1] / SQRT3)
+	].sort((a, b) => a - b);
+	let a2 = 30 - Math.atan(radii[0] / radii[5]) * (180 / Math.PI);
+	console.log(r3);
 	const angles12 = arrayMap(12, (n) => 30 * n - 90);
 	const angles6 = angles12.filter((a) => a % 60 === 0);
 	const atanAngles = angles6.map((a) => [a - a2, a + a2]).flat();
@@ -32,8 +37,9 @@
 
 <svg id="hex-thing" bind:this={svg} viewBox={viewBox(size)}>
 	<Background {size} fill="hsl(270, 100%, 20%)" />
+
 	<g id="whole" transform="rotate(0)">
-		<!-- {#each angles as a, i}
+		{#each angles as a, i}
 			<path d={`M0 0L${radialPointString(a, radii[7])}`} stroke="white" />
 			<text
 				x={radialPoint(a, radii[8]).x}
@@ -49,7 +55,7 @@
 			<text x={-size / 2 + 20} y={-r} fill="white" alignment-baseline="middle" text-anchor="middle"
 				>{i}</text
 			>
-		{/each} -->
+		{/each}
 		{#each angles6 as a}
 			<circle
 				r={radii[0]}
@@ -79,8 +85,8 @@
 			/>
 			<circle
 				r={radii[0]}
-				cx={radialPoint(a, radii[6]).x}
-				cy={radialPoint(a, radii[6]).y}
+				cx={radialPoint(a, radii[7]).x}
+				cy={radialPoint(a, radii[7]).y}
 				stroke="white"
 				fill="none"
 			/>
@@ -97,7 +103,7 @@
 				stroke-width={3}
 			/>
 			<path
-				d={parse('M22 2L23 5L1 5L2 2Z')}
+				d={parse('M22 2L23 6L1 6L2 2Z')}
 				stroke="red"
 				stroke-width={3}
 				fill="none"
