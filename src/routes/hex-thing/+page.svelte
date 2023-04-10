@@ -17,7 +17,6 @@
 		2 * (radii0[1] / SQRT3)
 	].sort((a, b) => a - b);
 	let a2 = 30 - Math.atan(radii[0] / radii[5]) * (180 / Math.PI);
-	console.log(r3);
 	const angles12 = arrayMap(12, (n) => 30 * n - 90);
 	const angles6 = angles12.filter((a) => a % 60 === 0);
 	const atanAngles = angles6.map((a) => [a - a2, a + a2]).flat();
@@ -36,101 +35,100 @@
 </script>
 
 <svg id="hex-thing" bind:this={svg} viewBox={viewBox(size)}>
-	<Background {size} fill="hsl(270, 100%, 20%)" />
+	<defs>
+		<style>
+			.guide {
+				stroke: hsl(270, 50%, 66%);
+			}
+		</style>
+	</defs>
+	<Background {size} fill="hsl(270, 100%, 90%)" />
 
 	<g id="whole" transform="rotate(0)">
-		{#each angles as a, i}
-			<path d={`M0 0L${radialPointString(a, radii[7])}`} stroke="white" />
-			<text
-				x={radialPoint(a, radii[8]).x}
-				y={radialPoint(a, radii[8]).y}
-				text-anchor="middle"
-				alignment-baseline="middle"
-				fill="white">{i}</text
-			>
-		{/each}
-		{#each radii as r, i}
-			<circle {r} stroke="white" stroke-width={1} fill="none" />
-			<path d={`M${-size / 2 + 30} ${-r}H0`} stroke="white" />
-			<text x={-size / 2 + 20} y={-r} fill="white" alignment-baseline="middle" text-anchor="middle"
-				>{i}</text
-			>
-		{/each}
+		<g class="guide">
+			{#each angles as a, i}
+				<path d={`M0 0L${radialPointString(a, radii[9])}`} />
+				<text
+					x={radialPoint(a, radii[9]).x}
+					y={radialPoint(a, radii[9]).y}
+					text-anchor="middle"
+					alignment-baseline="middle">{i}</text
+				>
+			{/each}
+			{#each radii as r, i}
+				<circle {r} stroke-width={1} fill="none" />
+				<path d={`M${-size / 2 + 30} ${-r}H0`} />
+				<text x={-size / 2 + 20} y={-r} alignment-baseline="middle" text-anchor="middle">{i}</text>
+			{/each}
+		</g>
 		{#each angles6 as a}
 			<circle
+				class="guide"
 				r={radii[0]}
 				cx={radialPoint(a, radii[2]).x}
 				cy={radialPoint(a, radii[2]).y}
-				stroke="white"
 				fill="none"
 			/>
-			<!-- <path
-				d={`M${radialPointString(a, radii[2])}L${radialPointString(a + 60, radii[2])}`}
-				stroke="blue"
-			/> -->
+			<circle
+				class="guide"
+				r={radii[0]}
+				cx={radialPoint(a + 30, radii[2] * SQRT3).x}
+				cy={radialPoint(a + 30, radii[2] * SQRT3).y}
+				fill="none"
+			/>
+			<circle
+				class="guide"
+				r={radii[0]}
+				cx={radialPoint(a, radii[7]).x}
+				cy={radialPoint(a, radii[7]).y}
+				fill="none"
+			/>
+			<path
+				class="guide"
+				d={`M${radialPointString(a + 30, radii[2] * SQRT3)}L${radialPointString(
+					a + 90,
+					radii[2] * SQRT3
+				)}`}
+				stroke="hsl(270, 100%, 20%)"
+				stroke-linejoin="round"
+			/>
 			<path
 				d={`M${radialPointString(a + 30, radii0[0] * SQRT3)}L${radialPointString(
 					a + 90,
 					radii[0] * SQRT3
 				)}`}
-				stroke="red"
+				stroke="hsl(270, 100%, 20%)"
 				stroke-width={3}
-			/>
-			<circle
-				r={radii[0]}
-				cx={radialPoint(a + 30, radii[2] * SQRT3).x}
-				cy={radialPoint(a + 30, radii[2] * SQRT3).y}
-				stroke="white"
-				fill="none"
-			/>
-			<circle
-				r={radii[0]}
-				cx={radialPoint(a, radii[7]).x}
-				cy={radialPoint(a, radii[7]).y}
-				stroke="white"
-				fill="none"
-			/>
-			<!-- <path
-				d={`M${radialPointString(a, radii[6])}L${radialPointString(a + 60, radii[6])}`}
-				stroke="blue"
-			/> -->
-			<path
-				d={`M${radialPointString(a + 30, radii[2] * SQRT3)}L${radialPointString(
-					a + 90,
-					radii[2] * SQRT3
-				)}`}
-				stroke="red"
-				stroke-width={3}
+				stroke-linejoin="round"
 			/>
 			<path
 				d={parse('M22 2L23 6L1 6L2 2Z')}
-				stroke="red"
+				stroke="hsl(270, 100%, 20%)"
 				stroke-width={3}
+				stroke-linejoin="round"
 				fill="none"
 				transform={`rotate(${a})`}
 			/>
-			<!-- <path
-				d={`M0 0V${-radii[1]}H${radii[2]}V0Z`}
-				stroke="red"
-				stroke-width="3"
-				fill="none"
-				transform={`rotate(${a})`}
-			/>
-			<path
-				d={`M0 0V${-radii[1]}H${-radii[2]}V0Z`}
-				stroke="red"
-				stroke-width="3"
-				fill="none"
-				transform={`rotate(${a})`}
-			/> -->
 			<path
 				d={`M${-radii[2]} ${-radii[1]}H${radii[2]}V0H${-radii[2]}Z`}
-				stroke="red"
+				stroke="hsl(270, 100%, 20%)"
 				stroke-width={3}
+				stroke-linejoin="round"
 				fill="none"
 				transform={`rotate(${a})`}
 			/>
 		{/each}
+		<path
+			d={parse(
+				'M23 6A0 0 0 0 0 1 6A0 0 0 0 0 3 6A0 0 0 0 0 5 6A0 0 0 0 0 7 6A0 0 0 0 0 9 6A0 0 0 0 0 11 6A0 0 0 0 0 13 6A0 0 0 0 0 15 6A0 0 0 0 0 17 6A0 0 0 0 0 19 6A0 0 0 0 0 21 6A0 0 0 0 0 23 6M0 0A0 0 0 1 1 23 0 Z'
+			)}
+			stroke="hsl(270, 100%, 20%)"
+			stroke-width={3}
+			fill="none"
+			fill-rule="evenodd"
+			transform={`rotate(${0})`}
+		/>
+
 		<!-- <PathBuilder {angles} {radii} /> -->
 	</g>
 </svg>
