@@ -38,6 +38,7 @@
 	<defs>
 		<style>
 			.guide {
+				display: none;
 				stroke: hsl(270, 50%, 66%);
 			}
 		</style>
@@ -110,12 +111,26 @@
 				transform={`rotate(${a})`}
 			/>
 			<path
-				d={`M${-radii[2]} ${-radii[1]}H${radii[2]}V0H${-radii[2]}Z`}
+				d={`M${-radii[2]} 0V${-radii[1]}H${radii[2]}V0`}
 				stroke="hsl(270, 100%, 20%)"
 				stroke-width={3}
 				stroke-linejoin="round"
 				fill="none"
 				transform={`rotate(${a})`}
+			/>
+			<path
+				d={parse('M0 1A0 0 0 0 0 4 1')}
+				stroke="hsl(270, 100%, 20%)"
+				stroke-width={3}
+				stroke-linejoin="round"
+				fill="none"
+				transform={`rotate(${a})`}
+			/>
+			<path
+				d={parse('M0 7L0 8')}
+				stroke="hsl(270, 100%, 20%"
+				stroke-width={3}
+				transform={`rotate(${30 + a})`}
 			/>
 		{/each}
 		<path
@@ -129,6 +144,14 @@
 			transform={`rotate(${0})`}
 		/>
 
+		<!-- <circle
+			r={(radii[9] - radii[8]) / 2 + radii[8]}
+			stroke="black"
+			stroke-width={radii[9] - radii[8]}
+			fill="none"
+		/> -->
+		<circle r={radii[7]} stroke="hsl(270, 100%, 20%)" stroke-width={3} fill="none" />
+		<circle r={radii[8]} stroke="hsl(270, 100%, 20%)" stroke-width={3} fill="none" />
 		<!-- <PathBuilder {angles} {radii} /> -->
 	</g>
 </svg>
