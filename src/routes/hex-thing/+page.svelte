@@ -80,8 +80,8 @@
 			r={size / hexTileSize}
 			gap={size / (hexTileSize * 4)}
 			fill="url('#rGradient')"
-			stroke={`hsl(30, 100%, 30%)`}
-			strokeWidth={size / 128}
+			stroke={`hsl(30, 100%, 50%)`}
+			strokeWidth={size / (hexTileSize * 8)}
 		/>
 		<g id="guide" class="guide" stroke-width={size / 512}>
 			{#each angles6 as a}
