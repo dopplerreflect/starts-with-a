@@ -38,7 +38,8 @@ const saveSvg = debounce(async (svg: SVGSVGElement) => {
 
 const savePng = debounce(async (svg: SVGSVGElement) => {
 	console.log('saving png');
-	const svgText = optimize(new XMLSerializer().serializeToString(svg)).data;
+	// const svgText = optimize(new XMLSerializer().serializeToString(svg)).data;
+	const svgText = new XMLSerializer().serializeToString(svg);
 	const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
 	const url = window.URL.createObjectURL(svgBlob);
 	const canvas = document.createElement('canvas');
