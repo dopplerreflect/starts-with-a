@@ -24,11 +24,11 @@
 	const parse = pathFromDSL(angles, radii);
 	let svg: SVGSVGElement;
 	onMount(() => {
-		const unmountZoomable = useZoomableViewbox(svg, 0, 0, 0);
-		const unmountSaveFile = useSaveFile(svg);
+		// const unmountZoomable = useZoomableViewbox(svg, 0, 0, 0);
+		// const unmountSaveFile = useSaveFile(svg);
 		return () => {
-			unmountZoomable();
-			unmountSaveFile();
+			// unmountZoomable();
+			// unmountSaveFile();
 		};
 	});
 </script>
@@ -53,8 +53,10 @@
 				/* display: none; */
 			}
 			#blocks path,
-			#blocks circle {
-				filter: 'url(#shrink)';
+			#blocks circle,
+			#large-ring path,
+			#outer-ring path {
+				filter: url(#shrink);
 				stroke: black;
 			}
 			#lines {
@@ -69,28 +71,24 @@
 		<g id="guide" class="guide" stroke-width={size / 1024}>
 			{#each angles6 as a}
 				<circle
-					class="guide"
 					r={radii[0]}
 					cx={radialPoint(a, radii[2]).x}
 					cy={radialPoint(a, radii[2]).y}
 					fill="none"
 				/>
 				<circle
-					class="guide"
 					r={radii[0]}
 					cx={radialPoint(a + 30, radii[2] * SQRT3).x}
 					cy={radialPoint(a + 30, radii[2] * SQRT3).y}
 					fill="none"
 				/>
 				<circle
-					class="guide"
 					r={radii[0]}
 					cx={radialPoint(a, radii[7]).x}
 					cy={radialPoint(a, radii[7]).y}
 					fill="none"
 				/>
 				<path
-					class="guide"
 					d={`M${radialPointString(a + 30, radii[2] * SQRT3)}L${radialPointString(
 						a + 90,
 						radii[2] * SQRT3
@@ -144,109 +142,70 @@
 		<g id="blocks" stroke-width={size / 384} fill-opacity={0.66}>
 			<circle filter="url(#shrink)" r={radii[0]} fill={`hsl(0, 75%, 20%)`} />
 			{#each angles6 as a}
+				<g class="rotateSixth" transform={`rotate(${a})`}>
+					<path
+						id="r0radiusTriangle"
+						d={parse('M22 0A0 0 0 0 0 0 1A0 0 0 0 0 2 0A0 0 0 0 0 22 0Z')}
+						fill={`hsl(7.5, 75%, 50%)`}
+					/>
+					<path id="r1ScoopArc" d={parse('M0 1A0 0 0 0 0 4 1Z')} fill="hsl(15, 75%, 50%)" />
+					<path id="r1r2Topper" d={parse('M0 1L2 2L4 1Z')} fill="hsl(22.5, 75%, 50%)" />
+					<path id="r2r3Topper" d={parse('M22 2L0 3L2 2Z')} fill="hsl(30, 75%, 50%)" />
+					<path
+						id="upperRightSupport"
+						d={`M${radii[0]} ${-radii[1]}H${radii[2]}L${radialPointString(angles[4], radii[3])}Z`}
+						fill="hsl(37.5, 75%, 50%)"
+					/>
+					<path
+						id="lowerRightSupport"
+						d={`M${radii[0]} ${radii[1]}H${radii[2]}L${radialPointString(angles[8], radii[3])}Z`}
+						fill="hsl(37.5, 75%, 50%)"
+					/>
+					<path
+						id="upperRightScoop"
+						d={`M${radii[2]} ${-radii[1]}A${radii[0]} ${radii[0]} 0 0 1 ${radialPointString(
+							angles[3],
+							radii[6]
+						)}L${radii[0]} ${-radii[1]}Z`}
+						fill="hsl(45, 75%, 50%)"
+					/>
+					<path
+						id="lowerRightScoop"
+						d={`M${radii[2]} ${radii[1]}A${radii[0]} ${radii[0]} 0 0 0 ${radialPointString(
+							angles[9],
+							radii[6]
+						)}L${radii[0]} ${radii[1]}Z`}
+						fill="hsl(45, 75%, 50%)"
+					/>
+					<path id="outerScoop" d={parse('M1 6A0 0 0 0 0 3 6L2 2Z')} fill="hsl(52.5, 75%, 50%)" />
+					<path id="outerBowl" d={parse('M23 6A0 0 0 0 0 1 6Z')} fill="hsl(30, 75%, 50%)" />
+					<path
+						d={parse('M0 7A7 7 0 0 1 2 7L2 4A0 0 0 0 1 1 6L0 5Z')}
+						fill={`hsl(240, 25%, 50%)`}
+					/>
+					<path
+						d={parse('M4 7A7 7 0 0 0 2 7L2 4A0 0 0 0 0 3 6L4 5Z')}
+						fill={`hsl(240, 25%, 50%)`}
+					/>
+				</g>
+			{/each}
+		</g>
+
+		<g id="large-ring" fill-opacity={0.66} stroke-width={size / 384}>
+			{#each angles12 as a}
 				<path
-					id="r0radiusTriangle"
-					d={parse('M22 0A0 0 0 0 0 0 1A0 0 0 0 0 2 0A0 0 0 0 0 22 0Z')}
-					fill={`hsl(7.5, 75%, 50%)`}
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					id="r1ScoopArc"
-					d={parse('M0 1A0 0 0 0 0 4 1Z')}
-					fill="hsl(15, 75%, 50%)"
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					id="r1r2Topper"
-					d={parse('M0 1L2 2L4 1Z')}
-					fill="hsl(22.5, 75%, 50%)"
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					id="r2r3Topper"
-					d={parse('M22 2L0 3L2 2Z')}
-					fill="hsl(30, 75%, 50%)"
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					id="upperRightSupport"
-					d={`M${radii[0]} ${-radii[1]}H${radii[2]}L${radialPointString(angles[4], radii[3])}Z`}
-					fill="hsl(37.5, 75%, 50%)"
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					id="lowerRightSupport"
-					d={`M${radii[0]} ${radii[1]}H${radii[2]}L${radialPointString(angles[8], radii[3])}Z`}
-					fill="hsl(37.5, 75%, 50%)"
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					id="upperRightScoop"
-					d={`M${radii[2]} ${-radii[1]}A${radii[0]} ${radii[0]} 0 0 1 ${radialPointString(
-						angles[3],
-						radii[6]
-					)}L${radii[0]} ${-radii[1]}Z`}
-					fill="hsl(45, 75%, 50%)"
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					id="lowerRightScoop"
-					d={`M${radii[2]} ${radii[1]}A${radii[0]} ${radii[0]} 0 0 0 ${radialPointString(
-						angles[9],
-						radii[6]
-					)}L${radii[0]} ${radii[1]}Z`}
-					fill="hsl(45, 75%, 50%)"
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					id="outerScoop"
-					d={parse('M1 6A0 0 0 0 0 3 6L2 2Z')}
-					fill="hsl(52.5, 75%, 50%)"
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					id="outerBowl"
-					d={parse('M23 6A0 0 0 0 0 1 6Z')}
-					fill="hsl(30, 75%, 50%)"
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					d={parse('M0 7A7 7 0 0 1 4 7L4 5L3 6A0 0 0 0 1 1 6L0 5Z')}
-					stroke="black"
-					stroke-linejoin="round"
-					fill={`hsl(240, 25%, 50%)`}
-					fill-rule="evenodd"
-					transform={`rotate(${a})`}
-					filter="url(#shrink)"
-				/>
-				<path
-					d={parse('M22 8 A8 8 0 0 1 2 8L2 7A7 7 0 0 0 22 7Z')}
-					stroke="black"
+					d={parse('M22 8 A8 8 0 0 1 0 8L0 7A7 7 0 0 0 22 7Z')}
 					fill={`hsl(240, 25%, 25%)`}
-					fill-rule="evenodd"
-					filter="url(#shrink)"
-					transform={`rotate(${a})`}
+					transform={`rotate(${a + 15})`}
 				/>
 			{/each}
 		</g>
 
-		<g id="rings" fill-opacity={0.66} stroke-width={size / 384}>
+		<g id="outer-ring" fill-opacity={0.66} stroke-width={size / 384}>
 			<path
 				d={parse('M0 9A9 9 0 0 0 12 9A9 9 0 0 0 0 9M0 8A8 8 0 0 0 12 8A8 8 0 0 0 0 8Z')}
-				stroke="black"
 				fill={`hsl(240, 25%, 50%)`}
 				fill-rule="evenodd"
-				filter="url(#shrink)"
 			/>
 		</g>
 	</g>
