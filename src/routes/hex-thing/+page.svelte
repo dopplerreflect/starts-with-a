@@ -6,7 +6,9 @@
 	import { pathFromDSL } from '$lib/path-parser';
 	import { useSaveFile } from '$lib/save-svg';
 	import SaturationFilter from '$lib/components/SaturationFilter.svelte';
+	import HexTiles2 from '$lib/components/HexTiles2.svelte';
 	const size = 2 ** 10;
+	const hexTileSize = 11;
 	const radii0 = arrayMap(5, (n) => (size / 11) * (n + 1));
 	const radii1 = radii0.slice(0, 3).map((r) => SQRT3 * r);
 	const radii = [
@@ -25,17 +27,17 @@
 	let svg: SVGSVGElement;
 	onMount(() => {
 		// const unmountZoomable = useZoomableViewbox(svg, 0, 0, 0);
-		// const unmountSaveFile = useSaveFile(svg);
+		const unmountSaveFile = useSaveFile(svg);
 		return () => {
 			// unmountZoomable();
-			// unmountSaveFile();
+			unmountSaveFile();
 		};
 	});
 </script>
 
 <svg id="hex-thing" bind:this={svg} viewBox={viewBox(size)}>
 	<defs>
-		<SaturationFilter values={'1'} />
+		<SaturationFilter values={'0.66'} />
 		<filter id="shrink" x={-size / 2} y={-size / 2} width={size} height={size}>
 			<feMorphology in="SourceGraphic" operator="erode" radius={size / 384} result="shrink" />
 			<feFlood flood-color={`hsl(240, 50%, 15%)`} flood-opacity="1" result="flood" />
@@ -46,11 +48,17 @@
 				<feMergeNode in="shrink" />
 			</feMerge>
 		</filter>
-
+		<radialGradient id="rGradient">
+			<stop offset="0%" stop-color="hsl(45, 100%, 50%)" />
+			<stop offset="100%" stop-color="hsl(0, 100%, 30%)" />
+		</radialGradient>
 		<style>
 			.guide {
-				stroke: hsl(270, 50%, 50%);
+				stroke: hsl(270, 50%, 100%);
 				/* display: none; */
+			}
+			.guide text {
+				fill: white;
 			}
 			#blocks path,
 			#blocks circle,
@@ -66,9 +74,16 @@
 		</style>
 	</defs>
 	<g id="whole" filter="url(#SaturationFilter)">
-		<Background {size} fill="hsl(270, 100%, 95%)" />
-
-		<g id="guide" class="guide" stroke-width={size / 1024}>
+		<Background {size} fill="hsl(0, 100%, 10%)" />
+		<HexTiles2
+			{size}
+			r={size / hexTileSize}
+			gap={size / (hexTileSize * 4)}
+			fill="url('#rGradient')"
+			stroke={`hsl(30, 100%, 30%)`}
+			strokeWidth={size / 128}
+		/>
+		<g id="guide" class="guide" stroke-width={size / 512}>
 			{#each angles6 as a}
 				<circle
 					r={radii[0]}
@@ -97,28 +112,26 @@
 			{/each}
 			{#each angles as a, i}
 				<path d={`M${radialPointString(a, radii[0])}L${radialPointString(a, radii[9])}`} />
-				<text
-					fill="hsl(270, 100%, 20%)"
+				<!-- <text
 					stroke="none"
 					font-size={size / 64}
 					x={radialPoint(a, radii[9]).x}
 					y={radialPoint(a, radii[9]).y}
 					text-anchor="middle"
 					alignment-baseline="middle">{i}</text
-				>
+				> -->
 			{/each}
 			{#each radii as r, i}
 				<circle {r} fill="none" />
-				<path d={`M${-size / 2 + size / 48} ${-r}H0`} />
+				<!-- <path d={`M${-size / 2 + size / 48} ${-r}H0`} />
 				<text
-					fill="hsl(270, 100%, 20%)"
 					stroke="none"
 					font-size={size / 64}
 					x={-size / 2 + size / 64}
 					y={-r}
 					alignment-baseline="middle"
 					text-anchor="middle">{i}</text
-				>
+				> -->
 			{/each}
 		</g>
 
@@ -140,7 +153,7 @@
 		</g>
 
 		<g id="blocks" stroke-width={size / 384} fill-opacity={0.66}>
-			<circle filter="url(#shrink)" r={radii[0]} fill={`hsl(0, 75%, 20%)`} />
+			<!-- <circle filter="url(#shrink)" r={radii[0]} fill={`hsl(0, 75%, 20%)`} /> -->
 			{#each angles6 as a}
 				<g class="rotateSixth" transform={`rotate(${a})`}>
 					<path
