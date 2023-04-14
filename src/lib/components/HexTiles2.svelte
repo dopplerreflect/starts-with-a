@@ -7,6 +7,8 @@
 	export let fill = 'white';
 	export let stroke: string | null = null;
 	export let strokeWidth = 0;
+	export let strokeOpacity = 1;
+	export let filter = '';
 
 	let y_offsets: number[] = [];
 	let x_offsets: number[] = [];
@@ -23,15 +25,14 @@
 	x_offsets.sort((a, b) => a - b);
 </script>
 
-{#each y_offsets as y, row}
-	{#each x_offsets as x}
-		<path
-			d={polygonPath(6, r, {
-				center: { x: row % 2 === 0 ? x + (r / 2) * SQRT3 + gap / 2 : x, y: y }
-			})}
-			{fill}
-			{stroke}
-			stroke-width={strokeWidth}
-		/>
+<g {fill} {stroke} stroke-width={strokeWidth} stroke-opacity={strokeOpacity} {filter}>
+	{#each y_offsets as y, row}
+		{#each x_offsets as x}
+			<path
+				d={polygonPath(6, r, {
+					center: { x: row % 2 === 0 ? x + (r / 2) * SQRT3 + gap / 2 : x, y: y }
+				})}
+			/>
+		{/each}
 	{/each}
-{/each}
+</g>

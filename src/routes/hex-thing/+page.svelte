@@ -7,7 +7,8 @@
 	import { useSaveFile } from '$lib/save-svg';
 	import SaturationFilter from '$lib/components/SaturationFilter.svelte';
 	import HexTiles2 from '$lib/components/HexTiles2.svelte';
-	const size = 2 ** 10;
+	import DrLogo from '$lib/components/DRLogo.svelte';
+	const size = 2 ** 12;
 	const hexTileSize = 11;
 	const radii0 = arrayMap(5, (n) => (size / 11) * (n + 1));
 	const radii1 = radii0.slice(0, 3).map((r) => SQRT3 * r);
@@ -37,7 +38,7 @@
 
 <svg id="hex-thing" bind:this={svg} viewBox={viewBox(size)}>
 	<defs>
-		<SaturationFilter values={'0.66'} />
+		<SaturationFilter values={'1'} />
 		<filter id="shrink" x={-size / 2} y={-size / 2} width={size} height={size}>
 			<feMorphology in="SourceGraphic" operator="erode" radius={size / 384} result="shrink" />
 			<feFlood flood-color={`hsl(240, 50%, 15%)`} flood-opacity="1" result="flood" />
@@ -55,13 +56,15 @@
 		<style>
 			.guide {
 				stroke: hsl(270, 50%, 100%);
+				fill: none;
 				/* display: none; */
 			}
 			.guide text {
 				fill: white;
 			}
-			#blocks path,
-			#blocks circle,
+
+			#blocks-rotateSixth path,
+			#blocks-rotateSixth circle,
 			#large-ring path,
 			#outer-ring path {
 				filter: url(#shrink);
@@ -69,40 +72,79 @@
 			}
 			#lines {
 				/* display: none; */
-				stroke: hsl(240, 25%, 50%);
+				fill: none;
+				stroke: hsl(0, 100%, 50%);
 			}
 		</style>
+		<g id="blocks-rotateSixth">
+			<path
+				id="r0radiusTriangle"
+				d={parse('M22 0A0 0 0 0 0 0 1A0 0 0 0 0 2 0A0 0 0 0 0 22 0Z')}
+				fill={`hsl(7.5, 75%, 50%)`}
+			/>
+			<path id="r1ScoopArc" d={parse('M0 1A0 0 0 0 0 4 1Z')} fill="hsl(15, 75%, 50%)" />
+			<path id="r1r2Topper" d={parse('M0 1L2 2L4 1Z')} fill="hsl(22.5, 75%, 50%)" />
+			<path id="r2r3Topper" d={parse('M22 2L0 3L2 2Z')} fill="hsl(30, 75%, 50%)" />
+			<path
+				id="upperRightSupport"
+				d={`M${radii[0]} ${-radii[1]}H${radii[2]}L${radialPointString(angles[4], radii[3])}Z`}
+				fill="hsl(37.5, 75%, 50%)"
+			/>
+			<path
+				id="lowerRightSupport"
+				d={`M${radii[0]} ${radii[1]}H${radii[2]}L${radialPointString(angles[8], radii[3])}Z`}
+				fill="hsl(37.5, 75%, 50%)"
+			/>
+			<path
+				id="upperRightScoop"
+				d={`M${radii[2]} ${-radii[1]}A${radii[0]} ${radii[0]} 0 0 1 ${radialPointString(
+					angles[3],
+					radii[6]
+				)}L${radii[0]} ${-radii[1]}Z`}
+				fill="hsl(45, 75%, 50%)"
+			/>
+			<path
+				id="lowerRightScoop"
+				d={`M${radii[2]} ${radii[1]}A${radii[0]} ${radii[0]} 0 0 0 ${radialPointString(
+					angles[9],
+					radii[6]
+				)}L${radii[0]} ${radii[1]}Z`}
+				fill="hsl(45, 75%, 50%)"
+			/>
+			<path id="outerScoop" d={parse('M1 6A0 0 0 0 0 3 6L2 2Z')} fill="hsl(52.5, 75%, 50%)" />
+			<path id="outerBowl" d={parse('M23 6A0 0 0 0 0 1 6Z')} fill="hsl(30, 75%, 50%)" />
+			<path d={parse('M0 7A7 7 0 0 1 2 7L2 4A0 0 0 0 1 1 6L0 5Z')} fill={`hsl(240, 75%, 50%)`} />
+			<path d={parse('M4 7A7 7 0 0 0 2 7L2 4A0 0 0 0 0 3 6L4 5Z')} fill={`hsl(240, 75%, 50%)`} />
+		</g>
 	</defs>
-	<g id="whole" filter="url(#SaturationFilter)">
-		<Background {size} fill="hsl(0, 100%, 10%)" />
-		<HexTiles2
-			{size}
-			r={size / hexTileSize}
-			gap={size / (hexTileSize * 4)}
-			fill="url('#rGradient')"
-			stroke={`hsl(30, 100%, 50%)`}
-			strokeWidth={size / (hexTileSize * 8)}
-		/>
+	<Background {size} fill="hsl(0, 100%, 10%)" />
+	<HexTiles2
+		{size}
+		r={size / hexTileSize}
+		gap={size / (hexTileSize * 4)}
+		stroke={`hsl(30, 100%, 50%)`}
+		strokeWidth={size / (hexTileSize * 8)}
+		fill="url(#rGradient)"
+	/>
+	<HexTiles2
+		{size}
+		r={size / (hexTileSize * 4)}
+		gap={size / (hexTileSize * 16)}
+		stroke={`hsl(240, 100%, 25%)`}
+		strokeWidth={size / (hexTileSize * 32)}
+		strokeOpacity={0.25}
+		fill="none"
+	/>
+	<g id="whole">
 		<g id="guide" class="guide" stroke-width={size / 512}>
 			{#each angles6 as a}
-				<circle
-					r={radii[0]}
-					cx={radialPoint(a, radii[2]).x}
-					cy={radialPoint(a, radii[2]).y}
-					fill="none"
-				/>
+				<circle r={radii[0]} cx={radialPoint(a, radii[2]).x} cy={radialPoint(a, radii[2]).y} />
 				<circle
 					r={radii[0]}
 					cx={radialPoint(a + 30, radii[2] * SQRT3).x}
 					cy={radialPoint(a + 30, radii[2] * SQRT3).y}
-					fill="none"
 				/>
-				<circle
-					r={radii[0]}
-					cx={radialPoint(a, radii[7]).x}
-					cy={radialPoint(a, radii[7]).y}
-					fill="none"
-				/>
+				<circle r={radii[0]} cx={radialPoint(a, radii[7]).x} cy={radialPoint(a, radii[7]).y} />
 				<path
 					d={`M${radialPointString(a + 30, radii[2] * SQRT3)}L${radialPointString(
 						a + 90,
@@ -122,7 +164,7 @@
 				> -->
 			{/each}
 			{#each radii as r, i}
-				<circle {r} fill="none" />
+				<circle {r} />
 				<!-- <path d={`M${-size / 2 + size / 48} ${-r}H0`} />
 				<text
 					stroke="none"
@@ -143,64 +185,19 @@
 						radii[0] * SQRT3
 					)}`}
 				/>
-				<path d={parse('M22 2L23 6L1 6L2 2Z')} fill="none" transform={`rotate(${a})`} />
-				<path
-					d={`M${-radii[2]} 0V${-radii[1]}H${radii[2]}V0`}
-					fill="none"
-					transform={`rotate(${a})`}
-				/>
+				<path d={parse('M22 2L23 6L1 6L2 2Z')} transform={`rotate(${a})`} />
+				<path d={`M${-radii[2]} 0V${-radii[1]}H${radii[2]}V0`} transform={`rotate(${a})`} />
 			{/each}
 		</g>
 
-		<g id="blocks" stroke-width={size / 384} fill-opacity={0.66}>
-			<!-- <circle filter="url(#shrink)" r={radii[0]} fill={`hsl(0, 75%, 20%)`} /> -->
+		<g id="blocks">
 			{#each angles6 as a}
-				<g class="rotateSixth" transform={`rotate(${a})`}>
-					<path
-						id="r0radiusTriangle"
-						d={parse('M22 0A0 0 0 0 0 0 1A0 0 0 0 0 2 0A0 0 0 0 0 22 0Z')}
-						fill={`hsl(7.5, 75%, 50%)`}
-					/>
-					<path id="r1ScoopArc" d={parse('M0 1A0 0 0 0 0 4 1Z')} fill="hsl(15, 75%, 50%)" />
-					<path id="r1r2Topper" d={parse('M0 1L2 2L4 1Z')} fill="hsl(22.5, 75%, 50%)" />
-					<path id="r2r3Topper" d={parse('M22 2L0 3L2 2Z')} fill="hsl(30, 75%, 50%)" />
-					<path
-						id="upperRightSupport"
-						d={`M${radii[0]} ${-radii[1]}H${radii[2]}L${radialPointString(angles[4], radii[3])}Z`}
-						fill="hsl(37.5, 75%, 50%)"
-					/>
-					<path
-						id="lowerRightSupport"
-						d={`M${radii[0]} ${radii[1]}H${radii[2]}L${radialPointString(angles[8], radii[3])}Z`}
-						fill="hsl(37.5, 75%, 50%)"
-					/>
-					<path
-						id="upperRightScoop"
-						d={`M${radii[2]} ${-radii[1]}A${radii[0]} ${radii[0]} 0 0 1 ${radialPointString(
-							angles[3],
-							radii[6]
-						)}L${radii[0]} ${-radii[1]}Z`}
-						fill="hsl(45, 75%, 50%)"
-					/>
-					<path
-						id="lowerRightScoop"
-						d={`M${radii[2]} ${radii[1]}A${radii[0]} ${radii[0]} 0 0 0 ${radialPointString(
-							angles[9],
-							radii[6]
-						)}L${radii[0]} ${radii[1]}Z`}
-						fill="hsl(45, 75%, 50%)"
-					/>
-					<path id="outerScoop" d={parse('M1 6A0 0 0 0 0 3 6L2 2Z')} fill="hsl(52.5, 75%, 50%)" />
-					<path id="outerBowl" d={parse('M23 6A0 0 0 0 0 1 6Z')} fill="hsl(30, 75%, 50%)" />
-					<path
-						d={parse('M0 7A7 7 0 0 1 2 7L2 4A0 0 0 0 1 1 6L0 5Z')}
-						fill={`hsl(240, 25%, 50%)`}
-					/>
-					<path
-						d={parse('M4 7A7 7 0 0 0 2 7L2 4A0 0 0 0 0 3 6L4 5Z')}
-						fill={`hsl(240, 25%, 50%)`}
-					/>
-				</g>
+				<use
+					xlink:href="#blocks-rotateSixth"
+					transform={`rotate(${a})`}
+					stroke-width={size / 384}
+					fill-opacity={0.66}
+				/>
 			{/each}
 		</g>
 
@@ -208,18 +205,19 @@
 			{#each angles12 as a}
 				<path
 					d={parse('M22 8 A8 8 0 0 1 0 8L0 7A7 7 0 0 0 22 7Z')}
-					fill={`hsl(240, 25%, 25%)`}
+					fill={`hsl(45, 100%, 50%)`}
 					transform={`rotate(${a + 15})`}
 				/>
 			{/each}
 		</g>
 
-		<g id="outer-ring" fill-opacity={0.66} stroke-width={size / 384}>
+		<g id="outer-ring" fill-opacity={0.8} stroke-width={size / 384}>
 			<path
 				d={parse('M0 9A9 9 0 0 0 12 9A9 9 0 0 0 0 9M0 8A8 8 0 0 0 12 8A8 8 0 0 0 0 8Z')}
-				fill={`hsl(240, 25%, 50%)`}
+				fill={`hsl(240, 75%, 50%)`}
 				fill-rule="evenodd"
 			/>
 		</g>
 	</g>
+	<DrLogo size={radii[0] / 3} stroke="hsl(45, 100%, 50%)" />
 </svg>
