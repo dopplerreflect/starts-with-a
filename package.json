@@ -26,7 +26,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"geometric": "^2.5.0",
-		"svgo": "^3.0.2"
+		"geometric": "^2.5.0"
 	}
 }
