@@ -8,8 +8,8 @@
 	import SaturationFilter from '$lib/components/SaturationFilter.svelte';
 	import HexTiles2 from '$lib/components/HexTiles2.svelte';
 	import DrLogo from '$lib/components/DRLogo.svelte';
-	const size = 2 ** 12;
-	const hexTileSize = 11;
+	import { size, hexTileSize, cropToRound } from './constants';
+
 	const radii0 = arrayMap(5, (n) => (size / 11) * (n + 1));
 	const radii1 = radii0.slice(0, 3).map((r) => SQRT3 * r);
 	const radii = [
@@ -49,10 +49,6 @@
 				<feMergeNode in="shrink" />
 			</feMerge>
 		</filter>
-		<radialGradient id="rGradient">
-			<stop offset="0%" stop-color="hsl(45, 100%, 50%)" />
-			<stop offset="100%" stop-color="hsl(0, 100%, 30%)" />
-		</radialGradient>
 		<style>
 			.guide {
 				stroke: hsl(270, 50%, 100%);
@@ -116,26 +112,38 @@
 			<path d={parse('M0 7A7 7 0 0 1 2 7L2 4A0 0 0 0 1 1 6L0 5Z')} fill={`hsl(240, 75%, 50%)`} />
 			<path d={parse('M4 7A7 7 0 0 0 2 7L2 4A0 0 0 0 0 3 6L4 5Z')} fill={`hsl(240, 75%, 50%)`} />
 		</g>
+		<radialGradient id="rGradient">
+			<stop offset="0%" stop-color="hsl(45, 100%, 50%)" />
+			<stop offset="100%" stop-color="hsl(0, 100%, 30%)" />
+		</radialGradient>
+		<mask id="cropToRound">
+			<radialGradient id="round">
+				<stop offset={'91%'} stop-color="white" />
+				<stop offset={'100%'} stop-color="black" />
+			</radialGradient>
+			<circle r={size / 2} fill="url(#round)" />
+		</mask>
 	</defs>
-	<Background {size} fill="hsl(0, 100%, 10%)" />
-	<HexTiles2
-		{size}
-		r={size / hexTileSize}
-		gap={size / (hexTileSize * 4)}
-		stroke={`hsl(30, 100%, 50%)`}
-		strokeWidth={size / (hexTileSize * 8)}
-		fill="url(#rGradient)"
-	/>
-	<HexTiles2
-		{size}
-		r={size / (hexTileSize * 4)}
-		gap={size / (hexTileSize * 16)}
-		stroke={`hsl(240, 100%, 25%)`}
-		strokeWidth={size / (hexTileSize * 32)}
-		strokeOpacity={0.25}
-		fill="none"
-	/>
-	<g id="whole">
+
+	<g id="whole" mask={cropToRound ? 'url(#cropToRound)' : null}>
+		<Background {size} fill="hsl(0, 100%, 10%)" />
+		<HexTiles2
+			{size}
+			r={size / hexTileSize}
+			gap={size / (hexTileSize * 4)}
+			stroke={`hsl(30, 100%, 50%)`}
+			strokeWidth={size / (hexTileSize * 8)}
+			fill="url(#rGradient)"
+		/>
+		<HexTiles2
+			{size}
+			r={size / (hexTileSize * 4)}
+			gap={size / (hexTileSize * 16)}
+			stroke={`hsl(240, 100%, 25%)`}
+			strokeWidth={size / (hexTileSize * 32)}
+			strokeOpacity={0.25}
+			fill="none"
+		/>
 		<g id="guide" class="guide" stroke-width={size / 512}>
 			{#each angles6 as a}
 				<circle r={radii[0]} cx={radialPoint(a, radii[2]).x} cy={radialPoint(a, radii[2]).y} />
