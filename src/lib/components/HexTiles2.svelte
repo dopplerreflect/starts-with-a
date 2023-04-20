@@ -9,6 +9,7 @@
 	export let strokeWidth = 0;
 	export let strokeOpacity = 1;
 	export let filter = '';
+	export let circular = false;
 
 	let y_offsets: number[] = [];
 	let x_offsets: number[] = [];
@@ -23,16 +24,25 @@
 	}
 	y_offsets.sort((a, b) => a - b);
 	x_offsets.sort((a, b) => a - b);
+
+	function isInCircle(radius: number, point: Point, centerX = 0, centerY = 0) {
+		let squareDist = (centerX - point.x) ** 2 + (centerY - point.y) ** 2;
+		return squareDist <= radius ** 2;
+	}
+
+	let hexCenterPoints: Point[] = y_offsets
+		.map((y, row) =>
+			x_offsets.map((x) => ({
+				x: row % 2 === 0 ? x + (r / 2) * SQRT3 + gap / 2 : x,
+				y: y
+			}))
+		)
+		.flat()
+		.filter((p) => (circular ? isInCircle(size / 4, p) : p));
 </script>
 
 <g {fill} {stroke} stroke-width={strokeWidth} stroke-opacity={strokeOpacity} {filter}>
-	{#each y_offsets as y, row}
-		{#each x_offsets as x}
-			<path
-				d={polygonPath(6, r, {
-					center: { x: row % 2 === 0 ? x + (r / 2) * SQRT3 + gap / 2 : x, y: y }
-				})}
-			/>
-		{/each}
+	{#each hexCenterPoints as center}
+		<path d={polygonPath(6, r, { center })} />
 	{/each}
 </g>

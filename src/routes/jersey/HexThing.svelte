@@ -22,10 +22,10 @@
 	const angles = [...angles12, ...atanAngles].sort((a, b) => a - b);
 
 	const parse = pathFromDSL(angles, radii);
-	let svg: SVGSVGElement;
+	// let svg: SVGSVGElement;
 </script>
 
-<svg id="hex-thing" bind:this={svg} viewBox={viewBox(size)}>
+<svg id="hex-thing" viewBox={viewBox(size)}>
 	<defs>
 		<SaturationFilter values={'1'} />
 		<filter id="shrink" x={-size / 2} y={-size / 2} width={size} height={size}>
