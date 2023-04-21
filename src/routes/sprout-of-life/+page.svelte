@@ -69,64 +69,119 @@
 			}
 			#guide circle,
 			#guide path {
-				stroke: oklch(0 0.37 300);
+				stroke: oklch(1 0.37 150);
 				fill: none;
 			}
 			#guide text {
-				fill: oklch(0 0.37 300);
-			}
-			#dodecahedron path {
-				stroke: oklch(0 0.37 300 / 1);
-				fill: oklch(0.25 0.37 300 / 0.33);
-				/* fill: none; */
+				fill: oklch(1 0.37 0);
 			}
 			#dodecahedron .pentagram {
-				stroke: oklch(0 0.37 300 / 1);
-				fill: oklch(0.25 0.37 300 / 0.33);
-				/* fill-rule: evenodd; */
+				display: none;
+				stroke: oklch(1 0.37 150 / 1);
+				fill: oklch(0.25 0.37 150 / 1);
 			}
 		</style>
+		<g id="guide" stroke-width={size / 2 ** 10}>
+			{#each smallCircles as c}
+				<circle cx={c.x} cy={c.y} r={c.r} />
+			{/each}
+			{#each largeCircles as c, i}
+				<circle cx={c.x} cy={c.y} r={c.r} />
+			{/each}
+			{#each radii as r, i}
+				<circle {r} />
+			{/each}
+			{#each angles as a, i}
+				<path d={`M${radialPointString(a, radii[4])}L${radialPointString(a, radii[0])}`} />
+			{/each}
+			<path d={polygonPath(6, radii[1])} />
+		</g>
 	</defs>
-	<Background {size} fill="oklch(1 0.125 300)" />
-	<g id="guide" stroke-width={size / 2 ** 11}>
-		{#each smallCircles as c}
-			<circle cx={c.x} cy={c.y} r={c.r} />
+	<Background {size} fill="oklch(0.2 0.125 300)" />
+	<use href="#guide" transform={`scale(0.33)`} />
+	<use href="#guide" transform={`scale(0.33) translate(${-size * 0.75} ${-size * 0.75})`} />
+	<use href="#guide" transform={`scale(0.33) translate(${size * 0.75} ${-size * 0.75})`} />
+	<use href="#guide" transform={`scale(0.33) translate(${-size * 0.75} ${size * 0.75})`} />
+	<use href="#guide" transform={`scale(0.33) translate(${size * 0.75} ${size * 0.75})`} />
+
+	<g
+		id="tetrahedron"
+		transform={`scale(0.33) translate(${-size * 0.75} ${-size * 0.75})`}
+		stroke={`oklch(1 0.37 30)`}
+		stroke-width={size / 2 ** 9}
+	>
+		{#each anglesArray(3, 0) as a, i}
+			<path
+				d={`M0 0` + parse('L20 1L4 1L12 1Z')}
+				transform={`rotate(${a})`}
+				fill={`oklch(${0.3 + 0.3 * i} 0.37 30 / 0.2)`}
+			/>
 		{/each}
-		{#each largeCircles as c, i}
-			<circle cx={c.x} cy={c.y} r={c.r} />
-		{/each}
-		{#each radii as r, i}
-			<circle {r} />
-			<path d={`M${-size / 2 + size / 24} ${-r}H0`} />
-			<text
-				font-size={size / 48}
-				x={-size / 2 + size / 48}
-				y={-r}
-				fill="white"
-				text-anchor="middle"
-				alignment-baseline="middle">{i}</text
-			>
-		{/each}
-		{#each angles as a, i}
-			<path d={`M${radialPointString(a, radii[4])}L${radialPointString(a, radii[0])}`} />
-			<text
-				font-size={size / 48}
-				x={radialPoint(a, radii[0] + size / 48).x}
-				y={radialPoint(a, radii[0] + size / 48).y}
-				fill="white"
-				text-anchor="middle"
-				alignment-baseline="middle">{i}</text
-			>
-		{/each}
-		<path d={polygonPath(6, radii[1])} />
 	</g>
-	<g id="dodecahedron" stroke-width={size / 2 ** 9}>
-		{#each anglesArray(3) as a}
-			<g transform={`rotate(${a - 30})`}>
-				<path d={parse(`M17 2L19 2L21 2L23 2L20 3Z`)} />
-				<path d={parse(`M20 3L23 2L1 2L4 3`) + 'L0 0Z'} />
+
+	<g
+		id="cube"
+		stroke={`oklch(1 0.37 90)`}
+		stroke-width={size / 2 ** 9}
+		transform={`scale(0.33) translate(${size * 0.75} ${-size * 0.75})`}
+	>
+		{#each anglesArray(3) as a, i}
+			<path
+				d={parse('M16 2L20 2L0 2') + 'L0 0Z'}
+				fill={`oklch(${0.25 + 0.25 * i} 0.37 90 / 0.33)`}
+				transform={`rotate(${a - angleToHexLineLargeCircleIntersection})`}
+			/>
+		{/each}
+	</g>
+
+	<g
+		id="octahedron"
+		stroke={`oklch(1 0.37 120)`}
+		stroke-width={size / 2 ** 9}
+		fill-opacity={0.33}
+		transform={`scale(0.33) translate(0 0) rotate(${-angleToHexLineLargeCircleIntersection}) `}
+	>
+		<path d={parse('M18 2L2 2L10 2Z')} fill={`oklch(1 0.37 120)`} />
+		{#each anglesArray(3, 0) as a, i}
+			<path
+				d={parse('M18 2L22 2L2 2Z')}
+				fill={`oklch(${0.25 + 0.25 * i} 0.37 120)`}
+				transform={`rotate(${a})`}
+			/>
+		{/each}
+	</g>
+
+	<g
+		id="dodecahedron"
+		stroke={`oklch(1 0.37 150)`}
+		stroke-width={size / 2 ** 9}
+		transform={`scale(0.33) translate(${-size * 0.75} ${size * 0.75})`}
+	>
+		{#each anglesArray(3) as a, i}
+			<g transform={`rotate(${a - 30})`} fill-opacity={0.5}>
+				<path d={parse(`M17 2L19 2L21 2L23 2L20 3Z`)} fill={`oklch(${0.15 + 0.15 * i} 0.37 150)`} />
+				<path
+					d={parse(`M20 3L23 2L1 2L4 3`) + 'L0 0Z'}
+					fill={`oklch(${0.45 + 0.15 * i} 0.37 150)`}
+				/>
 				<path class="pentagram" d={parse(`M17 2L21 2L20 3L19 2L23 2Z`)} />
 				<path class="pentagram" d={'M0 0' + parse(`L23 2L4 3L20 3L1 2Z`)} />
+			</g>
+		{/each}
+	</g>
+
+	<g
+		id="icosahedron"
+		stroke={` oklch(1 0.37 240 / 1)`}
+		stroke-width={size / 2 ** 9}
+		transform={`scale(0.33) translate(${size * 0.75} ${size * 0.75})`}
+	>
+		<path d={parse('M16 3L0 3L8 3Z')} fill={` oklch(0.6 0.37 240 / 0.5)`} />
+		{#each anglesArray(3) as a, i}
+			<g transform={`rotate(${a - 30})`}>
+				<path d={parse('M16 3L20 1L0 3Z')} fill={` oklch(${0.45 + 0.15 * i} 0.37 240 / 0.5)`} />
+				<path d={parse('M20 1L0 1L0 3Z')} fill={` oklch(${0.35 + 0.15 * i} 0.37 240 / 0.5)`} />
+				<path d={parse('M0 1L4 1L0 3')} fill={` oklch(${0.25 + 0.15 * i} 0.37 240 / 0.5)`} />
 			</g>
 		{/each}
 	</g>
