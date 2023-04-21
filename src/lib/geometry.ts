@@ -5,9 +5,10 @@ export const SQRT3 = Math.sqrt(3);
 /**
  * Returns angles for a circle divided by count. Rotates -90deg.
  * @param count
+ * @param rotate
  */
-export function anglesArray(count: number) {
-	return [...Array(count).keys()].map((i) => (360 / count) * i - 90);
+export function anglesArray(count: number, rotate: number = -90) {
+	return [...Array(count).keys()].map((i) => (360 / count) * i + rotate);
 }
 
 /**
