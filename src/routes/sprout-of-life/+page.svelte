@@ -10,16 +10,19 @@
 		polygonPath,
 		radialPoint,
 		radialPointString,
-		viewBox
+		viewBox,
+		phi,
+		Phi
 	} from '$lib/geometry';
 	import { pathFromDSL } from '$lib/path-parser';
 	import { useSaveFile } from '$lib/save-svg';
-	import { each, onMount } from 'svelte/internal';
+	import { onMount } from 'svelte/internal';
 
 	const size = 2 ** 10;
 	const r = size / 7;
 
 	const angles6 = anglesArray(6, 0);
+	const angles5 = anglesArray(5);
 	const centerPoints = angles6.map((a) => radialPoint(a, r));
 	const smallCircles = centerPoints.map((p) => ({ ...p, r }));
 	const largeCircles = centerPoints.map((p) => ({ ...p, r: r * 2 }));
@@ -91,22 +94,40 @@
 			{#each radii as r, i}
 				<circle {r} />
 			{/each}
-			{#each angles as a, i}
+			<!-- {#each angles as a, i}
 				<path d={`M${radialPointString(a, radii[4])}L${radialPointString(a, radii[0])}`} />
-			{/each}
-			<path d={polygonPath(6, radii[1])} />
+			{/each} -->
+			<!-- <path d={polygonPath(6, radii[1])} /> -->
 		</g>
 	</defs>
 	<Background {size} fill="oklch(0.2 0.125 300)" />
-	<use href="#guide" transform={`scale(0.33)`} />
-	<use href="#guide" transform={`scale(0.33) translate(${-size * 0.75} ${-size * 0.75})`} />
-	<use href="#guide" transform={`scale(0.33) translate(${size * 0.75} ${-size * 0.75})`} />
-	<use href="#guide" transform={`scale(0.33) translate(${-size * 0.75} ${size * 0.75})`} />
-	<use href="#guide" transform={`scale(0.33) translate(${size * 0.75} ${size * 0.75})`} />
+
+	<!-- <use href="#guide" /> -->
+	<use href="#guide" transform={`scale(${phi ** 2})`} />
+	<use
+		href="#guide"
+		transform={`scale(${phi ** 2}) translate(${radialPointString(angles5[0], radii[0] * Phi)})`}
+	/>
+	<use
+		href="#guide"
+		transform={`scale(${phi ** 2}) translate(${radialPointString(angles5[1], radii[0] * Phi)})`}
+	/>
+	<use
+		href="#guide"
+		transform={`scale(${phi ** 2}) translate(${radialPointString(angles5[2], radii[0] * Phi)})`}
+	/>
+	<use
+		href="#guide"
+		transform={`scale(${phi ** 2}) translate(${radialPointString(angles5[3], radii[0] * Phi)})`}
+	/>
+	<use
+		href="#guide"
+		transform={`scale(${phi ** 2}) translate(${radialPointString(angles5[4], radii[0] * Phi)})`}
+	/>
 
 	<g
 		id="tetrahedron"
-		transform={`scale(0.33) translate(${-size * 0.75} ${-size * 0.75})`}
+		transform={`scale(${phi ** 2}) translate(${radialPointString(angles5[0], radii[0] * Phi)})`}
 		stroke={`oklch(1 0.37 30)`}
 		stroke-width={size / 2 ** 9}
 	>
@@ -123,7 +144,7 @@
 		id="cube"
 		stroke={`oklch(1 0.37 90)`}
 		stroke-width={size / 2 ** 9}
-		transform={`scale(0.33) translate(${size * 0.75} ${-size * 0.75})`}
+		transform={`scale(${phi ** 2}) translate(${radialPointString(angles5[1], radii[0] * Phi)})`}
 	>
 		{#each anglesArray(3) as a, i}
 			<path
@@ -139,7 +160,10 @@
 		stroke={`oklch(1 0.37 120)`}
 		stroke-width={size / 2 ** 9}
 		fill-opacity={0.33}
-		transform={`scale(0.33) translate(0 0) rotate(${-angleToHexLineLargeCircleIntersection}) `}
+		transform={`scale(${phi ** 2}) translate(${radialPointString(
+			angles5[2],
+			radii[0] * Phi
+		)}) rotate(${-angleToHexLineLargeCircleIntersection}) `}
 	>
 		<path d={parse('M18 2L2 2L10 2Z')} fill={`oklch(1 0.37 120)`} />
 		{#each anglesArray(3, 0) as a, i}
@@ -155,7 +179,7 @@
 		id="dodecahedron"
 		stroke={`oklch(1 0.37 150)`}
 		stroke-width={size / 2 ** 9}
-		transform={`scale(0.33) translate(${-size * 0.75} ${size * 0.75})`}
+		transform={`scale(${phi ** 2}) translate(${radialPointString(angles5[3], radii[0] * Phi)})`}
 	>
 		{#each anglesArray(3) as a, i}
 			<g transform={`rotate(${a - 30})`} fill-opacity={0.5}>
@@ -174,7 +198,7 @@
 		id="icosahedron"
 		stroke={` oklch(1 0.37 240 / 1)`}
 		stroke-width={size / 2 ** 9}
-		transform={`scale(0.33) translate(${size * 0.75} ${size * 0.75})`}
+		transform={`scale(${phi ** 2}) translate(${radialPointString(angles5[4], radii[0] * Phi)})`}
 	>
 		<path d={parse('M16 3L0 3L8 3Z')} fill={` oklch(0.6 0.37 240 / 0.5)`} />
 		{#each anglesArray(3) as a, i}
