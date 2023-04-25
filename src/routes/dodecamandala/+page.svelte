@@ -17,7 +17,7 @@
 	import { onMount } from 'svelte';
 	const size = 2 ** 10;
 
-	const r0 = size / 5;
+	const r0 = size / 7;
 	const r1 = r0 * 2;
 	const sproutAngles = anglesArray(6, 0);
 	const circles: Circle[] = [
@@ -76,7 +76,7 @@
 				/* shape-rendering: 'optimizeSpeed'; */
 			}
 			circle.large {
-				stroke: oklch(0.5 0.37 150);
+				stroke: oklch(1 0.37 150);
 			}
 			circle.small {
 				stroke: oklch(0.5 0.37 60);
@@ -105,7 +105,7 @@
 				/* display: none; */
 			}
 			#guide {
-				display: none;
+				/* display: none; */
 			}
 			#dodecahedron {
 				/* display: none; */
@@ -117,6 +117,9 @@
 		</radialGradient>
 	</defs>
 	<Background {size} fill="url(#background)" />
+	{#each phylotaxicPoints(2 ** 12, Math.sqrt((size / 2) ** 2 * 2)) as p, i}
+		<circle cx={p.x} cy={p.y} r={5} stroke={`oklch(0.5 0.3 300)`} />
+	{/each}
 	<g id="guide" fill="none">
 		{#each circles as c, i}
 			<circle r={c.r} cx={c.x} cy={c.y} class={i < 6 ? 'large' : 'small'} />
@@ -145,9 +148,6 @@
 			>
 		{/each}
 	</g>
-	{#each phylotaxicPoints(2 ** 12, Math.sqrt((size / 2) ** 2 * 2)) as p, i}
-		<circle cx={p.x} cy={p.y} r={5} stroke={`oklch(0.5 0.3 300)`} />
-	{/each}
 	<g id="dodecahedron">
 		<g class="rear">
 			<path
