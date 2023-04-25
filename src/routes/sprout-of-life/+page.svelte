@@ -12,10 +12,12 @@
 		radialPointString,
 		viewBox,
 		phi,
-		Phi
+		Phi,
+		phylotaxicPoints
 	} from '$lib/geometry';
 	import { pathFromDSL } from '$lib/path-parser';
 	import { useSaveFile } from '$lib/save-svg';
+	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte/internal';
 
 	const size = 2 ** 10;
@@ -58,8 +60,10 @@
 	let svg: SVGSVGElement;
 	onMount(() => {
 		const unMountSave = useSaveFile(svg);
+		const unmountZoom = useZoomableViewbox(svg);
 		return () => {
 			unMountSave();
+			unmountZoom();
 		};
 	});
 </script>
@@ -84,26 +88,33 @@
 				fill: oklch(0.25 0.37 150 / 1);
 			}
 		</style>
-		<g id="guide" stroke-width={size / 2 ** 10}>
+		<g id="guide" stroke-width={size / 2 ** 9}>
 			{#each smallCircles as c}
 				<circle cx={c.x} cy={c.y} r={c.r} />
 			{/each}
 			{#each largeCircles as c, i}
 				<circle cx={c.x} cy={c.y} r={c.r} />
 			{/each}
-			{#each radii as r, i}
+			<!-- {#each radii as r, i}
 				<circle {r} />
-			{/each}
+			{/each} -->
 			<!-- {#each angles as a, i}
 				<path d={`M${radialPointString(a, radii[4])}L${radialPointString(a, radii[0])}`} />
 			{/each} -->
 			<!-- <path d={polygonPath(6, radii[1])} /> -->
 		</g>
 	</defs>
-	<Background {size} fill="oklch(0.2 0.125 300)" />
-
-	<!-- <use href="#guide" /> -->
-	<use href="#guide" transform={`scale(${phi ** 2})`} />
+	<Background {size} fill="oklch(0.1 0.125 300)" />
+	{#each phylotaxicPoints(2 ** 10, Math.sqrt((size / 2) ** 2 * 2)) as p, i}
+		<circle
+			cx={p.x}
+			cy={p.y}
+			r={2 + i / 2 ** 5}
+			stroke={`oklch(${0.75 - (0.75 / 2 ** 10) * i} 0.125 300)`}
+			fill="none"
+		/>
+	{/each}
+	<use href="#guide" transform={`scale(${phi ** 3})`} />
 	<use
 		href="#guide"
 		transform={`scale(${phi ** 2}) translate(${radialPointString(angles5[0], radii[0] * Phi)})`}
