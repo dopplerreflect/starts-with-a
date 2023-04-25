@@ -1,20 +1,23 @@
 <svelte:options namespace="svg" />
 
 <script lang="ts">
+	import Background from '$lib/components/Background.svelte';
 	import {
 		anglesArray,
 		circleIntersections,
 		circleLineIntersections,
+		phylotaxicPoints,
 		radialPoint,
 		radialPointString,
 		viewBox
 	} from '$lib/geometry';
 	import { pathFromDSL } from '$lib/path-parser';
+	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
 	const size = 2 ** 10;
 
-	const r0 = size / 7;
+	const r0 = size / 5;
 	const r1 = r0 * 2;
 	const sproutAngles = anglesArray(6, 0);
 	const circles: Circle[] = [
@@ -54,18 +57,23 @@
 
 	onMount(() => {
 		const unmountZoom = useZoomableViewbox(svg, 0);
+		const unMountSave = useSaveFile(svg);
 		return () => {
 			unmountZoom();
+			unMountSave();
 		};
 	});
 </script>
 
-<svg viewBox={viewBox(size)} bind:this={svg}>
+<svg viewBox={viewBox(size)} bind:this={svg} id="dodecamandala">
 	<defs>
 		<style>
 			circle,
 			path {
-				stroke: oklch(1 0 0);
+				/* stroke: oklch(1 0 0); */
+				shape-rendering: 'crispEdges';
+				shape-rendering: 'geometricPrecision';
+				/* shape-rendering: 'optimizeSpeed'; */
 			}
 			circle.large {
 				stroke: oklch(0.5 0.37 150);
@@ -90,7 +98,7 @@
 				/* display: none; */
 			}
 			#sixth-of-mandala path {
-				stroke: oklch(0.66 0.37 270 / 0.5);
+				stroke: oklch(1 0.37 150 / 0.5);
 				/* stroke: none; */
 			}
 			#sixth-of-mandala {
@@ -99,8 +107,16 @@
 			#guide {
 				display: none;
 			}
+			#dodecahedron {
+				/* display: none; */
+			}
 		</style>
+		<radialGradient id="background">
+			<stop offset="0%" stop-color="oklch(0.35 0.1 300)" />
+			<stop offset="100%" stop-color="oklch(0.1 0.37 300)" />
+		</radialGradient>
 	</defs>
+	<Background {size} fill="url(#background)" />
 	<g id="guide" fill="none">
 		{#each circles as c, i}
 			<circle r={c.r} cx={c.x} cy={c.y} class={i < 6 ? 'large' : 'small'} />
@@ -129,6 +145,9 @@
 			>
 		{/each}
 	</g>
+	{#each phylotaxicPoints(2 ** 12, Math.sqrt((size / 2) ** 2 * 2)) as p, i}
+		<circle cx={p.x} cy={p.y} r={5} stroke={`oklch(0.5 0.3 300)`} />
+	{/each}
 	<g id="dodecahedron">
 		<g class="rear">
 			<path
@@ -165,17 +184,32 @@
 		<g id="sixth-of-mandala">
 			{#each anglesArray(6, 0) as a}
 				<g class="sixth" transform={`rotate(${a})`}>
-					<path fill={`oklch(0.5 0.37 260 / 0.5)`} d={parse('M0 9A8 8 0 0 0 3 8A8 8 0 0 0 0 9Z')} />
-					<path fill={`oklch(0.5 0.37 240 / 0.5)`} d={parse('M0 9A8 8 0 0 0 7 8A8 8 0 0 1 5 5Z')} />
-					<path fill={`oklch(0.5 0.38 250 / 0.5)`} d={parse('M0 9A8 8 0 0 1 3 8A8 8 0 0 0 5 5Z')} />
-					<path fill={`oklch(0.5 0.38 240 / 0.5)`} d={parse('M3 8A8 8 0 0 0 5 5A4 4 0 0 1 3 6Z')} />
-					<path fill={`oklch(0.5 0.38 250 / 0.5)`} d={parse('M3 8A8 8 0 0 1 1 5A4 4 0 0 0 3 6Z')} />
 					<path
-						fill={`oklch(0.5 0.38 260 / 0.5)`}
+						fill={`oklch(0.1 0.37 150 / 0.25)`}
+						d={parse('M0 9A8 8 0 0 0 3 8A8 8 0 0 0 0 9Z')}
+					/>
+					<path
+						fill={`oklch(0.2 0.37 150 / 0.25)`}
+						d={parse('M0 9A8 8 0 0 0 7 8A8 8 0 0 1 5 5Z')}
+					/>
+					<path
+						fill={`oklch(0.3 0.38 150 / 0.25)`}
+						d={parse('M0 9A8 8 0 0 1 3 8A8 8 0 0 0 5 5Z')}
+					/>
+					<path
+						fill={`oklch(0.2 0.38 150 / 0.25)`}
+						d={parse('M3 8A8 8 0 0 0 5 5A4 4 0 0 1 3 6Z')}
+					/>
+					<path
+						fill={`oklch(0.3 0.38 150 / 0.25)`}
+						d={parse('M3 8A8 8 0 0 1 1 5A4 4 0 0 0 3 6Z')}
+					/>
+					<path
+						fill={`oklch(0.1 0.38 150 / 0.25)`}
 						d={parse('M3 6A5 5 0 0 0 5 5A5 5 0 0 1 1 5A5 5 0 0 0 3 6Z')}
 					/>
 					<path
-						fill={`oklch(0.5 0.38 270 / 0.5)`}
+						fill={`oklch(0.3 0.38 150 / 0.25)`}
 						d={parse('M5 5A5 5 0 0 1 3 3A5 5 0 0 1 1 5A5 5 0 0 0 5 5Z')}
 					/>
 				</g>
