@@ -26,7 +26,7 @@
 		<style>
 			path,
 			circle {
-				stroke: white;
+				stroke: hsl(0, 0%, 20%);
 				fill-opacity: 0.25;
 			}
 			path {
@@ -46,10 +46,10 @@
 			}
 		</style>
 	</defs>
-	<!-- <circle {r} /> -->
-	<!-- {#each circles as c}
+	<circle {r} />
+	{#each circles as c}
 		<circle r={c.r} cx={c.x} cy={c.y} />
-	{/each} -->
+	{/each}
 	<g class="cube rear">
 		<path d={'M0 0' + parse('L0 1L1 1L2 1Z')} />
 		<path d={'M0 0' + parse('L0 1L5 1L4 1Z')} />
