@@ -43,7 +43,8 @@
 				.flat()
 				.map((p) => Math.sqrt(p.x ** 2 + p.y ** 2))
 		),
-		r0
+		r0,
+		r0 * 3
 	].sort((a, b) => b - a);
 
 	const parse = pathFromDSL(angles, radii);
@@ -72,7 +73,7 @@
 				stroke: oklch(0.5 0.37 300);
 			}
 			.rear path {
-				stroke: oklch(0.75 0 0);
+				stroke: oklch(0.66 0 0);
 			}
 		</style>
 	</defs>
@@ -106,20 +107,20 @@
 	</g>
 	<g id="dodecahedron">
 		<g class="rear">
-			<path id="bottom" d={parse('M14 1L16 1L18 1L20 1L17 3Z')} />
-			<path id="lower-left" d={'M0 0' + parse('L17 3L14 1L12 1L9 3Z')} />
-			<path id="lower-right" d={'M0 0' + parse('L17 3L20 1L22 1L1 3Z')} />
-			<path id="upper-left" d={parse('M10 1L12 1L9 3L6 1L8 1Z')} />
-			<path id="upper-middle" d={'M0 0' + parse('L1 3L4 1L6 1L9 3Z')} />
-			<path id="upper-right" d={parse('M4 1L2 1L0 1L22 1L1 3Z')} />
+			<path id="bottom" d={parse('M14 2L16 2L18 2L20 2L17 4Z')} />
+			<path id="lower-left" d={'M0 0' + parse('L17 4L14 2L12 2L9 4Z')} />
+			<path id="lower-right" d={'M0 0' + parse('L17 4L20 2L22 2L1 4Z')} />
+			<path id="upper-left" d={parse('M10 2L12 2L9 4L6 2L8 2Z')} />
+			<path id="upper-middle" d={'M0 0' + parse('L1 4L4 2L6 2L9 4Z')} />
+			<path id="upper-right" d={parse('M4 2L2 2L0 2L22 2L1 4Z')} />
 		</g>
 		<g class="front">
-			<path id="top" d={parse('M8 1L6 1L4 1L2 1L5 3Z')} />
-			<path id="upper-left" d={'M0 0' + parse('L5 3L8 1L10 1L13 3Z')} />
-			<path id="upper-right" d={'M0 0' + parse('L5 3L2 1L0 1L21 3Z')} />
-			<path id="lower-left" d={parse('M10 1L12 1L14 1L16 1L13 3Z')} />
-			<path id="lower-middle" d={'M0 0' + parse('L13 3L16 1L18 1L21 3Z')} />
-			<path id="lower-right" d={parse('M18 1L20 1L22 1L0 1L21 3Z')} />
+			<path id="top" d={parse('M8 2L6 2L4 2L2 2L5 4Z')} />
+			<path id="upper-left" d={'M0 0' + parse('L5 4L8 2L10 2L13 4Z')} />
+			<path id="upper-right" d={'M0 0' + parse('L5 4L2 2L0 2L21 4Z')} />
+			<path id="lower-left" d={parse('M10 2L12 2L14 2L16 2L13 4Z')} />
+			<path id="lower-middle" d={'M0 0' + parse('L13 4L16 2L18 2L21 4Z')} />
+			<path id="lower-right" d={parse('M18 2L20 2L22 2L0 2L21 4Z')} />
 		</g>
 	</g>
 </svg>
