@@ -7,6 +7,7 @@
 		arrayMap,
 		circleIntersections,
 		circleLineIntersections,
+		intersection,
 		polygonPath,
 		radialPoint,
 		radialPointString,
@@ -65,9 +66,12 @@
 		phiAngles = [...Array(6).keys()]
 			.map((n) => [(60 * n + hexangle) % 360, (60 * n - hexangle + 180) % 360])
 			.flat(),
-		angles = [...angles6, ...phiAngles].sort((a, b) => b - a),
+		anglesWithPhi = [...angles6, ...phiAngles].sort((a, b) => b - a),
 		hexintersectRadius = Math.sqrt(hexintersect.x ** 2 + hexintersect.y ** 2),
-		triline: Line = [radialPoint(angles[4], setupRadii[1]), radialPoint(angles[16], setupRadii[1])],
+		triline: Line = [
+			radialPoint(anglesWithPhi[4], setupRadii[1]),
+			radialPoint(anglesWithPhi[16], setupRadii[1])
+		],
 		trilineIntersect = circleLineIntersections(circles[22], triline)[0],
 		trilineIntersectRadius = Math.sqrt(trilineIntersect.x ** 2 + trilineIntersect.y ** 2),
 		radii = [
@@ -77,7 +81,27 @@
 			hexintersectRadius,
 			trilineIntersectRadius
 		].sort((a, b) => b - a),
-		parse = pathFromDSL(angles, radii);
+		smallHexline: Line = [
+			radialPoint(anglesWithPhi[6], radii[1]),
+			radialPoint(anglesWithPhi[2], radii[1])
+		],
+		pentaLine: Line = [
+			radialPoint(anglesWithPhi[4], radii[1]),
+			radialPoint(anglesWithPhi[1], radii[5])
+		],
+		hexPentaIntersection = intersection(smallHexline, pentaLine),
+		hexaPentaRadius = Math.sqrt(hexPentaIntersection.x ** 2 + hexPentaIntersection.y ** 2);
+	radii.push(hexaPentaRadius);
+	radii.sort((a, b) => b - a);
+	const hexPentAngle = Math.abs(
+			Math.atan2(hexPentaIntersection.y, hexPentaIntersection.x) * (180 / Math.PI)
+		),
+		hexPentAngles = [...Array(6).keys()]
+			.map((n) => [(60 * n + hexPentAngle) % 360, (60 * n - hexPentAngle + 180) % 360])
+			.flat(),
+		angles = [...anglesWithPhi, ...hexPentAngles].sort((a, b) => b - a);
+
+	const parse = pathFromDSL(angles, radii);
 </script>
 
 <svg viewBox={viewBox(size)} bind:this={svg} id="stellated-dodecahedron">
@@ -100,13 +124,19 @@
 			#circles {
 				stroke: oklch(0.5 0.37 120);
 			}
-			#bigPenta path:not(.outer) {
+			#bigPenta path {
 				stroke: oklch(1 0.37 60);
+				stroke-width: 3;
 				fill: oklch(0.5 0.37 60 / 0.25);
 			}
 		</style>
 	</defs>
 	<Background {size} fill="black" />
+	<!-- <path d={`M${smallHexline[0].x} ${smallHexline[0].y}H${smallHexline[1].x}`} stroke="white" />
+	<path
+		d={`M${pentaLine[0].x} ${pentaLine[0].y}L${pentaLine[1].x} ${pentaLine[1].y}`}
+		stroke="white"
+	/> -->
 	<g id="radii">
 		{#each radii as r, i}
 			<circle {r} />
@@ -140,27 +170,32 @@
 		<g id="bigPenta" transform={`rotate(${a})`}>
 			<!-- <path
 				class="outer"
-				d={parse('M01 9L2 6L4 3L2 4L2 1L1 3L0 1L0 4L16 3L0 6Z')}
+				d={parse('M4 10L4 7L7 4L4 5L4 1L2 4L0 1L0 5L27 4L0 7Z')}
 				stroke={`oklch(1 0.37 60)`}
 			/> -->
 			<g class="edges">
-				<path d={parse('M4 9L2 6L4 3Z')} />
-				<path d={parse('M4 3L2 4L2 1Z')} />
-				<path d={parse('M2 1L1 3L0 1Z')} />
-				<path d={parse('M0 1L0 4L16 3Z')} />
-				<path d={parse('M16 3L0 6L16 9Z')} />
+				<path d={parse('M7 10L4 7L7 4Z')} />
+				<path d={parse('M7 4L4 5 L4 1Z')} />
+				<path d={parse('M4 1L2 4L0 1Z')} />
+				<path d={parse('M0 1L0 5L27 4Z')} />
+				<path d={parse('M27 4L0 7L27 10Z')} />
 			</g>
 			<g class="starInner">
-				<path d={parse('M01 4L1 9L2 6Z')} />
-				<path d={parse('M1 4L2 6L4 3Z')} />
-				<path d={parse(`M1 4L4 3L2 4Z`)} />
-				<path d={parse('M1 4L2 4L2 1Z')} />
-				<path d={parse('M1 4L2 1L1 3Z')} />
-				<path d={parse('M1 4L1 3L0 1Z')} />
-				<path d={parse('M1 4L0 1L0 4Z')} />
-				<path d={parse('M1 4L0 4L16 3Z')} />
-				<path d={parse('M1 4L16 3L0 6Z')} />
-				<path d={parse('M1 4L0 6L1 9Z')} />
+				<path d={parse('M2 5L2 10L4 7Z')} />
+				<path d={parse('M2 5L7 4L4 7Z')} />
+				<path d={parse('M2 5L7 4L4 5Z')} />
+				<path d={parse('M2 5L4 5L4 1Z')} />
+				<path d={parse('M2 5L4 1L2 4Z')} />
+				<path d={parse('M2 5L2 4L0 1Z')} />
+				<path d={parse('M2 5L0 1L0 5Z')} />
+				<path d={parse('M2 5L0 5L27 4Z')} />
+				<path d={parse('M2 5L27 4L0 7Z')} />
+				<path d={parse('M2 5L0 7L0 10Z')} />
+			</g>
+		</g>
+		<g class="medPenta">
+			<g class="starInner">
+				<path d={parse('M4 3L4 1L')} />
 			</g>
 		</g>
 	{/each}
