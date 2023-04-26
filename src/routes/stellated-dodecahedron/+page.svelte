@@ -84,7 +84,7 @@
 	<defs>
 		<style>
 			:root {
-				--radiiGuideColor: oklch(1 0.37 150);
+				--radiiGuideColor: oklch(0.66 0.37 150);
 			}
 			circle,
 			path {
@@ -98,7 +98,11 @@
 				fill: var(--radiiGuideColor);
 			}
 			#circles {
-				stroke: oklch(1 0.37 90);
+				stroke: oklch(0.5 0.37 120);
+			}
+			#bigPenta path:not(.outer) {
+				stroke: oklch(1 0.37 60);
+				fill: oklch(0.5 0.37 60 / 0.25);
 			}
 		</style>
 	</defs>
@@ -132,6 +136,32 @@
 			alignment-baseline="middle">{i}</text
 		>
 	{/each}
-	<path d={`M${triline[0].x} ${triline[0].y}L${triline[1].x} ${triline[1].y}`} stroke="red" />
-	<circle r={circles[22].r} cx={circles[22].x} cy={circles[22].y} stroke="red" />
+	{#each anglesArray(3, 0) as a}
+		<g id="bigPenta" transform={`rotate(${a})`}>
+			<!-- <path
+				class="outer"
+				d={parse('M01 9L2 6L4 3L2 4L2 1L1 3L0 1L0 4L16 3L0 6Z')}
+				stroke={`oklch(1 0.37 60)`}
+			/> -->
+			<g class="edges">
+				<path d={parse('M4 9L2 6L4 3Z')} />
+				<path d={parse('M4 3L2 4L2 1Z')} />
+				<path d={parse('M2 1L1 3L0 1Z')} />
+				<path d={parse('M0 1L0 4L16 3Z')} />
+				<path d={parse('M16 3L0 6L16 9Z')} />
+			</g>
+			<g class="starInner">
+				<path d={parse('M01 4L1 9L2 6Z')} />
+				<path d={parse('M1 4L2 6L4 3Z')} />
+				<path d={parse(`M1 4L4 3L2 4Z`)} />
+				<path d={parse('M1 4L2 4L2 1Z')} />
+				<path d={parse('M1 4L2 1L1 3Z')} />
+				<path d={parse('M1 4L1 3L0 1Z')} />
+				<path d={parse('M1 4L0 1L0 4Z')} />
+				<path d={parse('M1 4L0 4L16 3Z')} />
+				<path d={parse('M1 4L16 3L0 6Z')} />
+				<path d={parse('M1 4L0 6L1 9Z')} />
+			</g>
+		</g>
+	{/each}
 </svg>
