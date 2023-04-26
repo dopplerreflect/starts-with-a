@@ -12,6 +12,7 @@
 		radialPointString,
 		viewBox
 	} from '$lib/geometry';
+	import { pathFromDSL } from '$lib/path-parser';
 	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
@@ -27,7 +28,7 @@
 	const size = 2 ** 10,
 		r0 = size / 7,
 		r1 = r0 * 2,
-		angles6 = anglesArray(6),
+		angles6 = anglesArray(6, 30),
 		setupCircles: Circle[] = [...angles6.map((a) => [{ r: r1, ...radialPoint(a, r0) }]).flat()],
 		setupRadii = [
 			...new Set(
@@ -60,14 +61,23 @@
 			radialPoint(angles6[1], setupRadii[0])
 		],
 		hexintersect = circleLineIntersections(circles[0], hexline)[1],
-		hexangle = Math.atan2(hexintersect.y, hexintersect.x) * (180 / Math.PI),
-		angles = arrayMap(6, (n) => 60 * n)
-			.map((n) => [n + 30, n + hexangle, n - hexangle])
-			.flat()
-			.sort((a, b) => a - b),
-		radii = [...setupRadii, setupRadii[1] + setupRadii[3], setupRadii[4] + setupRadii[2]].sort(
-			(a, b) => b - a
-		);
+		hexangle = Math.abs(Math.atan2(hexintersect.y, hexintersect.x) * (180 / Math.PI)),
+		phiAngles = [...Array(6).keys()]
+			.map((n) => [(60 * n + hexangle) % 360, (60 * n - hexangle + 180) % 360])
+			.flat(),
+		angles = [...angles6, ...phiAngles].sort((a, b) => b - a),
+		hexintersectRadius = Math.sqrt(hexintersect.x ** 2 + hexintersect.y ** 2),
+		triline: Line = [radialPoint(angles[4], setupRadii[1]), radialPoint(angles[16], setupRadii[1])],
+		trilineIntersect = circleLineIntersections(circles[22], triline)[0],
+		trilineIntersectRadius = Math.sqrt(trilineIntersect.x ** 2 + trilineIntersect.y ** 2),
+		radii = [
+			...setupRadii,
+			setupRadii[1] + setupRadii[3],
+			setupRadii[4] + setupRadii[2],
+			hexintersectRadius,
+			trilineIntersectRadius
+		].sort((a, b) => b - a),
+		parse = pathFromDSL(angles, radii);
 </script>
 
 <svg viewBox={viewBox(size)} bind:this={svg} id="stellated-dodecahedron">
@@ -114,5 +124,14 @@
 	<path id="hexagon" d={polygonPath(6, setupRadii[0])} stroke={`oklch(1 0.37 270)`} />
 	{#each angles as a, i}
 		<path d={`M0 0L${radialPointString(a, setupRadii[0])}`} stroke="white" />
+		<text
+			fill="white"
+			x={radialPoint(a, setupRadii[0] + size / 60).x}
+			y={radialPoint(a, setupRadii[0] + size / 60).y}
+			text-anchor="middle"
+			alignment-baseline="middle">{i}</text
+		>
 	{/each}
+	<path d={`M${triline[0].x} ${triline[0].y}L${triline[1].x} ${triline[1].y}`} stroke="red" />
+	<circle r={circles[22].r} cx={circles[22].x} cy={circles[22].y} stroke="red" />
 </svg>
