@@ -1,6 +1,7 @@
 <svelte:options namespace="svg" />
 
 <script lang="ts">
+	import Background from '$lib/components/Background.svelte';
 	import {
 		anglesArray,
 		arrayMap,
@@ -11,6 +12,18 @@
 		radialPointString,
 		viewBox
 	} from '$lib/geometry';
+	import { useSaveFile } from '$lib/save-svg';
+	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
+	import { onMount } from 'svelte';
+	let svg: SVGSVGElement;
+	onMount(() => {
+		const unmountZoom = useZoomableViewbox(svg);
+		const unMountSave = useSaveFile(svg, { timestamp: true });
+		return () => {
+			unmountZoom();
+			unMountSave();
+		};
+	});
 	const size = 2 ** 10,
 		r0 = size / 7,
 		r1 = r0 * 2,
@@ -57,7 +70,7 @@
 		);
 </script>
 
-<svg viewBox={viewBox(size)}>
+<svg viewBox={viewBox(size)} bind:this={svg} id="stellated-dodecahedron">
 	<defs>
 		<style>
 			:root {
@@ -79,6 +92,7 @@
 			}
 		</style>
 	</defs>
+	<Background {size} fill="black" />
 	<g id="radii">
 		{#each radii as r, i}
 			<circle {r} />

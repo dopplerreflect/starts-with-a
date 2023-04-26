@@ -16,7 +16,11 @@ const showSize = debounce(async (svg: SVGSVGElement) => {
 	console.log(`SVG is ${svgText.length} bytes`);
 }, 500);
 
-const saveSvg = debounce(async (svg: SVGSVGElement) => {
+type SaveOptions = {
+	timestamp?: boolean;
+};
+
+const saveSvg = debounce(async (svg: SVGSVGElement, options: SaveOptions) => {
 	console.log('saving svg');
 	const svgText = new XMLSerializer().serializeToString(svg);
 	try {
@@ -34,7 +38,7 @@ const saveSvg = debounce(async (svg: SVGSVGElement) => {
 	}
 }, 500);
 
-const savePng = debounce(async (svg: SVGSVGElement) => {
+const savePng = debounce(async (svg: SVGSVGElement, options: SaveOptions) => {
 	console.log('saving png');
 	const startTime = Date.now();
 	const svgText = new XMLSerializer().serializeToString(svg);
@@ -60,8 +64,11 @@ const savePng = debounce(async (svg: SVGSVGElement) => {
 		const endTime = Date.now();
 		console.log('Total time: ', (endTime - startTime) / 1000);
 		try {
+			let suggestedName = svg.id;
+			if (options.timestamp) suggestedName += `-${new Date().toISOString()}`;
+			suggestedName += '.png';
 			const fileHandle = await window.showSaveFilePicker({
-				suggestedName: `${svg.id}.png`,
+				suggestedName,
 				types: [{ description: 'PNG File', accept: { 'image/png': ['.png'] } }]
 			});
 			const writable = await fileHandle.createWritable();
@@ -76,7 +83,7 @@ const savePng = debounce(async (svg: SVGSVGElement) => {
 	img.src = url;
 }, 500);
 
-export function useSaveFile(svg: SVGSVGElement) {
+export function useSaveFile(svg: SVGSVGElement, options: SaveOptions = {}) {
 	document.addEventListener('keydown', handleKeypress);
 	async function handleKeypress(event: KeyboardEvent) {
 		// if (event.key === 'S') {
@@ -84,10 +91,10 @@ export function useSaveFile(svg: SVGSVGElement) {
 		// }
 		if (event.key === 'S') {
 			await showSize(svg);
-			await saveSvg(svg);
+			await saveSvg(svg, options);
 		}
 		if (event.key === 'P') {
-			await savePng(svg);
+			await savePng(svg, options);
 		}
 	}
 	return () => {
