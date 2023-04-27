@@ -8,6 +8,7 @@
 </script>
 
 <path
+	class="Background"
 	d={`M${-width / 2} ${-height / 2}H${width / 2}V${height / 2}H${-width / 2}Z`}
 	{fill}
 	{transform}
