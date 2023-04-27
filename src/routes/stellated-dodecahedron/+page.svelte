@@ -7,7 +7,6 @@
 		circleIntersections,
 		circleLineIntersections,
 		intersection,
-		phylotaxicPoints,
 		polygonPath,
 		radialPoint,
 		radialPointString,
@@ -142,31 +141,28 @@
 	<defs>
 		<style>
 			:root {
-				--radiiGuideColor: oklch(0.66 0.37 150);
+				--guideColor: oklch(0.75 0.37 90);
 			}
 			#guide circle,
 			#guide path {
 				fill: none;
-				stroke: var(--radiiGuideColor);
+				stroke: var(--guideColor);
 			}
 			#guide text {
-				fill: var(--radiiGuideColor);
-			}
-			#circles {
-				stroke: oklch(0.5 0.37 120);
+				fill: var(--guideColor);
 			}
 			.bigPenta path,
 			.medPenta path,
 			.tinyPenta path {
-				stroke: oklch(0.1 0.37 60);
+				stroke: oklch(0.1 0.37 90);
 				stroke-width: 3;
-				fill: oklch(0.5 0.37 60);
+				fill: oklch(1 0.37 90 / 0.75);
 			}
 			.edges path {
-				fill: oklch(1 0.37 60);
+				fill: oklch(0.5 0.37 90/ 0.75);
 			}
 			#guide {
-				display: none;
+				/* display: none; */
 			}
 			.third {
 				/* display: none; */
@@ -175,16 +171,15 @@
 	</defs>
 	<Background {size} fill="oklch(0.075 0.2 240)" />
 	<g id="guide">
-		<path d={`M${smallHexline[0].x} ${smallHexline[0].y}H${smallHexline[1].x}`} stroke="white" />
-		<path d={`M${triline[0].x} ${triline[0].y}L${triline[1].x} ${triline[1].y}`} stroke="white" />
+		<!-- <path d={`M${smallHexline[0].x} ${smallHexline[0].y}H${smallHexline[1].x}`} />
+		<path d={`M${triline[0].x} ${triline[0].y}L${triline[1].x} ${triline[1].y}`} />
 		<path
 			d={`M${largeHexLine[0].x} ${largeHexLine[0].y}L${largeHexLine[1].x} ${largeHexLine[1].y}`}
-			stroke="white"
 		/>
-		<path d={`M${line42[0].x} ${line42[0].y}L${line42[1].x} ${line42[1].y}`} stroke="white" />
-		<circle cx={largeHexIntersection.x} cy={largeHexIntersection.y} r={10} stroke="white" />
-		<circle cx={line42Intersection.x} cy={line42Intersection.y} r={10} stroke="white" />
-		<g id="radii">
+		<path d={`M${line42[0].x} ${line42[0].y}L${line42[1].x} ${line42[1].y}`} />
+		<circle cx={largeHexIntersection.x} cy={largeHexIntersection.y} r={10} />
+		<circle cx={line42Intersection.x} cy={line42Intersection.y} r={10} /> -->
+		<!-- <g id="radii">
 			{#each radii as r, i}
 				<circle {r} />
 				<text
@@ -196,15 +191,15 @@
 				>
 				<path d={`M${-size / 2 + (size / 75) * 2} ${-r}H0`} />
 			{/each}
-		</g>
+		</g> -->
 		<g id="circles">
 			{#each circles as c, i}
 				<circle r={c.r} cx={c.x} cy={c.y} />
 			{/each}
 		</g>
-		<path id="hexagon" d={polygonPath(6, setupRadii[0])} stroke={`oklch(1 0.37 270)`} />
-		{#each angles as a, i}
-			<path d={`M0 0L${radialPointString(a, setupRadii[0])}`} stroke="white" />
+		<!-- <path id="hexagon" d={polygonPath(6, setupRadii[0])} /> -->
+		<!-- {#each anglesWithPhi as a, i}
+			<path d={`M0 0L${radialPointString(a, setupRadii[0])}`} />
 			<text
 				fill="white"
 				x={radialPoint(a, setupRadii[0] + size / 60).x}
@@ -212,22 +207,22 @@
 				text-anchor="middle"
 				alignment-baseline="middle">{i}</text
 			>
-		{/each}
+		{/each} -->
 	</g>
-	<g id="background">
+	<!-- <g id="background">
 		{#each angles as a, i}
 			<path
-				d={`M${radialPointString(a, radii[3])}L${radialPointString(a, (size / 2) * Math.sqrt(2))}`}
+				d={`M${radialPointString(a, radii[11])}L${radialPointString(a, (size / 2) * Math.sqrt(2))}`}
 				stroke="oklch(0.5 0.37 90)"
 				stroke-width={9}
 			/>
 			<path
-				d={`M${radialPointString(a, radii[3])}L${radialPointString(a, (size / 2) * Math.sqrt(2))}`}
+				d={`M${radialPointString(a, radii[11])}L${radialPointString(a, (size / 2) * Math.sqrt(2))}`}
 				stroke="oklch(1 0.37 90)"
 				stroke-width={3}
 			/>
 		{/each}
-	</g>
+	</g> -->
 	<g id="whole">
 		{#each anglesArray(3, 0) as a}
 			<g class="third" transform={`rotate(${a})`}>
