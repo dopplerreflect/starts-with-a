@@ -205,3 +205,6 @@ export const phylotaxicPoints = (
 		let r = (outerRadius / count) * k;
 		return radialPoint((360 - 360 * phi) * k, r, radialPointOptions);
 	});
+
+export const lineToPath = (line: Line): string =>
+	`M${line[0].x} ${line[0].y}L${line[1].x} ${line[1].y}`;
