@@ -159,6 +159,22 @@ export const circleIntersections = (c1: Circle, c2: Circle): Line => {
 	];
 };
 
+export const multiCircleIntersections = (circles: Circle[]): Point[] => {
+	let circlePairsJSON: string[] = [];
+	for (let i = 0; i < circles.length; i++) {
+		circles.slice(i + 1, circles.length).forEach((c) => {
+			circlePairsJSON.push(JSON.stringify([circles[i], c]));
+		});
+	}
+	const intersectionJSONSet: Set<string> = new Set();
+	circlePairsJSON.forEach((cpj) => {
+		let cp = JSON.parse(cpj);
+		let ij = JSON.stringify(circleIntersections(cp[0], cp[1]));
+		intersectionJSONSet.add(ij);
+	});
+	return [...intersectionJSONSet].map((ij) => JSON.parse(ij)).flat();
+};
+
 /**
  *
  * @param circle
@@ -208,3 +224,5 @@ export const phylotaxicPoints = (
 
 export const lineToPath = (line: Line): string =>
 	`M${line[0].x} ${line[0].y}L${line[1].x} ${line[1].y}`;
+
+export const pointToString = (p: Point): string => `${p.x} ${p.y}`;
