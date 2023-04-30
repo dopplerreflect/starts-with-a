@@ -31,7 +31,7 @@
 	const parse = pathFromDSL(angles, radii);
 </script>
 
-<svg viewBox={viewBox(size)}>
+<svg bind:this={svg} id="golden-starfield" viewBox={viewBox(size)}>
 	<defs>
 		<style>
 			path,
@@ -44,6 +44,7 @@
 			}
 			.lotsapentagrams path {
 				fill: oklch(1 0.37 60 / 1);
+				/* fill: none; */
 				/* fill-rule: evenodd; */
 			}
 		</style>
