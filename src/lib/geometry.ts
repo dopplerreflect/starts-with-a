@@ -91,6 +91,10 @@ export function starPath(radius: number, options?: GeometryOptions): string {
 	);
 }
 
+export function pentagram(radius: number, options?: GeometryOptions): string {
+	const angles = anglesArray(5);
+	return `M${[0, 2, 4, 1, 3].map((i) => radialPointString(angles[i], radius, options)).join('L')}Z`;
+}
 /** Points for a 5-pointed star
  * @params radius
  * @param options
