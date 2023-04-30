@@ -4,9 +4,8 @@
 	import Background from '$lib/components/Background.svelte';
 	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
 	import { anglesArray, arrayMap, pentagram, phi, radialPoint, viewBox } from '$lib/geometry';
-	const size = 2 ** 10;
-	const r = size / 3;
-	const radii = arrayMap(12, (n) => r * phi ** n);
+	const size = 2 ** 13;
+	const radii = arrayMap(12, (n) => (size / 3) * phi ** n);
 
 	const pentagramPaths = anglesArray(10, 0)
 		.map((a) =>
@@ -19,7 +18,7 @@
 
 <DopplerSvg id="golden-starfield" viewBox={viewBox(size)}>
 	<Background {size} fill="white" />
-	<g class="lotsapentagrams" fill-rule="evenodd">
+	<g fill-rule="evenodd">
 		{#each pentagramPaths as path, i}
 			<path d={path} fill={`oklch(0.88 0.37 ${30 + (i % 9) * 10})`} />
 		{/each}
