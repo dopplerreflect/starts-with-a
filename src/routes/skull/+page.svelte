@@ -16,20 +16,18 @@
 	const parse = pathFromDSL(angles, radii);
 </script>
 
-<DopplerSvg viewBox={`${-size / 2} ${-size / 3} ${size} ${size}`} id="skull">
+<DopplerSvg zoom={0} viewBox={`${-size / 2} ${-size / 3} ${size} ${size}`} id="skull">
 	<defs>
 		<style>
 			circle,
 			path:not(.Background) {
 				fill: none;
-				stroke: black;
-				stroke-width: 1;
+				stroke: yellow;
+				stroke-width: 2;
 			}
-			.red {
-				stroke: red;
-			}
-			#nose {
-				fill: blue;
+			path.black,
+			.black {
+				/* fill: blue; */
 				fill-opacity: 0.5;
 			}
 		</style>
@@ -62,8 +60,32 @@
 	<!-- <path d={parse(`M30 1A11 11 0 0 0 28 1A4 4 0 0 0 28 3`)} class="red" /> -->
 	<path
 		id="nose"
+		class="black"
 		d={parse(
 			`M30 1A11 11 0 0 0 28 1Q27 2 28 3S29 4 29 5A5 5 0 0 1 31 5Q31 4 32 3S33 2 32 1A 11 11 0 0 0 30 1Z`
 		)}
 	/>
+
+	<circle
+		id="leftEye"
+		r={radii[5]}
+		cx={radialPoint(angles[40], radii[3]).x}
+		cy={radialPoint(angles[40], radii[3]).y}
+		class="black"
+	/>
+	<circle
+		id="rightEye"
+		r={radii[5]}
+		cx={radialPoint(angles[20], radii[3]).x}
+		cy={radialPoint(angles[20], radii[3]).y}
+		class="black"
+	/>
+
+	<path id="leftTemple" d={parse(`M48 0C47 2 41 0 40 0`)} />
+	<path id="rightTemple" d={parse(`M12 0C13 2 19 0 20 0`)} />
+
+	<circle id="cheekCircle" r={radii[0] + radii[2] - radii[3]} />
+
+	<circle id="teethRadius" r={radii[0]} cy={radii[4]} />
+	<circle id="chinRadius" r={radii[1]} cy={radii[0] + radii[7]} />
 </DopplerSvg>
