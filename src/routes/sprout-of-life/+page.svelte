@@ -2,12 +2,13 @@
 
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
+	import DrLogo from '$lib/components/DRLogo.svelte';
+	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
 	import {
 		anglesArray,
 		arrayMap,
 		circleIntersections,
 		circleLineIntersections,
-		polygonPath,
 		radialPoint,
 		radialPointString,
 		viewBox,
@@ -16,9 +17,6 @@
 		phylotaxicPoints
 	} from '$lib/geometry';
 	import { pathFromDSL } from '$lib/path-parser';
-	import { useSaveFile } from '$lib/save-svg';
-	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
-	import { onMount } from 'svelte/internal';
 
 	const size = 2 ** 10;
 	const r = size / 7;
@@ -56,19 +54,9 @@
 	radii.sort((a, b) => b - a);
 
 	const parse = pathFromDSL(angles, radii);
-
-	let svg: SVGSVGElement;
-	onMount(() => {
-		const unMountSave = useSaveFile(svg);
-		const unmountZoom = useZoomableViewbox(svg);
-		return () => {
-			unMountSave();
-			unmountZoom();
-		};
-	});
 </script>
 
-<svg bind:this={svg} id="sprout-of-life" viewBox={viewBox(size)}>
+<DopplerSvg id="sprout-of-life" viewBox={viewBox(size)}>
 	<defs>
 		<style>
 			#guide {
@@ -220,4 +208,9 @@
 			</g>
 		{/each}
 	</g>
-</svg>
+
+	<DrLogo
+		size={size / 16}
+		transform={`translate(${size / 2 - size / 16} ${size / 2 - size / 16})`}
+	/>
+</DopplerSvg>
