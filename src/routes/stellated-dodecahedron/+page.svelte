@@ -2,6 +2,8 @@
 
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
+	import DrLogo from '$lib/components/DRLogo.svelte';
+	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
 	import {
 		anglesArray,
 		circleIntersections,
@@ -13,18 +15,6 @@
 		viewBox
 	} from '$lib/geometry';
 	import { pathFromDSL } from '$lib/path-parser';
-	import { useSaveFile } from '$lib/save-svg';
-	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
-	import { onMount } from 'svelte';
-	let svg: SVGSVGElement;
-	onMount(() => {
-		const unmountZoom = useZoomableViewbox(svg);
-		const unMountSave = useSaveFile(svg, { timestamp: true });
-		return () => {
-			unmountZoom();
-			unMountSave();
-		};
-	});
 	const size = 2 ** 10,
 		r0 = size / 7,
 		r1 = r0 * 2,
@@ -137,7 +127,7 @@
 	const parse = pathFromDSL(angles, radii);
 </script>
 
-<svg viewBox={viewBox(size)} bind:this={svg} id="stellated-dodecahedron">
+<DopplerSvg viewBox={viewBox(size)} id="stellated-dodecahedron">
 	<defs>
 		<style>
 			:root {
@@ -270,4 +260,8 @@
 			</g>
 		{/each}
 	</g>
-</svg>
+	<DrLogo
+		size={size / 16}
+		transform={`translate(${size / 2 - size / 16} ${size / 2 - size / 16})`}
+	/>
+</DopplerSvg>
