@@ -2,6 +2,7 @@
 
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
+	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
 	import {
 		anglesArray,
 		circleIntersections,
@@ -12,9 +13,6 @@
 		viewBox
 	} from '$lib/geometry';
 	import { pathFromDSL } from '$lib/path-parser';
-	import { useSaveFile } from '$lib/save-svg';
-	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
-	import { onMount } from 'svelte';
 	const size = 2 ** 10;
 
 	const r0 = size / 7;
@@ -52,20 +50,9 @@
 	].sort((a, b) => b - a);
 
 	const parse = pathFromDSL(angles, radii);
-
-	let svg: SVGSVGElement;
-
-	onMount(() => {
-		const unmountZoom = useZoomableViewbox(svg, 0);
-		const unMountSave = useSaveFile(svg);
-		return () => {
-			unmountZoom();
-			unMountSave();
-		};
-	});
 </script>
 
-<svg viewBox={viewBox(size)} bind:this={svg} id="dodecamandala">
+<DopplerSvg viewBox={viewBox(size)} id="dodecamandala">
 	<defs>
 		<style>
 			circle,
@@ -83,7 +70,7 @@
 			}
 			.angle {
 				/* display: none; */
-				stroke: oklch(0.25 0.37 0);
+				stroke: oklch(0.25 0.37 300);
 			}
 			.radius {
 				/* display: none; */
@@ -137,7 +124,7 @@
 			>
 		{/each}
 		{#each angles as a, i}
-			<path class="angle" d={`M0 0L${radialPointString(a, radii[0])}`} stroke="red" />
+			<path class="angle" d={`M0 0L${radialPointString(a, radii[0])}`} />
 			<text
 				class="angle"
 				x={radialPoint(a, radii[0] + size / 20).x}
@@ -244,4 +231,4 @@
 			/>
 		</g>
 	</g>
-</svg>
+</DopplerSvg>
