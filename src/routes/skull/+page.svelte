@@ -1,63 +1,98 @@
 <svelte:options namespace="svg" />
 
-<script>
+<script lang="ts">
 	import Background from '$lib/components/Background.svelte';
 	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
-	import { anglesArray, arrayMap, phi, radialPoint, radialPointString } from '$lib/geometry';
+	import {
+		Phi,
+		anglesArray,
+		arrayMap,
+		circleIntersections,
+		phi,
+		pointToString,
+		polygonPath,
+		radialPoint,
+		radialPointString,
+		viewBox
+	} from '$lib/geometry';
 	import { pathFromDSL } from '$lib/path-parser';
 
 	const size = 2 ** 10;
 
 	const r = size / 3.75;
 	const angles = anglesArray(60);
-	// const radii = arrayMap(7, (n) => r * phi ** n);
-	const radii = arrayMap(13, (n) => r * phi ** (n * 0.5));
+	const radii = arrayMap(12, (n) => r * phi ** (n * 0.5));
 
 	const parse = pathFromDSL(angles, radii);
+
+	const cheekRadius = radii[0] + radii[2] - radii[3],
+		teethRadius = radii[0] + radii[2] - radii[4];
+
+	const parse2 = pathFromDSL(angles, [teethRadius, cheekRadius, ...radii]);
+
+	const jawInnerCircle: Circle = { r: radii[2], x: 0, y: radii[1] + radii[11] };
+	const jawOuterCircle: Circle = { r: radii[1], x: 0, y: radii[0] + radii[10] };
+	const haloCircle: Circle = { r: radii[0] * Phi, x: 0, y: 0 };
+	const skullCircle: Circle = { r: radii[0], x: 0, y: 0 };
+
+	const jawPoints = circleIntersections(haloCircle, jawOuterCircle);
+	const jawSkullIntersections = circleIntersections(skullCircle, jawInnerCircle);
 </script>
 
 <DopplerSvg zoom={0} viewBox={`${-size / 2} ${-size / 3} ${size} ${size}`} id="skull">
 	<defs>
 		<style>
+			ellipse,
 			circle,
 			path:not(.Background) {
 				fill: none;
-				stroke: yellow;
+				stroke: black;
 				stroke-width: 2;
+			}
+			ellipse {
+				fill: white;
 			}
 			path.black,
 			.black {
-				/* fill: blue; */
+				fill: black;
 				fill-opacity: 0.5;
+			}
+			path#skull,
+			path#jaw {
+				fill: oklch(0.9 0.18 280 / 0.5);
+			}
+			#guide {
+				/* display: none; */
 			}
 		</style>
 	</defs>
-	<Background {size} fill="white" />
+	<Background width={size} height={size * 1.3} fill="white" />
 	<image href="/skull.jpg" x={-size / 1.57} y={-size / 2.05} width={size * 1.25} />
 
-	<circle {r} />
+	<g id="guide">
+		{#each angles as a, i}
+			<path d={`M${radialPointString(a, radii[1])}L${radialPointString(a, r)}`} />
+			<text
+				x={radialPoint(a, r + size / 60).x}
+				y={radialPoint(a, r + size / 60).y}
+				alignment-baseline="middle"
+				text-anchor="middle">{i}</text
+			>
+		{/each}
 
-	{#each angles as a, i}
-		<path d={`M${radialPointString(a, radii[5])}L${radialPointString(a, r)}`} />
-		<text
-			x={radialPoint(a, r + size / 60).x}
-			y={radialPoint(a, r + size / 60).y}
-			alignment-baseline="middle"
-			text-anchor="middle">{i}</text
-		>
-	{/each}
+		{#each radii as r}
+			<circle {r} />
+		{/each}
+		<path id="pentagram" d={parse('M0 0L24 0L48 0L12 0L36 0Z')} />
 
-	{#each radii as r}
-		<circle {r} />
-	{/each}
-	<path id="pentagram" d={parse('M0 0L24 0L48 0L12 0L36 0Z')} />
-	<!-- <circle
-		class="red"
-		r={radii[11]}
-		cx={radialPoint(angles[29], radii[1]).x}
-		cy={radialPoint(angles[29], radii[1]).y}
-	/> -->
-	<!-- <path d={parse(`M30 1A11 11 0 0 0 28 1A4 4 0 0 0 28 3`)} class="red" /> -->
+		<path d={polygonPath(3, radii[0])} />
+		<circle r={cheekRadius} />
+		<circle r={teethRadius} />
+		<circle r={haloCircle.r} />
+		<circle r={jawInnerCircle.r} cy={jawInnerCircle.y} />
+		<circle r={jawOuterCircle.r} cy={jawOuterCircle.y} />
+	</g>
+
 	<path
 		id="nose"
 		class="black"
@@ -84,8 +119,42 @@
 	<path id="leftTemple" d={parse(`M48 0C47 2 41 0 40 0`)} />
 	<path id="rightTemple" d={parse(`M12 0C13 2 19 0 20 0`)} />
 
-	<circle id="cheekCircle" r={radii[0] + radii[2] - radii[3]} />
+	<path
+		id="skull"
+		d={parse2(
+			'M40 2Q40 1 39 1A1 1 0 0 0 37 1C36 1 37 2 36 2' +
+				'A2 2 0 0 0 35 2Q34 2 34 0' +
+				'A0 0 0 0 0 26 0' +
+				'Q26 2 25 2' +
+				'A2 2 0 0 0 24 2' +
+				'C23 2 24 1 23 1' +
+				'A1 1 0 0 0 21 1' +
+				'Q20 1 20 2' +
+				'A2 2 1 1 0 40 2'
+		)}
+	/>
 
-	<circle id="teethRadius" r={radii[0]} cy={radii[4]} />
-	<circle id="chinRadius" r={radii[1]} cy={radii[0] + radii[7]} />
+	<path
+		id="jaw"
+		d={`M${radialPointString(angles[37], cheekRadius)}Q${radialPointString(
+			angles[36],
+			cheekRadius
+		)} ${pointToString(jawPoints[1])}A${jawOuterCircle.r} ${jawOuterCircle.r} 0 0 0 ${pointToString(
+			jawPoints[0]
+		)}Q${radialPointString(angles[24], cheekRadius)} ${radialPointString(
+			angles[23],
+			cheekRadius
+		)}C${radialPointString(angles[24], cheekRadius)} ${radialPointString(
+			angles[23],
+			radii[0]
+		)} ${pointToString(jawSkullIntersections[0])}A${jawInnerCircle.r} ${
+			jawInnerCircle.r
+		} 0 1 1 ${pointToString(jawSkullIntersections[1])}C${radialPointString(
+			angles[37],
+			radii[0]
+		)} ${radialPointString(angles[36], cheekRadius)} ${radialPointString(
+			angles[37],
+			cheekRadius
+		)}Z`}
+	/>
 </DopplerSvg>
