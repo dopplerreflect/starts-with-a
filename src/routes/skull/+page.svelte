@@ -34,6 +34,11 @@
 	const jawOuterCircle: Circle = { r: radii[1], x: 0, y: radii[0] + radii[10] };
 	const haloCircle: Circle = { r: radii[0] * Phi, x: 0, y: 0 };
 	const skullCircle: Circle = { r: radii[0], x: 0, y: 0 };
+	const biteCircle: Circle = { r: radii[0], x: 0, y: radii[4] };
+
+	const biteCircleAngles = [...Array(7).keys()]
+		.map((k, i) => [90 - (8 - k / 2) * k, 90 + (8 - k / 2) * k])
+		.flat();
 
 	const jawPoints = circleIntersections(haloCircle, jawOuterCircle);
 	const jawSkullIntersections = circleIntersections(skullCircle, jawInnerCircle);
@@ -88,6 +93,7 @@
 		<path d={polygonPath(3, radii[0])} />
 		<circle r={cheekRadius} />
 		<circle r={teethRadius} />
+		<circle r={biteCircle.r} cy={biteCircle.y} />
 		<circle r={haloCircle.r} />
 		<circle r={jawInnerCircle.r} cy={jawInnerCircle.y} />
 		<circle r={jawOuterCircle.r} cy={jawOuterCircle.y} />
@@ -157,4 +163,12 @@
 			cheekRadius
 		)}Z`}
 	/>
+
+	{#each biteCircleAngles as a}
+		<path
+			d={`M0 ${biteCircle.y}L${radialPointString(a, biteCircle.r, {
+				center: { x: 0, y: biteCircle.y }
+			})}`}
+		/>
+	{/each}
 </DopplerSvg>

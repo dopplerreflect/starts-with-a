@@ -1,6 +1,7 @@
 <svelte:options namespace="svg" />
 
 <script lang="ts">
+	import Background from '$lib/components/Background.svelte';
 	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
 	import { viewBox } from '$lib/geometry';
 
@@ -12,7 +13,7 @@
 	<defs>
 		<style>
 			circle,
-			path {
+			path:not(.Background) {
 				fill: none;
 				stroke: white;
 				stroke-linejoin: round;
@@ -22,6 +23,7 @@
 			}
 		</style>
 	</defs>
+	<Background {size} fill="black" />
 	<g id="345">
 		<circle {r} />
 		<circle r={r * 2} />
