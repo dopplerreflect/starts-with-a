@@ -29,7 +29,15 @@
 	const cheekRadius = radii[0] + radii[2] - radii[3],
 		teethRadius = radii[0] + radii[2] - radii[4];
 
-	const parse2 = pathFromDSL(angles, [teethRadius, cheekRadius, ...radii]);
+	const anglesModifiedForUpperJawCorrection = [...angles];
+	anglesModifiedForUpperJawCorrection[26] += Phi;
+	anglesModifiedForUpperJawCorrection[34] -= Phi;
+
+	const parse2 = pathFromDSL(anglesModifiedForUpperJawCorrection, [
+		teethRadius,
+		cheekRadius,
+		...radii
+	]);
 
 	const jawInnerCircle: Circle = { r: radii[2], x: 0, y: radii[1] + radii[11] };
 	const jawOuterCircle: Circle = { r: radii[1], x: 0, y: radii[0] + radii[10] };
@@ -102,14 +110,17 @@
 				stroke: red;
 			}
 			path.tooth {
-				/* fill: white; */
+				fill: oklch(1.84 0.37 60 / 0.75);
+			}
+			#biteCircleIntersections circle {
+				fill: red;
 			}
 		</style>
 	</defs>
 	<Background width={size} height={size * 1.3} fill="white" />
-	<!-- <image href="/skull.jpg" x={-size / 1.57} y={-size / 2.05} width={size * 1.25} /> -->
 
 	<g id="guide">
+		<image href="/skull.jpg" x={-size / 1.57} y={-size / 2.05} width={size * 1.25} />
 		{#each angles as a, i}
 			<path d={`M${radialPointString(a, radii[1])}L${radialPointString(a, r)}`} />
 			<text
@@ -128,7 +139,7 @@
 		<path d={polygonPath(3, radii[0])} />
 		<circle r={cheekRadius} />
 		<circle r={teethRadius} />
-		<!-- <circle r={biteCircle.r} cy={biteCircle.y} /> -->
+		<circle r={biteCircle.r} cy={biteCircle.y} />
 		<circle r={haloCircle.r} />
 		<circle r={jawInnerCircle.r} cy={jawInnerCircle.y} />
 		<circle r={jawOuterCircle.r} cy={jawOuterCircle.y} />
@@ -138,9 +149,14 @@
 				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
 			{/each}
 		</g>
-		<g id="biteCircleLines" transform="scale(-1, 1)">
+		<!-- <g id="biteCircleLines" transform="scale(-1, 1)">
 			{#each biteCircleLines as l}
 				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
+			{/each}
+		</g> -->
+		<g id="biteCircleIntersections">
+			{#each biteCircleIntersections as i}
+				<circle cx={i.x} cy={i.y} r={5} />
 			{/each}
 		</g>
 	</g>
@@ -175,10 +191,9 @@
 		id="skull"
 		d={parse2(
 			'M40 2Q40 1 39 1A1 1 0 0 0 37 1C36 1 37 2 36 2' +
-				'A2 2 0 0 0 35 2Q34 2 34 0' +
+				'Q34 2 34 0' +
 				'A0 0 0 0 0 26 0' +
-				'Q26 2 25 2' +
-				'A2 2 0 0 0 24 2' +
+				'Q26 2 24 2' +
 				'C23 2 24 1 23 1' +
 				'A1 1 0 0 0 21 1' +
 				'Q20 1 20 2' +
