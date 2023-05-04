@@ -8,6 +8,7 @@
 		anglesArray,
 		arrayMap,
 		circleIntersections,
+		circleLineIntersections,
 		phi,
 		pointToString,
 		polygonPath,
@@ -21,7 +22,7 @@
 
 	const r = size / 3.75;
 	const angles = anglesArray(60);
-	const radii = arrayMap(12, (n) => r * phi ** (n * 0.5));
+	const radii = arrayMap(21, (n) => r * phi ** (n * 0.5));
 
 	const parse = pathFromDSL(angles, radii);
 
@@ -34,17 +35,44 @@
 	const jawOuterCircle: Circle = { r: radii[1], x: 0, y: radii[0] + radii[10] };
 	const haloCircle: Circle = { r: radii[0] * Phi, x: 0, y: 0 };
 	const skullCircle: Circle = { r: radii[0], x: 0, y: 0 };
-	const biteCircle: Circle = { r: radii[0], x: 0, y: radii[4] };
-
-	const biteCircleAngles = [...Array(7).keys()]
-		.map((k, i) => [90 - (8 - k / 2) * k, 90 + (8 - k / 2) * k])
-		.flat();
 
 	const jawPoints = circleIntersections(haloCircle, jawOuterCircle);
 	const jawSkullIntersections = circleIntersections(skullCircle, jawInnerCircle);
+
+	const biteCircle: Circle = { r: radii[0] - radii[11], x: 0, y: radii[3] - radii[11] };
+
+	const biteCircleAngles = [
+		...new Set([...Array(7).keys()].map((k, i) => [90 + (8 - k / 2) * k]).flat())
+	];
+
+	const biteCircleLines: Line[] = biteCircleAngles.map((a) => [
+		{ x: biteCircle.x, y: biteCircle.y },
+		radialPoint(a, biteCircle.r + 1, { center: { x: 0, y: biteCircle.y } })
+	]);
+
+	const biteCircleIntersections: Point[] = biteCircleLines
+		.map((l, i) => circleLineIntersections(biteCircle, l)[0])
+		.sort((a, b) => a.x - b.x);
+
+	const toothPaths = biteCircleIntersections
+		.slice(0, biteCircleIntersections.length - 1)
+		.map((t, n) => {
+			const i = biteCircleIntersections;
+			let path =
+				`M${t.x} ${t.y}` +
+				`C${(i[n + 1].x + i[n].x) / 2 - 18} ` +
+				`${t.y - 75 + Math.abs(5.55 - n) * 7.5} ` +
+				`${(i[n + 1].x + i[n].x) / 2 + 18} ` +
+				`${t.y - 75 + Math.abs(5.55 - n) * 7.5} ` +
+				`${i[n + 1].x} ${i[n + 1].y}` +
+				`Q${(i[n + 1].x + i[n].x) / 2} ` +
+				`${t.y + 8} ` +
+				`${t.x} ${t.y}Z`;
+			return path;
+		});
 </script>
 
-<DopplerSvg zoom={0} viewBox={`${-size / 2} ${-size / 3} ${size} ${size}`} id="skull">
+<DopplerSvg zoom={0} yPan={0} viewBox={`${-size / 2} ${-size / 3} ${size} ${size}`} id="skull">
 	<defs>
 		<style>
 			ellipse,
@@ -63,16 +91,23 @@
 				fill-opacity: 0.5;
 			}
 			path#skull,
-			path#jaw {
+			path#jaw,
+			path.tooth {
 				fill: oklch(0.9 0.18 280 / 0.5);
 			}
 			#guide {
 				/* display: none; */
 			}
+			path.red {
+				stroke: red;
+			}
+			path.tooth {
+				/* fill: white; */
+			}
 		</style>
 	</defs>
 	<Background width={size} height={size * 1.3} fill="white" />
-	<image href="/skull.jpg" x={-size / 1.57} y={-size / 2.05} width={size * 1.25} />
+	<!-- <image href="/skull.jpg" x={-size / 1.57} y={-size / 2.05} width={size * 1.25} /> -->
 
 	<g id="guide">
 		{#each angles as a, i}
@@ -93,10 +128,21 @@
 		<path d={polygonPath(3, radii[0])} />
 		<circle r={cheekRadius} />
 		<circle r={teethRadius} />
-		<circle r={biteCircle.r} cy={biteCircle.y} />
+		<!-- <circle r={biteCircle.r} cy={biteCircle.y} /> -->
 		<circle r={haloCircle.r} />
 		<circle r={jawInnerCircle.r} cy={jawInnerCircle.y} />
 		<circle r={jawOuterCircle.r} cy={jawOuterCircle.y} />
+
+		<g id="biteCircleLines">
+			{#each biteCircleLines as l}
+				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
+			{/each}
+		</g>
+		<g id="biteCircleLines" transform="scale(-1, 1)">
+			{#each biteCircleLines as l}
+				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
+			{/each}
+		</g>
 	</g>
 
 	<path
@@ -164,11 +210,14 @@
 		)}Z`}
 	/>
 
-	{#each biteCircleAngles as a}
-		<path
-			d={`M0 ${biteCircle.y}L${radialPointString(a, biteCircle.r, {
-				center: { x: 0, y: biteCircle.y }
-			})}`}
-		/>
-	{/each}
+	<g id="upperLeftTeeth">
+		{#each toothPaths as d, i}
+			<path class="tooth" {d} />
+		{/each}
+	</g>
+	<g id="upperRightTeeth" transform="scale(-1, 1)">
+		{#each toothPaths as d, i}
+			<path class="tooth" {d} />
+		{/each}
+	</g>
 </DopplerSvg>
