@@ -49,6 +49,11 @@
 
 	const teethCircle: Circle = { r: radii[0] - radii[11], x: 0, y: radii[3] - radii[11] };
 
+	const teethCircleSkullCircleIntersections = circleIntersections(
+		{ r: radii[0], x: 0, y: 0 },
+		teethCircle
+	);
+
 	const upperTeethAngles = [...new Set([...Array(7).keys()].map((k, i) => 90 + (8 - k / 2) * k))];
 
 	const upperTeethAngleLines: Line[] = upperTeethAngles.map((a) => [
@@ -106,7 +111,7 @@
 		});
 </script>
 
-<DopplerSvg zoom={0} yPan={0} viewBox={`${-size / 2} ${-size / 3} ${size} ${size}`} id="skull">
+<DopplerSvg zoom={0} yPan={0} viewBox={`${-size / 2} ${-size / 3} ${size} ${size}`} id="skully">
 	<defs>
 		<style>
 			ellipse,
@@ -124,10 +129,12 @@
 				fill: black;
 				fill-opacity: 0.5;
 			}
-			path#skull,
-			path#jaw,
-			path.tooth {
-				fill: oklch(0.9 0.18 280 / 0.5);
+			#skull path,
+			#jaw {
+				fill: oklch(0.9 0.02 100 / 1);
+			}
+			#skull path.rear {
+				fill: oklch(0.85 0.02 100 / 1);
 			}
 			#guide {
 				/* display: none; */
@@ -136,52 +143,42 @@
 				stroke: red;
 			}
 			path.tooth {
-				fill: oklch(1.84 0.37 60 / 0.75);
+				fill: oklch(1.3 0.18 60 / 1);
 			}
 		</style>
 	</defs>
 	<Background width={size} height={size * 1.3} fill="white" />
 
-	<g id="guide">
-		<image href="/skull.jpg" x={-size / 1.57} y={-size / 2.05} width={size * 1.25} />
-		{#each angles as a, i}
-			<path d={`M${radialPointString(a, radii[1])}L${radialPointString(a, r)}`} />
-			<text
-				x={radialPoint(a, r + size / 60).x}
-				y={radialPoint(a, r + size / 60).y}
-				alignment-baseline="middle"
-				text-anchor="middle">{i}</text
-			>
-		{/each}
-
-		{#each radii as r}
-			<circle {r} />
-		{/each}
-		<path id="pentagram" d={parse('M0 0L24 0L48 0L12 0L36 0Z')} />
-
-		<path d={polygonPath(3, radii[0])} />
-		<circle r={cheekRadius} />
-		<circle r={upperGumRadius} />
-		<circle r={teethCircle.r} cy={teethCircle.y} />
-		<circle r={haloCircle.r} />
-		<circle r={jawInnerCircle.r} cy={jawInnerCircle.y} />
-		<circle r={jawOuterCircle.r} cy={jawOuterCircle.y} />
-
-		<g id="biteCircleLines">
-			{#each upperTeethAngleLines as l}
-				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
-			{/each}
-		</g>
-		<!-- <g id="biteCircleLines" transform="scale(-1, 1)">
-			{#each biteCircleLines as l}
-				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
-			{/each}
-		</g> -->
-		<g id="lowerTeethAngleLineIntersections">
-			{#each lowerTeethAngleLineIntersections as i}
-				<circle cx={i.x} cy={i.y} r={5} />
-			{/each}
-		</g>
+	<g id="skull">
+		<path
+			class="rear"
+			d={`M${pointToString(teethCircleSkullCircleIntersections[0])}` +
+				`A${teethCircle.r} ${teethCircle.r} 0 0 1 ${radialPointString(
+					angles[25],
+					upperGumRadius
+				)}` +
+				`L${radialPointString(angles[24], cheekRadius)}` +
+				`A${cheekRadius} ${cheekRadius} 0 0 1 ${radialPointString(angles[36], cheekRadius)}` +
+				`L${radialPointString(angles[35], upperGumRadius)}` +
+				`A${teethCircle.r} ${teethCircle.r} 0 0 1 ${pointToString(
+					teethCircleSkullCircleIntersections[1]
+				)}` +
+				`A${radii[0]} ${radii[0]} 0 1 1 ${pointToString(teethCircleSkullCircleIntersections[0])}Z`}
+		/>
+		<path
+			d={parse2(
+				'M40 2Q40 1 39 1A1 1 0 0 0 37 1C36 1 37 2 36 2' +
+					'Q34 2 34 0' +
+					'A0 0 0 0 0 26 0' +
+					'Q26 2 24 2' +
+					'C23 2 24 1 23 1' +
+					'A1 1 0 0 0 21 1' +
+					'Q20 1 20 2' +
+					'C19 2 13 4 12 2' +
+					'A2 2 0 0 0 48 2' +
+					'C47 4 41 2 40 2'
+			)}
+		/>
 	</g>
 
 	<path
@@ -209,20 +206,6 @@
 
 	<path id="leftTemple" d={parse(`M48 0C47 2 41 0 40 0`)} />
 	<path id="rightTemple" d={parse(`M12 0C13 2 19 0 20 0`)} />
-
-	<path
-		id="skull"
-		d={parse2(
-			'M40 2Q40 1 39 1A1 1 0 0 0 37 1C36 1 37 2 36 2' +
-				'Q34 2 34 0' +
-				'A0 0 0 0 0 26 0' +
-				'Q26 2 24 2' +
-				'C23 2 24 1 23 1' +
-				'A1 1 0 0 0 21 1' +
-				'Q20 1 20 2' +
-				'A2 2 1 1 0 40 2'
-		)}
-	/>
 
 	<path
 		id="jaw"
@@ -272,6 +255,48 @@
 					<path class="tooth" {d} />
 				{/each}
 			</g>
+		</g>
+	</g>
+
+	<g id="guide">
+		<!-- <image href="/skull.jpg" x={-size / 1.57} y={-size / 2.05} width={size * 1.25} opacity={0.8} /> -->
+		{#each angles as a, i}
+			<path d={`M${radialPointString(a, radii[1])}L${radialPointString(a, r)}`} />
+			<text
+				x={radialPoint(a, r + size / 60).x}
+				y={radialPoint(a, r + size / 60).y}
+				alignment-baseline="middle"
+				text-anchor="middle">{i}</text
+			>
+		{/each}
+
+		{#each radii as r}
+			<circle {r} />
+		{/each}
+		<path id="pentagram" d={parse('M0 0L24 0L48 0L12 0L36 0Z')} />
+
+		<path d={polygonPath(3, radii[0])} />
+		<circle r={cheekRadius} />
+		<circle r={upperGumRadius} />
+		<circle r={teethCircle.r} cy={teethCircle.y} />
+		<circle r={haloCircle.r} />
+		<circle r={jawInnerCircle.r} cy={jawInnerCircle.y} />
+		<circle r={jawOuterCircle.r} cy={jawOuterCircle.y} />
+
+		<g id="biteCircleLines">
+			{#each upperTeethAngleLines as l}
+				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
+			{/each}
+		</g>
+		<!-- <g id="biteCircleLines" transform="scale(-1, 1)">
+			{#each biteCircleLines as l}
+				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
+			{/each}
+		</g> -->
+		<g id="lowerTeethAngleLineIntersections">
+			{#each lowerTeethAngleLineIntersections as i}
+				<circle cx={i.x} cy={i.y} r={5} />
+			{/each}
 		</g>
 	</g>
 </DopplerSvg>
