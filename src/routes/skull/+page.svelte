@@ -27,14 +27,14 @@
 	const parse = pathFromDSL(angles, radii);
 
 	const cheekRadius = radii[0] + radii[2] - radii[3],
-		teethRadius = radii[0] + radii[2] - radii[4];
+		upperGumRadius = radii[0] + radii[2] - radii[4];
 
 	const anglesModifiedForUpperJawCorrection = [...angles];
 	anglesModifiedForUpperJawCorrection[26] += Phi;
 	anglesModifiedForUpperJawCorrection[34] -= Phi;
 
 	const parse2 = pathFromDSL(anglesModifiedForUpperJawCorrection, [
-		teethRadius,
+		upperGumRadius,
 		cheekRadius,
 		...radii
 	]);
@@ -47,31 +47,57 @@
 	const jawPoints = circleIntersections(haloCircle, jawOuterCircle);
 	const jawSkullIntersections = circleIntersections(skullCircle, jawInnerCircle);
 
-	const biteCircle: Circle = { r: radii[0] - radii[11], x: 0, y: radii[3] - radii[11] };
+	const teethCircle: Circle = { r: radii[0] - radii[11], x: 0, y: radii[3] - radii[11] };
 
-	const biteCircleAngles = [
-		...new Set([...Array(7).keys()].map((k, i) => [90 + (8 - k / 2) * k]).flat())
-	];
+	const upperTeethAngles = [...new Set([...Array(7).keys()].map((k, i) => 90 + (8 - k / 2) * k))];
 
-	const biteCircleLines: Line[] = biteCircleAngles.map((a) => [
-		{ x: biteCircle.x, y: biteCircle.y },
-		radialPoint(a, biteCircle.r + 1, { center: { x: 0, y: biteCircle.y } })
+	const upperTeethAngleLines: Line[] = upperTeethAngles.map((a) => [
+		{ x: teethCircle.x, y: teethCircle.y },
+		radialPoint(a, teethCircle.r + 1, { center: { x: 0, y: teethCircle.y } })
 	]);
 
-	const biteCircleIntersections: Point[] = biteCircleLines
-		.map((l, i) => circleLineIntersections(biteCircle, l)[0])
+	const upperTeethAngleLineIntersections: Point[] = upperTeethAngleLines
+		.map((l, i) => circleLineIntersections(teethCircle, l)[0])
 		.sort((a, b) => a.x - b.x);
 
-	const toothPaths = biteCircleIntersections
-		.slice(0, biteCircleIntersections.length - 1)
+	const upperTeethPaths = upperTeethAngleLineIntersections
+		.slice(0, upperTeethAngleLineIntersections.length - 1)
 		.map((t, n) => {
-			const i = biteCircleIntersections;
+			const i = upperTeethAngleLineIntersections;
 			let path =
 				`M${t.x} ${t.y}` +
 				`C${(i[n + 1].x + i[n].x) / 2 - 18} ` +
 				`${t.y - 75 + Math.abs(5.55 - n) * 7.5} ` +
 				`${(i[n + 1].x + i[n].x) / 2 + 18} ` +
 				`${t.y - 75 + Math.abs(5.55 - n) * 7.5} ` +
+				`${i[n + 1].x} ${i[n + 1].y}` +
+				`Q${(i[n + 1].x + i[n].x) / 2} ` +
+				`${t.y + 8} ` +
+				`${t.x} ${t.y}Z`;
+			return path;
+		});
+
+	const lowerTeethAngles = [...new Set([...Array(7).keys()].map((k, i) => 90 + 4.9 * k))];
+
+	const lowerTeethAngleLines: Line[] = lowerTeethAngles.map((a) => [
+		{ x: teethCircle.x, y: teethCircle.y },
+		radialPoint(a, teethCircle.r + 1, { center: { x: 0, y: teethCircle.y } })
+	]);
+
+	const lowerTeethAngleLineIntersections: Point[] = lowerTeethAngleLines
+		.map((l, i) => circleLineIntersections(teethCircle, l)[0])
+		.sort((a, b) => a.x - b.x);
+
+	const lowerTeethPaths = lowerTeethAngleLineIntersections
+		.slice(0, lowerTeethAngleLineIntersections.length - 1)
+		.map((t, n) => {
+			const i = lowerTeethAngleLineIntersections;
+			let path =
+				`M${t.x} ${t.y}` +
+				`C${(i[n + 1].x + i[n].x) / 2 - 12} ` +
+				`${t.y + 30 + Math.abs(6.18 + n) * 2} ` +
+				`${(i[n + 1].x + i[n].x) / 2 + 12} ` +
+				`${t.y + 30 + Math.abs(6.18 + n) * 2} ` +
 				`${i[n + 1].x} ${i[n + 1].y}` +
 				`Q${(i[n + 1].x + i[n].x) / 2} ` +
 				`${t.y + 8} ` +
@@ -112,9 +138,6 @@
 			path.tooth {
 				fill: oklch(1.84 0.37 60 / 0.75);
 			}
-			#biteCircleIntersections circle {
-				fill: red;
-			}
 		</style>
 	</defs>
 	<Background width={size} height={size * 1.3} fill="white" />
@@ -138,14 +161,14 @@
 
 		<path d={polygonPath(3, radii[0])} />
 		<circle r={cheekRadius} />
-		<circle r={teethRadius} />
-		<circle r={biteCircle.r} cy={biteCircle.y} />
+		<circle r={upperGumRadius} />
+		<circle r={teethCircle.r} cy={teethCircle.y} />
 		<circle r={haloCircle.r} />
 		<circle r={jawInnerCircle.r} cy={jawInnerCircle.y} />
 		<circle r={jawOuterCircle.r} cy={jawOuterCircle.y} />
 
 		<g id="biteCircleLines">
-			{#each biteCircleLines as l}
+			{#each upperTeethAngleLines as l}
 				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
 			{/each}
 		</g>
@@ -154,8 +177,8 @@
 				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
 			{/each}
 		</g> -->
-		<g id="biteCircleIntersections">
-			{#each biteCircleIntersections as i}
+		<g id="lowerTeethAngleLineIntersections">
+			{#each lowerTeethAngleLineIntersections as i}
 				<circle cx={i.x} cy={i.y} r={5} />
 			{/each}
 		</g>
@@ -225,14 +248,30 @@
 		)}Z`}
 	/>
 
-	<g id="upperLeftTeeth">
-		{#each toothPaths as d, i}
-			<path class="tooth" {d} />
-		{/each}
-	</g>
-	<g id="upperRightTeeth" transform="scale(-1, 1)">
-		{#each toothPaths as d, i}
-			<path class="tooth" {d} />
-		{/each}
+	<g id="teeth">
+		<g class="upper">
+			<g class="left">
+				{#each upperTeethPaths as d, i}
+					<path class="tooth" {d} />
+				{/each}
+			</g>
+			<g class="right" transform="scale(-1, 1)">
+				{#each upperTeethPaths as d, i}
+					<path class="tooth" {d} />
+				{/each}
+			</g>
+		</g>
+		<g class="lower">
+			<g class="left">
+				{#each lowerTeethPaths as d, i}
+					<path class="tooth" {d} />
+				{/each}
+			</g>
+			<g class="right" transform="scale(-1, 1)">
+				{#each lowerTeethPaths as d, i}
+					<path class="tooth" {d} />
+				{/each}
+			</g>
+		</g>
 	</g>
 </DopplerSvg>
