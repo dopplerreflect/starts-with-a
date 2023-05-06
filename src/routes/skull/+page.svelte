@@ -111,47 +111,50 @@
 		});
 </script>
 
-<DopplerSvg zoom={0} yPan={0} viewBox={`${-size / 2} ${-size / 3} ${size} ${size}`} id="skully">
+<DopplerSvg
+	zoom={0}
+	yPan={0}
+	viewBox={`${-size / 2} ${-size / Math.sqrt(5)} ${size} ${size}`}
+	id="skully"
+>
 	<defs>
 		<style>
-			ellipse,
-			circle,
-			path:not(.Background) {
-				fill: none;
-				stroke: black;
-				stroke-width: 2;
-			}
-			ellipse {
-				fill: white;
-			}
-			path.black,
 			.black {
 				fill: black;
 				fill-opacity: 0.5;
 			}
-			#skull path,
-			#jaw {
-				fill: oklch(0.9 0.02 100 / 1);
+			.bone {
+				fill: oklch(0.9 0.03 100 / 1);
+				stroke: black;
+				stroke-width: 1;
 			}
-			#skull path.rear {
-				fill: oklch(0.85 0.02 100 / 1);
+			#skull #rear,
+			#jaw {
+				/* display: none; */
+				fill: oklch(0.9 0.03 100 / 1);
+			}
+			#orifices {
+				/* display: none; */
 			}
 			#guide {
 				/* display: none; */
+				fill: none;
+				stroke: black;
+				stroke-width: 2;
+				stroke-opacity: 0.25;
 			}
-			path.red {
-				stroke: red;
-			}
-			path.tooth {
-				fill: oklch(1.3 0.18 60 / 1);
+			text {
+				/* display: none; */
+				stroke: none;
+				fill: black;
 			}
 		</style>
 	</defs>
 	<Background width={size} height={size * 1.3} fill="white" />
 
-	<g id="skull">
+	<g id="skull" class="bone">
 		<path
-			class="rear"
+			id="rear"
 			d={`M${pointToString(teethCircleSkullCircleIntersections[0])}` +
 				`A${teethCircle.r} ${teethCircle.r} 0 0 1 ${radialPointString(
 					angles[25],
@@ -166,6 +169,7 @@
 				`A${radii[0]} ${radii[0]} 0 1 1 ${pointToString(teethCircleSkullCircleIntersections[0])}Z`}
 		/>
 		<path
+			id="front"
 			d={parse2(
 				'M40 2Q40 1 39 1A1 1 0 0 0 37 1C36 1 37 2 36 2' +
 					'Q34 2 34 0' +
@@ -179,59 +183,56 @@
 					'C47 4 41 2 40 2'
 			)}
 		/>
+		<path
+			id="jaw"
+			d={`M${radialPointString(angles[37], cheekRadius)}Q${radialPointString(
+				angles[36],
+				cheekRadius
+			)} ${pointToString(jawPoints[1])}A${jawOuterCircle.r} ${
+				jawOuterCircle.r
+			} 0 0 0 ${pointToString(jawPoints[0])}Q${radialPointString(
+				angles[24],
+				cheekRadius
+			)} ${radialPointString(angles[23], cheekRadius)}C${radialPointString(
+				angles[24],
+				cheekRadius
+			)} ${radialPointString(angles[23], radii[0])} ${pointToString(jawSkullIntersections[0])}A${
+				jawInnerCircle.r
+			} ${jawInnerCircle.r} 0 1 1 ${pointToString(jawSkullIntersections[1])}C${radialPointString(
+				angles[37],
+				radii[0]
+			)} ${radialPointString(angles[36], cheekRadius)} ${radialPointString(
+				angles[37],
+				cheekRadius
+			)}Z`}
+		/>
 	</g>
 
-	<path
-		id="nose"
-		class="black"
-		d={parse(
-			`M30 1A11 11 0 0 0 28 1Q27 2 28 3S29 4 29 5A5 5 0 0 1 31 5Q31 4 32 3S33 2 32 1A 11 11 0 0 0 30 1Z`
-		)}
-	/>
+	<g id="orifices">
+		<path
+			id="nose"
+			class="black"
+			d={parse(
+				`M30 1A11 11 0 0 0 28 1Q27 2 28 3S29 4 29 5A5 5 0 0 1 31 5Q31 4 32 3S33 2 32 1A 11 11 0 0 0 30 1Z`
+			)}
+		/>
+		<circle
+			id="leftEye"
+			r={radii[5]}
+			cx={radialPoint(angles[40], radii[3]).x}
+			cy={radialPoint(angles[40], radii[3]).y}
+			class="black"
+		/>
+		<circle
+			id="rightEye"
+			r={radii[5]}
+			cx={radialPoint(angles[20], radii[3]).x}
+			cy={radialPoint(angles[20], radii[3]).y}
+			class="black"
+		/>
+	</g>
 
-	<circle
-		id="leftEye"
-		r={radii[5]}
-		cx={radialPoint(angles[40], radii[3]).x}
-		cy={radialPoint(angles[40], radii[3]).y}
-		class="black"
-	/>
-	<circle
-		id="rightEye"
-		r={radii[5]}
-		cx={radialPoint(angles[20], radii[3]).x}
-		cy={radialPoint(angles[20], radii[3]).y}
-		class="black"
-	/>
-
-	<path id="leftTemple" d={parse(`M48 0C47 2 41 0 40 0`)} />
-	<path id="rightTemple" d={parse(`M12 0C13 2 19 0 20 0`)} />
-
-	<path
-		id="jaw"
-		d={`M${radialPointString(angles[37], cheekRadius)}Q${radialPointString(
-			angles[36],
-			cheekRadius
-		)} ${pointToString(jawPoints[1])}A${jawOuterCircle.r} ${jawOuterCircle.r} 0 0 0 ${pointToString(
-			jawPoints[0]
-		)}Q${radialPointString(angles[24], cheekRadius)} ${radialPointString(
-			angles[23],
-			cheekRadius
-		)}C${radialPointString(angles[24], cheekRadius)} ${radialPointString(
-			angles[23],
-			radii[0]
-		)} ${pointToString(jawSkullIntersections[0])}A${jawInnerCircle.r} ${
-			jawInnerCircle.r
-		} 0 1 1 ${pointToString(jawSkullIntersections[1])}C${radialPointString(
-			angles[37],
-			radii[0]
-		)} ${radialPointString(angles[36], cheekRadius)} ${radialPointString(
-			angles[37],
-			cheekRadius
-		)}Z`}
-	/>
-
-	<g id="teeth">
+	<g id="teeth" class="bone">
 		<g class="upper">
 			<g class="left">
 				{#each upperTeethPaths as d, i}
@@ -259,7 +260,7 @@
 	</g>
 
 	<g id="guide">
-		<!-- <image href="/skull.jpg" x={-size / 1.57} y={-size / 2.05} width={size * 1.25} opacity={0.8} /> -->
+		<image href="/skull.jpg" x={-size / 1.57} y={-size / 2.05} width={size * 1.25} opacity={0.5} />
 		{#each angles as a, i}
 			<path d={`M${radialPointString(a, radii[1])}L${radialPointString(a, r)}`} />
 			<text
@@ -283,20 +284,15 @@
 		<circle r={jawInnerCircle.r} cy={jawInnerCircle.y} />
 		<circle r={jawOuterCircle.r} cy={jawOuterCircle.y} />
 
-		<g id="biteCircleLines">
+		<!-- <g id="biteCircleLines">
 			{#each upperTeethAngleLines as l}
 				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
 			{/each}
-		</g>
-		<!-- <g id="biteCircleLines" transform="scale(-1, 1)">
-			{#each biteCircleLines as l}
-				<path d={`M${pointToString(l[1])}L${pointToString(l[0])}`} />
-			{/each}
 		</g> -->
-		<g id="lowerTeethAngleLineIntersections">
+		<!-- <g id="lowerTeethAngleLineIntersections">
 			{#each lowerTeethAngleLineIntersections as i}
 				<circle cx={i.x} cy={i.y} r={5} />
 			{/each}
-		</g>
+		</g> -->
 	</g>
 </DopplerSvg>
