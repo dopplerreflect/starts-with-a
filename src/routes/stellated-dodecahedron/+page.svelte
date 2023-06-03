@@ -41,6 +41,7 @@
 					{ r: setupRadii[1], ...radialPoint(a, setupRadii[2]) },
 					{ r: setupRadii[3], ...radialPoint(a, setupRadii[2]) },
 					{ r: setupRadii[4], ...radialPoint(a, setupRadii[2]) },
+					{ r: setupRadii[0], ...radialPoint(a, setupRadii[1]) },
 					{ r: setupRadii[3], ...radialPoint(a, setupRadii[1]) }
 				])
 				.flat()
@@ -188,7 +189,7 @@
 			{/each}
 		</g>
 		<!-- <path id="hexagon" d={polygonPath(6, setupRadii[0])} /> -->
-		<!-- {#each anglesWithPhi as a, i}
+		{#each anglesWithPhi as a, i}
 			<path d={`M0 0L${radialPointString(a, setupRadii[0])}`} />
 			<text
 				fill="white"
@@ -197,7 +198,7 @@
 				text-anchor="middle"
 				alignment-baseline="middle">{i}</text
 			>
-		{/each} -->
+		{/each}
 	</g>
 	<!-- <g id="background">
 		{#each angles as a, i}
