@@ -230,3 +230,8 @@ export const lineToPath = (line: Line): string =>
 	`M${line[0].x} ${line[0].y}L${line[1].x} ${line[1].y}`;
 
 export const pointToString = (p: Point): string => `${p.x} ${p.y}`;
+
+export const midpoint = (l: Line): Point => ({
+	x: (l[0].x + l[1].x) / 2,
+	y: (l[0].y + l[1].y) / 2
+});
