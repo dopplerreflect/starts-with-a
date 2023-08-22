@@ -15,8 +15,8 @@
 	} from '$lib/geometry';
 	import { text } from 'svelte/internal';
 
-	const size = 2 ** 10;
-	const r = size / 12;
+	const size = 2 ** 12;
+	const r = size / 10.5;
 	const radii = [r, r * Phi, r * Phi ** 2];
 	const vpr = Math.sqrt(radii[2] ** 2 - (radii[2] / 2) ** 2) * 2; // radius to vesica formed by circle 3
 	const angles = anglesArray(6);
@@ -32,14 +32,7 @@
 	angles.forEach((a) => {
 		lines.push([radialPoint(a - 30, vpr), radialPoint(a - 150, vpr)]); // hexagram from vesicas
 		lines.push([radialPoint(a - 30, vpr), radialPoint(a - 90, vpr)]); // hexagon from vesicas
-		// outer perimeter:
-		// lines.push([radialPoint(a - 30, vpr), radialPoint(a, radii[2] + radii[1])]);
-		// lines.push([radialPoint(a + 30, vpr), radialPoint(a, radii[2] + radii[1])]);
 		lines.push([radialPoint(a, radii[2] + radii[1]), radialPoint(a + 60, radii[2] + radii[1])]); // hexagon
-		// lines.push([
-		// 	radialPoint(a - 60, radii[1], { center: radialPoint(a, radii[2]) }),
-		// 	radialPoint(a + 60, radii[1], { center: radialPoint(a, radii[2]) })
-		// ]); // bottom of pentagram
 	});
 	anglesArray(3).forEach((a) => {
 		lines.push([
@@ -134,18 +127,18 @@
 		<style>
 			path:not(.Background) {
 				stroke: black;
-				stroke-width: 3;
+				stroke-width: 1;
+				stroke-linejoin: bevel;
 			}
 			circle {
-				stroke: black;
 				fill: none;
-			}
-			circle {
 				stroke: grey;
+				/* display: none; */
 			}
 			line {
 				stroke: black;
 				stroke-width: 1;
+				/* display: none; */
 			}
 			text {
 				fill: red;
@@ -154,31 +147,12 @@
 			text.point {
 				fill: blue;
 			}
-			path.edgeStar {
-				fill: oklch(0.37 0.5 240 / 0.25);
-			}
-			path.edgeStarSide,
-			path.faceStarOutside,
-			path.edgeStarBottom,
-			path.faceStarInside,
-			path.center {
-				fill: oklch(0.37 0.5 180 / 0.25);
-			}
 		</style>
-		<path id="edgeStar" class="edgeStar" d={edgeStarPath} fill="blue" />
-		<path id="faceStar" class="edgeStar" d={faceStarPath} fill="blue" />
-		<g id="edgeStarSide">
-			<path class="edgeStarSide" d={edgeStarSidePath} />
-			<path class="edgeStarSide" d={edgeStarSidePath} transform="scale(-1, 1)" />
-		</g>
-		<g id="faceStarOutside">
-			<path class="faceStarOutside" d={faceStarOutsidePointPath} />
-			<path class="faceStarOutside" d={faceStarOutsidePointPath} transform="scale(-1, 1)" />
-		</g>
-		<g id="edgeStarBottom">
-			<path class="edgeStarBottom" d={edgeStarBottom} />
-			<path class="edgeStarBottom" d={edgeStarBottom} transform="scale(-1, 1)" />
-		</g>
+		<path id="edgeStar" d={edgeStarPath} />
+		<path id="faceStar" d={faceStarPath} />
+		<path id="edgeStarSide" d={edgeStarSidePath} />
+		<path id="faceStarOutside" d={faceStarOutsidePointPath} />
+		<path id="edgeStarBottom" d={edgeStarBottom} />
 		<path id="faceStarInside" class="faceStarInside" d={faceStarInside} />
 		<path id="center" class="center" d={center} />
 	</defs>
@@ -197,42 +171,55 @@
 		>
 	{/each}
 
-	<!-- {#each points as p, i}
-		<circle class="point" r={20} cx={p.x} cy={p.y} />
-		<text
-			class="point"
-			x={p.x}
-			y={p.y}
-			alignment-baseline="middle"
-			text-anchor="middle"
-			font-size={size / 45}>{i}</text
-		>
-	{/each} -->
+	<use fill="oklch(1 0.37 105 / 0.25)" href="#edgeStar" />
+	<use fill="oklch(1 0.37 105 / 0.25)" href="#faceStarOutside" />
+	<use fill="oklch(1 0.37 105 / 0.25)" href="#faceStarInside" />
+	<use fill="oklch(1 0.37 105 / 0.25)" href="#faceStarOutside" transform="scale(-1, 1)" />
 
-	<use href="#edgeStar" />
-	<use href="#edgeStar" transform="rotate(120)" />
-	<use href="#edgeStar" transform="rotate(240)" />
-	<use href="#faceStar" />
-	<use href="#faceStar" transform="rotate(120)" />
-	<use href="#faceStar" transform="rotate(240)" />
+	<use fill="oklch(1 0.37 95 / 0.25)" href="#faceStar" />
+	<use fill="oklch(1 0.37 95 / 0.25)" href="#edgeStarSide" />
+	<use fill="oklch(1 0.37 95 / 0.25)" href="#edgeStarBottom" transform="scale(-1, 1)" />
+	<use fill="oklch(1 0.37 95 / 0.25)" href="#edgeStarSide" transform="scale(-1, 1) rotate(-120)" />
+	<use fill="oklch(1 0.37 95 / 0.25)" href="#edgeStarBottom" transform="rotate(120)" />
+	<use fill="oklch(1 0.37 95 / 0.25)" href="#center" transform="rotate(-120)" />
 
-	<use href="#edgeStarSide" />
-	<use href="#edgeStarSide" transform="rotate(120)" />
-	<use href="#edgeStarSide" transform="rotate(240)" />
+	<use fill="oklch(1 0.37 70 / 0.25)" href="#faceStar" transform="rotate(-120)" />
+	<use fill="oklch(1 0.37 70 / 0.25)" href="#edgeStarSide" transform="rotate(-120)" />
+	<use
+		fill="oklch(1 0.37 70 / 0.25)"
+		href="#edgeStarBottom"
+		transform="scale(-1, 1) rotate(-240)"
+	/>
+	<use fill="oklch(1 0.37 70 / 0.25)" href="#edgeStarSide" transform="scale(-1, 1) " />
+	<use fill="oklch(1 0.37 70 / 0.25)" href="#edgeStarBottom" />
+	<use fill="oklch(1 0.37 70 / 0.25)" href="#center" transform="rotate(120)" />
 
-	<use href="#faceStarOutside" />
-	<use href="#faceStarOutside" transform="rotate(120)" />
-	<use href="#faceStarOutside" transform="rotate(240)" />
+	<use fill="oklch(1 0.37 55 / 0.25)" href="#faceStar" transform="rotate(120)" />
+	<use fill="oklch(1 0.37 55 / 0.25)" href="#edgeStarSide" transform="rotate(120)" />
+	<use
+		fill="oklch(1 0.37 55 / 0.25)"
+		href="#edgeStarBottom"
+		transform="scale(-1, 1) rotate(-120)"
+	/>
+	<use fill="oklch(1 0.37 55 / 0.25)" href="#edgeStarSide" transform="scale(-1, 1) rotate(120)" />
+	<use fill="oklch(1 0.37 55 / 0.25)" href="#edgeStarBottom" transform="rotate(-120)" />
+	<use fill="oklch(1 0.37 55 / 0.25)" href="#center" transform="rotate()" />
 
-	<use href="#edgeStarBottom" />
-	<use href="#edgeStarBottom" transform="rotate(120)" />
-	<use href="#edgeStarBottom" transform="rotate(240)" />
+	<use fill="oklch(1 0.37 40 / 0.25)" href="#edgeStar" transform="rotate(120)" />
+	<use fill="oklch(1 0.37 40 / 0.25)" href="#faceStarOutside" transform="rotate(120)" />
+	<use fill="oklch(1 0.37 40 / 0.25)" href="#faceStarInside" transform="rotate(120)" />
+	<use
+		fill="oklch(1 0.37 40 / 0.25)"
+		href="#faceStarOutside"
+		transform="scale(-1, 1) rotate(-120)"
+	/>
 
-	<use href="#faceStarInside" />
-	<use href="#faceStarInside" transform="rotate(120)" />
-	<use href="#faceStarInside" transform="rotate(240)" />
-
-	<use href="#center" />
-	<use href="#center" transform="rotate(120)" />
-	<use href="#center" transform="rotate(240)" />
+	<use fill="oklch(0.98 0.37 35 / 0.25)" href="#edgeStar" transform="rotate(-120)" />
+	<use fill="oklch(0.98 0.37 35 / 0.25)" href="#faceStarOutside" transform="rotate(-120)" />
+	<use fill="oklch(0.98 0.37 35 / 0.25)" href="#faceStarInside" transform="rotate(-120)" />
+	<use
+		fill="oklch(0.98 0.37 35 / 0.25)"
+		href="#faceStarOutside"
+		transform="scale(-1, 1) rotate(120)"
+	/>
 </DopplerSvg>
