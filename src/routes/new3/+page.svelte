@@ -126,6 +126,9 @@
 		<filter id="blur">
 			<feGaussianBlur in="SourceGraphic" stdDeviation="10" />
 		</filter>
+		<filter id="blur1">
+			<feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
+		</filter>
 		<filter id="blur2">
 			<feGaussianBlur in="SourceGraphic" stdDeviation="2" />
 		</filter>
@@ -138,6 +141,10 @@
 			#figure {
 				/* display: none; */
 			}
+			/* #figure {
+				stroke: oklch(50% 0.37 100);
+				stroke-width: 0.5;
+			} */
 			circle {
 				fill: none;
 				stroke: oklch(100% 0.37 200);
@@ -172,10 +179,12 @@
 		<path id="edgeStarBottom" d={edgeStarBottom} />
 		<path id="faceStarInside" class="faceStarInside" d={faceStarInside} />
 		<path id="center" class="center" d={center} />
-		<HexPattern size={r / 4} stroke="oklch(50% 0.37 200)" strokeWidth={1} id="HexPattern" />
+		<HexPattern size={r / 24} stroke="oklch(33% 0.37 300)" strokeWidth={1} id="HexPattern" />
+		<HexPattern size={r / 4} stroke="oklch(66% 0.37 200)" strokeWidth={1} id="HexPattern2" />
 	</defs>
 	<path d={`M${-size / 2} ${-size / 2}h${size}v${size}h${-size}Z`} fill="oklch(5% 0.25 300)" />
-	<Background {size} fill="url(#HexPattern)" filter="url(#blur2)" />
+	<Background {size} fill="url(#HexPattern)" filter="url(#blur1)" />
+	<Background {size} fill="url(#HexPattern2)" filter="url(#blur2)" />
 	{#each circles as c, i}
 		<circle class="blur" id={`c${i}`} r={c.r} cx={c.x} cy={c.y} />
 	{/each}
