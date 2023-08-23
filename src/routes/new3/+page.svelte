@@ -15,6 +15,8 @@
 	} from '$lib/geometry';
 
 	const size = 2 ** 10;
+	const height = size;
+	const width = height * 1.76;
 	const r = size / 11;
 	const radii = [r, r * Phi, r * Phi ** 2];
 	const vpr = Math.sqrt(radii[2] ** 2 - (radii[2] / 2) ** 2) * 2; // radius to vesica formed by circle 3
@@ -121,7 +123,7 @@
 		.join(' ')}Z`;
 </script>
 
-<DopplerSvg id="new3" viewBox={viewBox(size)}>
+<DopplerSvg id="new3" viewBox={viewBox(width, height)}>
 	<defs>
 		<filter id="blur">
 			<feGaussianBlur in="SourceGraphic" stdDeviation="10" />
@@ -134,7 +136,7 @@
 		</filter>
 		<style>
 			:root {
-				--t: 85%;
+				--t: 75%;
 				--chroma: 0.5;
 				--hue: 100;
 			}
@@ -182,9 +184,9 @@
 		<HexPattern size={r / 24} stroke="oklch(33% 0.37 300)" strokeWidth={1} id="HexPattern" />
 		<HexPattern size={r / 4} stroke="oklch(66% 0.37 200)" strokeWidth={1} id="HexPattern2" />
 	</defs>
-	<path d={`M${-size / 2} ${-size / 2}h${size}v${size}h${-size}Z`} fill="oklch(5% 0.25 300)" />
-	<Background {size} fill="url(#HexPattern)" filter="url(#blur1)" />
-	<Background {size} fill="url(#HexPattern2)" filter="url(#blur2)" />
+	<path d={`M${-width / 2} ${-size / 2}h${width}v${height}h${-width}Z`} fill="oklch(5% 0.25 300)" />
+	<Background {width} {height} fill="url(#HexPattern)" filter="url(#blur1)" />
+	<Background {width} {height} fill="url(#HexPattern2)" filter="url(#blur2)" />
 	{#each circles as c, i}
 		<circle class="blur" id={`c${i}`} r={c.r} cx={c.x} cy={c.y} />
 	{/each}
