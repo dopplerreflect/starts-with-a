@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Background from '$lib/components/Background.svelte';
 	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
 	import {
 		Phi,
@@ -20,7 +21,7 @@
 	<defs>
 		<style>
 			circle,
-			path {
+			path:not(.Background) {
 				stroke: oklch(90% 0.37 90);
 				stroke-width: 1;
 				fill: none;
@@ -41,6 +42,7 @@
 			<feGaussianBlur in="SourceGraphic" stdDeviation="3" />
 		</filter>
 	</defs>
+	<Background {size} fill="oklch(5% 0.185 300)" />
 	<circle class="dim" r={radii[1]} />
 	{#each angles as a}
 		<circle
