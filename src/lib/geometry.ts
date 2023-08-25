@@ -235,3 +235,5 @@ export const midpoint = (l: Line): Point => ({
 	x: (l[0].x + l[1].x) / 2,
 	y: (l[0].y + l[1].y) / 2
 });
+
+export const slope = (l: Line): number => (l[1].y - l[0].y) / (l[1].x - l[0].x);
