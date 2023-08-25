@@ -48,6 +48,9 @@
 			{ x: 0, y: size }
 		]
 	];
+	const pyramidIntersections = circleLineIntersections(circles[4], lines[4]);
+	lines.push([{ x: 0, y: -size }, pyramidIntersections[0]]);
+	lines.push([{ x: 0, y: -size }, pyramidIntersections[1]]);
 	lines.push([
 		corners[1],
 		{
@@ -72,12 +75,9 @@
 			)
 		}
 	]);
-	const pyramidIntersections = circleLineIntersections(circles[4], lines[4]);
-	lines.push([{ x: 0, y: -size }, pyramidIntersections[0]]);
-	lines.push([{ x: 0, y: -size }, pyramidIntersections[1]]);
 </script>
 
-<DopplerSvg id="russian-pyramid" viewBox={viewBox(size * 3)}>
+<DopplerSvg id="russian-pyramid" viewBox={viewBox(size * 3.5 + 5)}>
 	<defs>
 		<style>
 			path:not(.Background),
@@ -87,18 +87,29 @@
 				stroke-width: 5;
 				fill: none;
 			}
-			circle#c4 {
-				/* stroke: red; */
-			}
-			line#l4 {
-				/* stroke: red; */
+			#c2,
+			#c3,
+			#c5,
+			#c6,
+			#l0 {
+				display: none;
 			}
 		</style>
 	</defs>
-	{#each circles as c, i}
-		<circle id={`c${i}`} r={c.r} cx={c.x} cy={c.y} />
-	{/each}
-	{#each lines as l, i}
-		<line id={`l${i}`} x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
-	{/each}
+	<g transform="scale(-1, 1)">
+		{#each circles as c, i}
+			<circle id={`c${i}`} r={c.r} cx={c.x} cy={c.y} />
+		{/each}
+		{#each lines as l, i}
+			<line id={`l${i}`} x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
+		{/each}
+	</g>
+	<g transform="">
+		{#each circles as c, i}
+			<circle id={`c${i}`} r={c.r} cx={c.x} cy={c.y} />
+		{/each}
+		{#each lines as l, i}
+			<line id={`l${i}`} x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
+		{/each}
+	</g>
 </DopplerSvg>
