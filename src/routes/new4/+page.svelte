@@ -27,11 +27,8 @@
 				fill: none;
 			}
 			circle.dim {
-				stroke: oklch(0.33 0.2 300);
+				stroke: oklch(0.5 0.37 200);
 				stroke-width: 1;
-			}
-			circle.mask {
-				fill: black;
 			}
 			path.blur {
 				stroke-width: 3;

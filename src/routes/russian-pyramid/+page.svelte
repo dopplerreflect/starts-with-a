@@ -11,7 +11,6 @@
 		missingX,
 		missingY,
 		phi,
-		pointToString,
 		radialPoint,
 		slope,
 		viewBox
@@ -29,13 +28,13 @@
 		{ r: r2, x: 0, y: 0 },
 		// { r, x: r, y: 0 },
 		// { r, x: -r, y: 0 },
+		{ r: r * phi, x: 0, y: -r },
 		{ r: r * phi, x: 0, y: r },
 		{ r: r * phi ** 2, x: 0, y: 0 },
 		{ r: r * phi ** 3, x: 0, y: -r * phi },
 		{ r: r * phi ** 4, x: 0, y: -r },
 		{ r: r * phi ** 5, x: 0, y: -r - r * phi ** 3 },
-		{ r: r * phi ** 6, x: 0, y: -r - r * phi ** 2 },
-		{ r: r * phi, x: 0, y: -r }
+		{ r: r * phi ** 6, x: 0, y: -r - r * phi ** 2 }
 	];
 	const corners: Point[] = [
 		{ x: -size, y: -size },
@@ -89,21 +88,29 @@
 			y: missingY(
 				corners[1],
 				corners[0].x,
-				slope([corners[1], circleIntersections(circles[9], circles[16])[0]])
+				slope([corners[1], circleIntersections(circles[9], circles[10])[0]])
 			)
 		}
 	]);
+	circles.map((c) => console.log(c.r / 1000));
 </script>
 
-<DopplerSvg id="russian-pyramid" viewBox={viewBox(size * 3.5)}>
+<DopplerSvg id="russian-pyramid" viewBox={viewBox(r1 * 2 + 10, (r1 * 2 + 10) * 1.77)}>
 	<defs>
 		<style>
-			path:not(.Background),
+			path.Background {
+				fill: oklch(0 0.37 300);
+			}
 			circle,
 			line {
-				stroke: white;
 				stroke-width: 5;
+			}
+			circle {
 				fill: none;
+				stroke: oklch(100% 0.37 180);
+			}
+			line {
+				stroke: oklch(100% 0.37 90);
 			}
 			#c2,
 			#c3,
@@ -112,14 +119,27 @@
 			#l0 {
 				display: none;
 			}
-			/* #c16,
-			#c9 {
-				stroke: red;
-			} */
 		</style>
 	</defs>
-	<Background size={size * 3.5} fill="oklch(0 0.18 270)" />
-	<g transform="scale(-1, 1)">
+	<Background height={r * 2 + r1 * 2} width={r1 * 2} fill="" />
+	<g transform="scale(-1 1)">
+		{#each lines as l, i}
+			<line id={`l${i}`} x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
+		{/each}
+		{#each circles as c, i}
+			<circle id={`c${i}`} r={c.r} cx={c.x} cy={c.y} />
+		{/each}
+		<circle r={r * Phi} />
+	</g>
+	<!-- <g transform="">
+		{#each lines as l, i}
+			<line id={`l${i}`} x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
+		{/each}
+		{#each circles as c, i}
+			<circle id={`c${i}`} r={c.r} cx={c.x} cy={c.y} />
+		{/each}
+	</g>
+	<g transform="scale(-1 1) rotate(180)">
 		{#each circles as c, i}
 			<circle id={`c${i}`} r={c.r} cx={c.x} cy={c.y} />
 		{/each}
@@ -127,7 +147,7 @@
 			<line id={`l${i}`} x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
 		{/each}
 	</g>
-	<!-- <g transform="">
+	<g transform="rotate(180)">
 		{#each circles as c, i}
 			<circle id={`c${i}`} r={c.r} cx={c.x} cy={c.y} />
 		{/each}
@@ -135,13 +155,4 @@
 			<line id={`l${i}`} x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
 		{/each}
 	</g> -->
-
-	<!--   
-	<line x1={-size} y1={lines[10][1].y} x2={size} y2={lines[10][1].y} />
-	<line x1={-size} y1={lines[11][1].y} x2={size} y2={lines[11][1].y} />
-	<line x1={-size} y1={lines[12][1].y} x2={size} y2={lines[12][1].y} />
- -->
-	<!-- <path
-		d={`M${-size} -${size} ${pointToString(circleIntersections(circles[9], circles[16])[1])}`}
-	/> -->
 </DopplerSvg>
