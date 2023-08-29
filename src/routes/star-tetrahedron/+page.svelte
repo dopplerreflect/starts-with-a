@@ -127,7 +127,7 @@
 			}
 			#guide circle,
 			#guide line {
-				stroke: oklch(0.5 0.37 200);
+				stroke: oklch(0.75 0.37 200);
 			}
 			path.star {
 				stroke: none;
@@ -165,11 +165,11 @@
 			</feMerge>
 		</filter>
 		<HexPattern size={r1 / 18} stroke="oklch(25% 0.37 300)" strokeWidth={1} id="HexPattern" />
-		<HexPattern size={r1 / 6} stroke="oklch(50% 0.37 240)" strokeWidth={1} id="HexPattern2" />
+		<HexPattern size={r1 / 6} stroke="oklch(50% 0.37 200)" strokeWidth={1} id="HexPattern2" />
 	</defs>
 	<Background {size} fill="oklch(0 0.37 270)" />
 	<Background {size} fill="url(#HexPattern)" />
-	<Background {size} fill="url(#HexPattern2)" />
+	<Background {size} fill="url(#HexPattern2)" filter="url(#blur)" />
 
 	<g id="guide" filter="url(#blur)">
 		{#each circles as c, i}
