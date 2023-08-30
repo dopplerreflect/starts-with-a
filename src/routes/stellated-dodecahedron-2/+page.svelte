@@ -112,7 +112,7 @@
 	];
 </script>
 
-<DopplerSvg id="star-tetrahedron" viewBox={viewBox(size)}>
+<DopplerSvg id="stellated-dodecahedron-2" viewBox={viewBox(size)}>
 	<defs>
 		<style>
 			:root {
