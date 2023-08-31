@@ -16,98 +16,89 @@
 	const size = 2 ** 10;
 	const r = size / 4;
 	const r1 = Math.sqrt(r ** 2 - (r / 2) ** 2);
-	const angles = anglesArray(6);
-	const circles: Circle[] = [
-		{ r, x: 0, y: 0 },
-		...angles.map((a) => ({ r, ...radialPoint(a, r) }))
-	];
-	const oHexlines: Line[] = angles.map((a) => [radialPoint(a, r), radialPoint(a + 60, r)]);
-	const iHexlines: Line[] = angles.map((a) => [radialPoint(a - 30, r1), radialPoint(a + 30, r1)]);
-	const radials: Line[] = angles
-		.slice(0, 3)
-		.map((a) => [radialPoint(a + 30, r * Math.sqrt(3)), radialPoint(a + 210, r * Math.sqrt(3))]);
-	const glines: Line[] = angles.slice(0, 6).map((a, i) => {
+	const a = anglesArray(6);
+	const c: Circle[] = [{ r, x: 0, y: 0 }, ...a.map((a) => ({ r, ...radialPoint(a, r) }))];
+	const ol: Line[] = a.map((a) => [radialPoint(a, r), radialPoint(a + 60, r)]);
+	const il: Line[] = a.map((a) => [radialPoint(a - 30, r1), radialPoint(a + 30, r1)]);
+	const rl: Line[] = a.map((a) => [radialPoint(a + 30, r * Math.sqrt(3)), { x: 0, y: 0 }]);
+	const gl: Line[] = a.slice(0, 6).map((a, i) => {
 		return [
-			circleLineIntersections(circles[((i + 11) % 6) + 1], iHexlines[i])[0],
-			circleLineIntersections(circles[((i + 15) % 6) + 1], iHexlines[(i + 2) % 6])[0]
+			circleLineIntersections(c[((i + 11) % 6) + 1], il[i])[0],
+			circleLineIntersections(c[((i + 15) % 6) + 1], il[(i + 2) % 6])[0]
 		];
 	});
-	const tlines: Line[] = [
-		[radialPoint(angles[0] - 30, r1), radialPoint(angles[2] - 30, r1)],
-		[radialPoint(angles[2] - 30, r1), radialPoint(angles[4] - 30, r1)],
-		[radialPoint(angles[4] - 30, r1), radialPoint(angles[0] - 30, r1)],
-		[radialPoint(angles[1] - 30, r1), radialPoint(angles[3] - 30, r1)],
-		[radialPoint(angles[3] - 30, r1), radialPoint(angles[5] - 30, r1)],
-		[radialPoint(angles[5] - 30, r1), radialPoint(angles[1] - 30, r1)]
-	];
-	const xlines: Line[] = [
-		[radialPoint(angles[5] + 30, r1), intersection(radials[1], glines[1])],
-		[intersection(radials[1], glines[1]), radialPoint(angles[3] + 30, r1)],
-		[radialPoint(angles[3] + 30, r1), intersection(radials[2], glines[5])],
-		[intersection(radials[2], glines[5]), radialPoint(angles[1] + 30, r1)],
-		[radialPoint(angles[1] + 30, r1), intersection(radials[0], glines[3])],
-		[intersection(radials[0], glines[3]), radialPoint(angles[5] + 30, r1)]
+	const tl: Line[] = a.map((_, i) => [
+		radialPoint(a[i] - 30, r1),
+		radialPoint(a[(i + 2) % 6] - 30, r1)
+	]);
+	const xl: Line[] = [
+		[radialPoint(a[5] + 30, r1), intersection(rl[1], gl[1])],
+		[intersection(rl[1], gl[1]), radialPoint(a[3] + 30, r1)],
+		[radialPoint(a[3] + 30, r1), intersection(rl[2], gl[5])],
+		[intersection(rl[2], gl[5]), radialPoint(a[1] + 30, r1)],
+		[radialPoint(a[1] + 30, r1), intersection(rl[0], gl[3])],
+		[intersection(rl[0], gl[3]), radialPoint(a[5] + 30, r1)]
 	];
 	const faces: Point[][] = [
 		[
-			intersection(xlines[0], oHexlines[5]),
-			intersection(xlines[0], glines[0]),
-			intersection(oHexlines[4], iHexlines[4]),
-			intersection(xlines[5], glines[4]),
-			intersection(glines[4], glines[5]),
-			intersection(glines[5], xlines[0]),
-			intersection(iHexlines[0], oHexlines[0]),
-			intersection(glines[2], glines[3])
+			intersection(il[5], ol[5]),
+			intersection(gl[0], gl[1]),
+			intersection(il[4], ol[4]),
+			intersection(xl[5], gl[4]),
+			intersection(gl[4], gl[5]),
+			intersection(gl[5], xl[0]),
+			intersection(il[0], ol[0]),
+			intersection(gl[2], gl[3])
 		],
 		[
-			intersection(xlines[3], oHexlines[1]),
-			intersection(xlines[4], glines[2]),
-			intersection(oHexlines[0], iHexlines[1]),
-			intersection(glines[0], xlines[3]),
-			intersection(glines[0], glines[1]),
-			intersection(glines[1], xlines[4]),
-			intersection(iHexlines[2], oHexlines[2]),
-			intersection(glines[4], glines[5])
+			intersection(xl[3], ol[1]),
+			intersection(xl[4], gl[2]),
+			intersection(ol[0], il[1]),
+			intersection(gl[0], xl[3]),
+			intersection(gl[0], gl[1]),
+			intersection(gl[1], xl[4]),
+			intersection(il[2], ol[2]),
+			intersection(gl[4], gl[5])
 		],
 		[
-			intersection(xlines[2], oHexlines[3]),
-			intersection(glines[4], glines[5]),
-			intersection(iHexlines[3], oHexlines[2]),
-			intersection(xlines[1], glines[2]),
-			intersection(glines[2], glines[3]),
-			intersection(glines[3], xlines[2]),
-			intersection(iHexlines[4], oHexlines[4]),
-			intersection(glines[0], glines[1])
+			intersection(xl[2], ol[3]),
+			intersection(gl[4], gl[5]),
+			intersection(il[3], ol[2]),
+			intersection(xl[1], gl[2]),
+			intersection(gl[2], gl[3]),
+			intersection(gl[3], xl[2]),
+			intersection(il[4], ol[4]),
+			intersection(gl[0], gl[1])
 		],
 		[
-			intersection(xlines[0], oHexlines[5]),
-			intersection(tlines[0], tlines[5]),
-			intersection(tlines[5], glines[5]),
-			intersection(glines[4], glines[5]),
-			intersection(xlines[3], oHexlines[1]),
-			intersection(tlines[0], tlines[3]),
-			intersection(xlines[3], glines[0]),
-			intersection(glines[0], glines[1])
+			intersection(xl[0], ol[5]),
+			intersection(tl[0], tl[5]),
+			intersection(tl[5], gl[5]),
+			intersection(gl[4], gl[5]),
+			intersection(xl[3], ol[1]),
+			intersection(tl[0], tl[1]),
+			intersection(xl[3], gl[0]),
+			intersection(gl[0], gl[1])
 		],
 		[
-			intersection(xlines[4], oHexlines[1]),
-			intersection(tlines[1], tlines[3]),
-			intersection(xlines[4], glines[1]),
-			intersection(glines[0], glines[1]),
-			intersection(xlines[1], oHexlines[3]),
-			intersection(tlines[1], tlines[4]),
-			intersection(glines[2], tlines[4]),
-			intersection(glines[2], glines[3])
+			intersection(xl[4], ol[1]),
+			intersection(tl[1], tl[2]),
+			intersection(xl[4], gl[1]),
+			intersection(gl[0], gl[1]),
+			intersection(xl[1], ol[3]),
+			intersection(tl[2], tl[3]),
+			intersection(gl[2], tl[3]),
+			intersection(gl[2], gl[3])
 		],
 		[
-			intersection(xlines[2], oHexlines[3]),
-			intersection(tlines[2], tlines[4]),
-			intersection(xlines[2], tlines[4]),
-			intersection(glines[2], glines[3]),
-			intersection(xlines[5], oHexlines[5]),
-			intersection(tlines[2], tlines[5]),
-			intersection(xlines[5], tlines[5]),
-			intersection(glines[4], glines[5])
+			intersection(ol[3], xl[2]),
+			intersection(tl[4], tl[3]),
+			intersection(tl[3], xl[2]),
+			intersection(gl[2], gl[3]),
+			intersection(tl[4], ol[5]),
+			intersection(tl[4], tl[5]),
+			intersection(gl[4], tl[5]),
+			intersection(gl[4], gl[5])
 		]
 	];
 </script>
@@ -171,38 +162,39 @@
 	<Background {size} fill="url(#HexPattern)" />
 	<Background {size} fill="url(#HexPattern2)" filter="url(#blur)" />
 
-	<g id="guide" filter="url(#blur)">
-		{#each circles as c, i}
+	<g id="guide" filter="url(#blu)">
+		{#each c as c, i}
 			<circle r={c.r} cx={c.x} cy={c.y} />
 		{/each}
-		{#each oHexlines as l, i}
+		{#each ol as l, i}
 			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
 			<text x={midpoint(l).x} y={midpoint(l).y} alignment-baseline="middle" text-anchor="middle"
 				>o{i}</text
 			>
 		{/each}
-		{#each tlines as l, i}
-			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
-			<text x={midpoint(l).x} y={midpoint(l).y} alignment-baseline="middle" text-anchor="middle"
-				>t{i}</text
-			>
-		{/each}
-		{#each iHexlines as l, i}
+		{#each il as l, i}
 			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
 			<text x={midpoint(l).x} y={midpoint(l).y} alignment-baseline="middle" text-anchor="middle"
 				>i{i}</text
 			>
 		{/each}
-		{#each radials as l, i}
+		{#each tl as l, i}
 			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
+			<text x={midpoint(l).x} y={midpoint(l).y} alignment-baseline="middle" text-anchor="middle"
+				>t{i}</text
+			>
 		{/each}
-		{#each glines as l, i}
+		{#each rl as l, i}
+			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
+			<text x={l[0].x} y={l[0].y} alignment-baseline="middle" text-anchor="middle">r{i}</text>
+		{/each}
+		{#each gl as l, i}
 			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
 			<text x={midpoint(l).x} y={midpoint(l).y} alignment-baseline="middle" text-anchor="middle"
 				>g{i}</text
 			>
 		{/each}
-		{#each xlines as l, i}
+		{#each xl as l, i}
 			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
 			<text x={midpoint(l).x} y={midpoint(l).y} alignment-baseline="middle" text-anchor="middle"
 				>x{i}</text
