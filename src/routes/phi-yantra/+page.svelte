@@ -45,12 +45,6 @@
 			circle,
 			line {
 				stroke: white;
-				/* filter: url(#blur); */
-			}
-			circle {
-				fill: oklch(0.25 0.37 300 / 0.24);
-			}
-			path.s {
 				stroke: white;
 				fill: oklch(0.25 0.37 300 / 0.24);
 			}
@@ -83,13 +77,8 @@
 	{/each}
 	<line x1={squares[0][0].x} y1={squares[0][0].y} x2={squares[0][2].x} y2={squares[0][2].y} />
 	<line x1={squares[0][1].x} y1={squares[0][1].y} x2={squares[0][3].x} y2={squares[0][3].y} />
-	<line x1={squares[3][0].x} y1={squares[0][0].y} x2={squares[3][0].x} y2={squares[0][3].y} />
-	<line x1={squares[3][1].x} y1={squares[0][0].y} x2={squares[3][1].x} y2={squares[0][3].y} />
-	<line x1={squares[0][0].x} y1={squares[3][0].y} x2={squares[0][1].x} y2={squares[3][0].y} />
-	<line x1={squares[0][0].x} y1={squares[3][2].y} x2={squares[0][1].x} y2={squares[3][2].y} />
-	<path class="s" d={`M${squares[0].map((p) => pointToString(p)).join(' ')}Z`} />
-	<path class="s" d={`M${squares[1].map((p) => pointToString(p)).join(' ')}Z`} />
-	<path class="s" d={`M${squares[2].map((p) => pointToString(p)).join(' ')}Z`} />
-	<path class="s" d={`M${squares[3].map((p) => pointToString(p)).join(' ')}Z`} />
+	{#each squares as s}
+		<path class="s" d={`M${s.map((p) => pointToString(p)).join(' ')}Z`} />
+	{/each}
 	<path class="y" d={`M${yp.map((p) => pointToString(p)).join(' ')}Z`} />
 </DopplerSvg>
