@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import Background from '$lib/components/Background.svelte';
-	import PathBuilder from '$lib/components/PathBuilder.svelte';
 	import { arrayMap, phi, viewBox, radialPointString } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import { onMount } from 'svelte';
@@ -61,16 +60,24 @@
 			].join(' ')}
 			fill-opacity={1 / 2}
 		/>
+		<filter id="blur">
+			<feMorphology in="SourceGraphic" operator="dilate" radius="1" result="dilate" />
+			<feGaussianBlur in="dilate" stdDeviation="3" result="blur" />
+			<feMerge>
+				<feMergeNode in="blur" />
+				<feMergeNode in="SourceGraphic" />
+			</feMerge>
+		</filter>
 	</defs>
-	<Background {size} fill="hsl(120, 50%, 10%)" />
-
-	{#each angles as angle, i}
-		<use
-			href="#thing"
-			fill={`hsl(${90 + 30 * (i % 3)}, 100%, 50%)`}
-			stroke="black"
-			transform={`rotate(${angle + 90})`}
-		/>
-	{/each}
-	<!-- <PathBuilder {size} {angles} {radii} {rotate90} /> -->
+	<Background {size} fill="oklch(0.1 0.185 270)" />
+	<g filter="url(#blur)">
+		{#each angles.slice(0, 21) as angle, i}
+			<use
+				href="#thing"
+				fill={`oklch(0.75 0.37 ${angle})`}
+				stroke="black"
+				transform={`rotate(${angle + 90})`}
+			/>
+		{/each}
+	</g>
 </svg>
