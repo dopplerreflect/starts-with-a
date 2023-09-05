@@ -98,6 +98,10 @@
 		width: 33vh;
 		flex-direction: row;
 		transition: all 0.25s;
+		overflow: scroll;
+	}
+	nav::-webkit-scrollbar {
+		display: none;
 	}
 	nav.open {
 		left: 0;
