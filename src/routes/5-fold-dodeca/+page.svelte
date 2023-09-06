@@ -185,6 +185,8 @@
 		{/each} -->
 		{#each angles2 as a}
 			<circle r={or / 2} cx={radialPoint(a, or / 2).x} cy={radialPoint(a, or / 2).y} />
+			<circle r={(or / 2) * phi} cx={radialPoint(a, or / 2).x} cy={radialPoint(a, or / 2).y} />
+			<circle r={(or / 2) * phi ** 2} cx={radialPoint(a, or / 2).x} cy={radialPoint(a, or / 2).y} />
 		{/each}
 		{#each op as l, i}
 			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
@@ -198,12 +200,12 @@
 				>{`ip${i}`}</text
 			>
 		{/each}
-		{#each sp as l, i}
+		<!-- {#each sp as l, i}
 			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
 			<text x={midpoint(l).x} y={midpoint(l).y} text-anchor="middle" alignment-baseline="middle"
 				>{`sp${i}`}</text
 			>
-		{/each}
+		{/each} -->
 		{#each al as l, i}
 			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} />
 			<text x={midpoint(l).x} y={midpoint(l).y} text-anchor="middle" alignment-baseline="middle"
