@@ -39,7 +39,7 @@ export function radialPointString(
 	radius: number,
 	options?: GeometryOptions
 ): string {
-	let point = radialPoint(angle, radius, options);
+	let point: Point = radialPoint(angle, radius, options);
 	return `${point.x},${point.y}`;
 }
 
@@ -243,3 +243,9 @@ export const missingX = (knownPoint: Point, knownY: number, slope: number): numb
 
 export const missingY = (knownPoint: Point, knownX: number, slope: number): number =>
 	(knownX - knownPoint.x) * slope + knownPoint.y;
+
+/**
+ * Return length of chord given angle in radians and radius.
+ */
+export const chordLength = (angle: number, radius: number): number =>
+	2 * radius * Math.sin(angle / 2);
