@@ -5,6 +5,7 @@
 	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
 	import {
 		anglesArray,
+		arrayMap,
 		chordLength,
 		intersection,
 		midpoint,
@@ -98,11 +99,60 @@
 
 <DopplerSvg id="5-fold-dodeca" viewBox={viewBox(size)}>
 	<defs>
+		<style>
+			:root {
+				--opacity: 0.7;
+			}
+			path.Background {
+				stroke: none;
+			}
+			circle,
+			line {
+				stroke: oklch(1 0.37 200);
+				fill: none;
+				filter: url(#blur);
+			}
+			text {
+				fill: yellow;
+				display: none;
+			}
+			path {
+				stroke: oklch(1 0.37 80 / 0.75);
+			}
+			.ssp0 {
+				fill: oklch(1 0.37 80 / var(--opacity));
+			}
+			.ssp1 {
+				fill: oklch(0.95 0.37 80 / var(--opacity));
+			}
+			.ssp2 {
+				fill: oklch(0.8 0.37 80 / var(--opacity));
+			}
+			.ssp3 {
+				fill: oklch(0.75 0.37 80 / var(--opacity));
+			}
+			.ssp4 {
+				fill: oklch(0.85 0.37 80 / var(--opacity));
+			}
+			.ffp {
+				fill: oklch(0.9 0.37 80 / var(--opacity));
+			}
+			#guide {
+				/* display: none; */
+			}
+			#figure {
+				/* display: none; */
+			}
+			#background line {
+				stroke: oklch(0.1 0.37 300);
+				filter: none;
+			}
+		</style>
 		<path id="sideStarPath" d={sideStarPath} />
 		<path id="frontFacePath" d={frontFacePath} />
 		<filter id="glow">
-			<feMorphology in="SourceAlpha" operator="dilate" radius="5" result="dilate" />
-			<feFlood in="dilate" flood-color="oklch(1 0.37 90 / 0.75)" result="color" />
+			<feMorphology in="SourceAlpha" operator="dilate" radius="10" result="dilate" />
+			<feFlood in="dilate" flood-color="oklch(1 0.37 90 / 0.7)" result="color" />
 			<feComposite in="color" in2="dilate" operator="in" result="border" />
 			<feGaussianBlur in="border" stdDeviation="20" result="blur" />
 			<feMerge>
@@ -110,12 +160,26 @@
 				<feMergeNode in="SourceGraphic" />
 			</feMerge>
 		</filter>
+		<filter id="blur">
+			<feMorphology in="SourceGraphic" operator="dilate" radius="2" result="dilate" />
+			<feGaussianBlur in="dilate" stdDeviation="20" result="blur" />
+			<feMerge>
+				<feMergeNode in="blur" />
+				<feMergeNode in="SourceGraphic" />
+			</feMerge>
+		</filter>
 	</defs>
 	<Background {size} fill="oklch(0.2 0.09 300)" />
-	<g id="guide">
-		{#each radii as r}
-			<circle {r} />
+	<g id="background">
+		{#each arrayMap(size / 8, (s) => s) as y}
+			<line x1={-size / 2} y1={-size / 2 + y * 8} x2={size / 2} y2={-size / 2 + y * 8} />
+			<line y1={-size / 2} x1={-size / 2 + y * 8} y2={size / 2} x2={-size / 2 + y * 8} />
 		{/each}
+	</g>
+	<g id="guide">
+		<!-- {#each radii as r}
+			<circle {r} />
+		{/each} -->
 		{#each angles2 as a}
 			<circle r={or / 2} cx={radialPoint(a, or / 2).x} cy={radialPoint(a, or / 2).y} />
 		{/each}
@@ -158,48 +222,3 @@
 		<path d={starPath(radii[2], { rotate: -18 })} class="ffp" />
 	</g>
 </DopplerSvg>
-
-<style>
-	:root {
-		--opacity: 0.75;
-	}
-	path.Background {
-		stroke: none;
-	}
-	circle,
-	line {
-		stroke: white;
-		fill: none;
-	}
-	circle {
-		stroke: grey;
-	}
-	text {
-		fill: yellow;
-		display: none;
-	}
-	path {
-		/* stroke: oklch(0.5 0.37 90 / 1); */
-	}
-	.ssp0 {
-		fill: oklch(1 0.37 90 / var(--opacity));
-	}
-	.ssp1 {
-		fill: oklch(0.95 0.37 90 / var(--opacity));
-	}
-	.ssp2 {
-		fill: oklch(0.8 0.37 90 / var(--opacity));
-	}
-	.ssp3 {
-		fill: oklch(0.75 0.37 90 / var(--opacity));
-	}
-	.ssp4 {
-		fill: oklch(0.85 0.37 90 / var(--opacity));
-	}
-	.ffp {
-		fill: oklch(0.9 0.37 90 / var(--opacity));
-	}
-	#guide {
-		/* display: none; */
-	}
-</style>
