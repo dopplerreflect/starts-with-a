@@ -23,9 +23,10 @@
 	const r = Math.sqrt(or ** 2 - (chordLength(36 * (Math.PI / 180), or) / 2) ** 2);
 	const radii = [r, r - r * phi ** 4];
 	const op: Line[] = angles.map((a, i) => [
-		radialPoint(a, r),
+		radialPoint(angles[i], r),
 		radialPoint(angles[(i + 2) % 10], r)
 	]);
+	console.log(op);
 	const ip: Line[] = [0, 2, 4, 6, 8].map((i) => [
 		radialPoint(angles2[i], radii[1]),
 		radialPoint(angles2[(i + 2) % 10], radii[1])
@@ -101,7 +102,9 @@
 	<defs>
 		<style>
 			:root {
-				--opacity: 0.7;
+				--chroma: 0.5;
+				--hue: 100;
+				--opacity: 0.75;
 			}
 			path.Background {
 				stroke: none;
@@ -117,25 +120,25 @@
 				display: none;
 			}
 			path {
-				stroke: oklch(1 0.37 80 / 0.75);
+				/* stroke: oklch(1 0.37 100 / 0.75); */
 			}
 			.ssp0 {
-				fill: oklch(1 0.37 80 / var(--opacity));
+				fill: oklch(1 var(--chroma) var(--hue) / var(--opacity));
 			}
 			.ssp1 {
-				fill: oklch(0.95 0.37 80 / var(--opacity));
+				fill: oklch(0.95 var(--chroma) var(--hue) / var(--opacity));
 			}
 			.ssp2 {
-				fill: oklch(0.8 0.37 80 / var(--opacity));
+				fill: oklch(0.8 var(--chroma) var(--hue) / var(--opacity));
 			}
 			.ssp3 {
-				fill: oklch(0.75 0.37 80 / var(--opacity));
+				fill: oklch(0.75 var(--chroma) var(--hue) / var(--opacity));
 			}
 			.ssp4 {
-				fill: oklch(0.85 0.37 80 / var(--opacity));
+				fill: oklch(0.85 var(--chroma) var(--hue) / var(--opacity));
 			}
 			.ffp {
-				fill: oklch(0.9 0.37 80 / var(--opacity));
+				fill: oklch(0.9 var(--chroma) var(--hue) / var(--opacity));
 			}
 			#guide {
 				/* display: none; */
@@ -151,8 +154,8 @@
 		<path id="sideStarPath" d={sideStarPath} />
 		<path id="frontFacePath" d={frontFacePath} />
 		<filter id="glow">
-			<feMorphology in="SourceAlpha" operator="dilate" radius="10" result="dilate" />
-			<feFlood in="dilate" flood-color="oklch(1 0.37 90 / 0.7)" result="color" />
+			<feMorphology in="SourceAlpha" operator="dilate" radius="20" result="dilate" />
+			<feFlood in="dilate" flood-color="oklch(1 0.37 90 / 0.2)" result="color" />
 			<feComposite in="color" in2="dilate" operator="in" result="border" />
 			<feGaussianBlur in="border" stdDeviation="20" result="blur" />
 			<feMerge>
@@ -160,9 +163,9 @@
 				<feMergeNode in="SourceGraphic" />
 			</feMerge>
 		</filter>
-		<filter id="blur">
+		<filter id="blur" x={-size / 2} y={-size / 2} filterUnits="userSpaceOnUse">
 			<feMorphology in="SourceGraphic" operator="dilate" radius="2" result="dilate" />
-			<feGaussianBlur in="dilate" stdDeviation="20" result="blur" />
+			<feGaussianBlur in="dilate" stdDeviation="10" result="blur" />
 			<feMerge>
 				<feMergeNode in="blur" />
 				<feMergeNode in="SourceGraphic" />
