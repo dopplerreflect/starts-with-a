@@ -26,6 +26,10 @@
 			[radialPoint(a, radii[0]), { x: 0, y: 0 }]
 		])
 		.flat();
+	const bgRadii: number[] = [];
+	for (let r = 10; r <= size * Math.sqrt(2); r += 20) {
+		bgRadii.push(r);
+	}
 </script>
 
 <DopplerSvg id="starfield" viewBox={viewBox(size)}>
@@ -42,11 +46,19 @@
 				<feMergeNode in="SourceGraphic" />
 			</feMerge>
 		</filter>
+		<filter id="glow">
+			<feMorphology in="StrokePaint" operator="dilate" radius="2" result="dilate" />
+			<feGaussianBlur in="dilate" stdDeviation="3" result="blur" />
+			<feMerge>
+				<feMergeNode in="blur" />
+				<feMergeNode in="SourceGraphic" />
+			</feMerge>
+		</filter>
 		<radialGradient id="rgradient">
-			<stop offset="80%" stop-color="oklch(0.0 0.25 300)" />
-			<stop offset="90%" stop-color="oklch(1 0.37 300)" />
-			<stop offset="91%" stop-color="oklch(0.1 0.37 300)" />
-			<stop offset="100%" stop-color="oklch(0.0 0.18 300 / 0)" />
+			<stop offset="80%" stop-color="oklch(0.0 0.25 300 / 0.75)" />
+			<stop offset="90%" stop-color="oklch(1 0.37 300 / 0.75)" />
+			<stop offset="91%" stop-color="oklch(0.1 0.37 300/ 0.75)" />
+			<stop offset="100%" stop-color="oklch(0.0 0.18 300 / 0.0)" />
 		</radialGradient>
 		<style>
 			path:not(.Background),
@@ -73,9 +85,20 @@
 				fill: oklch(0.25 0.18 300);
 				fill-rule: evenodd;
 			}
+			#bgCircles circle {
+				stroke: oklch(0.5 0.37 300);
+			}
+			#bgCircles {
+				filter: url(#glow);
+			}
 		</style>
 	</defs>
 	<Background {size} fill="black" />
+	<g id="bgCircles">
+		{#each bgRadii as r, i}
+			<circle {r} />
+		{/each}
+	</g>
 	<Background {size} fill="url(#rgradient)" />
 	<g id="mask">
 		{#each radii as r}
