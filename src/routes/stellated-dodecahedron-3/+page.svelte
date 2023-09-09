@@ -3,11 +3,9 @@
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
 	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
-	import HexPattern from '$lib/components/HexPattern.svelte';
 	import {
 		anglesArray,
 		phi,
-		viewBox,
 		radialPoint,
 		pentagram,
 		Phi,
@@ -56,7 +54,7 @@
 	const bgr = arrayMap(Math.floor(size / 15), (i) => i * 8);
 </script>
 
-<DopplerSvg id="stellated-dodecahedron-3" viewBox={viewBox(size)}>
+<DopplerSvg id="stellated-dodecahedron-3" {size}>
 	<defs>
 		<filter id="blur">
 			<feMorphology in="SourceGraphic" operator="dilate" radius="1" result="dilate" />
