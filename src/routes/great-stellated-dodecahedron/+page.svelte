@@ -83,8 +83,7 @@
 <DopplerSvg {size} id="great-stellated-dodecahedron">
 	<defs>
 		<filter id="glow">
-			<feMorphology in="SourceGraphic" operator="dilate" radius="1.5" result="dilate" />
-			<feGaussianBlur in="dilate" stdDeviation="3" result="blur" />
+			<feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
 			<feMerge>
 				<feMergeNode in="blur" />
 				<feMergeNode in="SourceGraphic" />
@@ -95,13 +94,11 @@
 			<stop offset="100%" stop-color="oklch(0.0 0.37 240)" />
 		</linearGradient>
 		<style>
-			circle {
-				fill: none;
-			}
-			circle,
-			line {
+			#guide {
 				stroke: white;
+				fill: none;
 				filter: url(#glow);
+				/* display: none; */
 			}
 			text {
 				display: none;
