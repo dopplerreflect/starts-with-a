@@ -6,11 +6,10 @@
 	import {
 		anglesArray,
 		circleLineIntersections,
-		intersection,
 		midpoint,
 		phi,
-		pointToString,
-		radialPoint
+		radialPoint,
+		pathFromIntersectionsOfLines
 	} from '$lib/geometry';
 
 	const size = 2 ** 10;
@@ -36,48 +35,54 @@
 	]);
 	const tll: Line[] = angles.map((a, i) => [radialPoint(a, ro), sll[(i + 1) % 6][1]]);
 	const tlr: Line[] = angles.map((a, i) => [radialPoint(a, ro), sll[(i + 2) % 6][0]]);
-	const bigStarPath = [
+	const bigStarPath = pathFromIntersectionsOfLines([
 		'M',
-		pointToString(intersection(slr[1], tll[1])),
-		pointToString(intersection(tll[1], tll[5])),
-		pointToString(intersection(tll[5], sll[4])),
-		pointToString(intersection(sll[4], sll[2])),
+		slr[1],
+		tll[1],
+		tll[5],
+		sll[4],
+		sll[2],
 		'Z',
 		'M',
-		pointToString(intersection(tlr[5], sll[3])),
-		pointToString(intersection(sll[3], slr[2])),
-		pointToString(intersection(slr[2], tlr[5])),
+		tlr[5],
+		sll[3],
+		slr[2],
+		tlr[5],
 		'Z',
 		'M',
-		pointToString(intersection(slr[2], tll[1])),
-		pointToString(intersection(tll[1], tlr[1])),
-		pointToString(intersection(tlr[1], slr[2])),
+		slr[2],
+		tll[1],
+		tlr[1],
+		slr[2],
 		'Z',
 		'M',
-		pointToString(intersection(tll[3], slr[2])),
-		pointToString(intersection(slr[2], sll[2])),
-		pointToString(intersection(sll[2], tll[3])),
+		tll[3],
+		slr[2],
+		sll[2],
+		tll[3],
 		'Z',
 		'M',
-		pointToString(intersection(tlr[3], tlr[1])),
-		pointToString(intersection(tlr[1], sll[3])),
-		pointToString(intersection(sll[3], sll[1])),
-		pointToString(intersection(sll[1], tlr[3])),
+		tlr[3],
+		tlr[1],
+		sll[3],
+		sll[1],
+		tlr[3],
 		'Z'
-	].join(' ');
-	const smallStarPath = [
+	]);
+	const smallStarPath = pathFromIntersectionsOfLines([
 		'M',
-		pointToString(intersection(rl[4], tlr[2])),
-		pointToString(intersection(tlr[2], tlr[4])),
-		pointToString(intersection(tlr[4], rl[4])),
-		pointToString(intersection(rl[4], rl[0])),
-		pointToString(intersection(rl[0], tll[0])),
-		pointToString(intersection(tll[0], tll[2])),
-		pointToString(intersection(tll[2], tlr[4])),
-		pointToString(intersection(tlr[4], slr[0])),
-		pointToString(intersection(slr[0], tll[0])),
+		rl[4],
+		tlr[2],
+		tlr[4],
+		rl[4],
+		rl[0],
+		tll[0],
+		tll[2],
+		tlr[4],
+		slr[0],
+		tll[0],
 		'Z'
-	].join(' ');
+	]);
 </script>
 
 <DopplerSvg {size} id="great-stellated-dodecahedron">
@@ -108,7 +113,7 @@
 			}
 			line.rl,
 			line.ol {
-				display: none;
+				/* display: none; */
 			}
 			#bigStarPath {
 				stroke: none;

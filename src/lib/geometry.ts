@@ -249,3 +249,17 @@ export const missingY = (knownPoint: Point, knownX: number, slope: number): numb
  */
 export const chordLength = (angle: number, radius: number): number =>
 	2 * radius * Math.sin(angle / 2);
+
+export function pathFromIntersectionsOfLines(array: Array<Line | 'M' | 'Z'>): string {
+	const intermediateArray = [];
+	for (let i = 0; i < array.length; i++) {
+		let input = [array[i], array[i + 1]];
+		if (input[0] === 'M' || input[0] === 'Z') {
+			intermediateArray.push(input[0]);
+			continue;
+		}
+		if (input[1] === 'M' || input[1] === 'Z') continue;
+		intermediateArray.push(pointToString(intersection(input[0], input[1])));
+	}
+	return intermediateArray.join(' ');
+}
