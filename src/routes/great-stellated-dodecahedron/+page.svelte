@@ -3,10 +3,10 @@
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
 	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
+	import LineWithLegend from '$lib/components/LineWithLegend.svelte';
 	import {
 		anglesArray,
 		circleLineIntersections,
-		midpoint,
 		phi,
 		radialPoint,
 		pathFromIntersectionsOfLines
@@ -130,30 +130,12 @@
 		{#each circles as c, i}
 			<circle r={c.r} cx={c.x} cy={c.y} id={`c${i}`} />
 		{/each}
-		{#each rl as l, i}
-			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} class="rl" />
-			<text x={midpoint(l).x} y={midpoint(l).y}>{`rl${i}`}</text>
-		{/each}
-		{#each ol as l, i}
-			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} class="ol" />
-			<text x={midpoint(l).x} y={midpoint(l).y}>{`ol${i}`}</text>
-		{/each}
-		{#each sll as l, i}
-			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} class="sll" />
-			<text x={midpoint(l).x} y={midpoint(l).y}>{`sll${i}`}</text>
-		{/each}
-		{#each slr as l, i}
-			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} class="slr" />
-			<text x={midpoint(l).x} y={midpoint(l).y}>{`slr${i}`}</text>
-		{/each}
-		{#each tll as l, i}
-			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} class="tll" />
-			<text x={midpoint(l).x} y={midpoint(l).y}>{`tll${i}`}</text>
-		{/each}
-		{#each tlr as l, i}
-			<line x1={l[0].x} y1={l[0].y} x2={l[1].x} y2={l[1].y} class="tlr" />
-			<text x={midpoint(l).x} y={midpoint(l).y}>{`tlr${i}`}</text>
-		{/each}
+		<LineWithLegend lineArray={rl} name="rl" />
+		<LineWithLegend lineArray={ol} name="ol" />
+		<LineWithLegend lineArray={sll} name="sll" />
+		<LineWithLegend lineArray={slr} name="slr" />
+		<LineWithLegend lineArray={tll} name="tll" />
+		<LineWithLegend lineArray={tlr} name="tlr" />
 	</g>
 	{#each anglesArray(3, 0) as a, i}
 		<use href="#bigStarPath" transform={`rotate(${a})`} fill={`oklch(1.0 0.37 ${a} / 0.66)`} />
