@@ -105,25 +105,13 @@
 				filter: url(#glow);
 				/* display: none; */
 			}
-			text {
+			/* text {
 				display: none;
 				fill: yellow;
 				alignment-baseline: middle;
 				text-anchor: middle;
-			}
-			line.rl,
-			line.ol {
-				/* display: none; */
-			}
-			#bigStarPath {
-				stroke: none;
-			}
-			#smallStarPath {
-				stroke: none;
-			}
+			} */
 		</style>
-		<path id="bigStarPath" d={bigStarPath} />
-		<path id="smallStarPath" d={smallStarPath} />
 	</defs>
 	<Background {size} fill="url(#lGradient)" />
 	<g id="guide">
@@ -138,13 +126,9 @@
 		<LineWithLegend lineArray={tlr} name="tlr" />
 	</g>
 	{#each anglesArray(3, 0) as a, i}
-		<use href="#bigStarPath" transform={`rotate(${a})`} fill={`oklch(1.0 0.37 ${a} / 0.66)`} />
+		<path d={bigStarPath} transform={`rotate(${a})`} fill={`oklch(1.0 0.37 ${a} / 0.66)`} />
 	{/each}
 	{#each anglesArray(3, 0) as a, i}
-		<use
-			href="#smallStarPath"
-			transform={`rotate(${a})`}
-			fill={`oklch(1.0 0.37 ${a + 180} / 0.66)`}
-		/>
+		<path d={smallStarPath} transform={`rotate(${a})`} fill={`oklch(1.0 0.37 ${a + 180} / 0.66)`} />
 	{/each}
 </DopplerSvg>
