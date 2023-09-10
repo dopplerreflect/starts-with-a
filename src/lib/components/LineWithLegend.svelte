@@ -3,7 +3,6 @@
 
 	export let lineArray: Line[];
 	export let name: string;
-	console.log(name);
 </script>
 
 {#each lineArray as l, i}
