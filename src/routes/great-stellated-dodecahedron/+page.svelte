@@ -105,12 +105,6 @@
 				filter: url(#glow);
 				/* display: none; */
 			}
-			/* text {
-				display: none;
-				fill: yellow;
-				alignment-baseline: middle;
-				text-anchor: middle;
-			} */
 		</style>
 	</defs>
 	<Background {size} fill="url(#lGradient)" />
