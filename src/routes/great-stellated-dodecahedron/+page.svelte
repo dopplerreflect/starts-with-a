@@ -15,7 +15,7 @@
 
 	const size = 2 ** 10;
 
-	const ro = size / 4.1;
+	const ro = size / 3.37;
 	const radii = [ro * phi, ro * phi ** 2];
 	const angles = anglesArray(6, 0);
 	const circles: Circle[] = angles
@@ -82,14 +82,26 @@
 
 <DopplerSvg {size} id="great-stellated-dodecahedron">
 	<defs>
+		<filter id="glow">
+			<feMorphology in="SourceGraphic" operator="dilate" radius="1.5" result="dilate" />
+			<feGaussianBlur in="dilate" stdDeviation="3" result="blur" />
+			<feMerge>
+				<feMergeNode in="blur" />
+				<feMergeNode in="SourceGraphic" />
+			</feMerge>
+		</filter>
+		<linearGradient id="lGradient" gradientTransform="rotate(90)">
+			<stop offset="0%" stop-color="oklch(0.4 0.37 0)" />
+			<stop offset="100%" stop-color="oklch(0.0 0.37 240)" />
+		</linearGradient>
 		<style>
-			circle,
-			path:not(.Background) {
-				/* fill: none; */
-				stroke: grey;
+			circle {
+				fill: none;
 			}
+			circle,
 			line {
-				stroke: grey;
+				stroke: white;
+				filter: url(#glow);
 			}
 			text {
 				display: none;
@@ -97,49 +109,21 @@
 				alignment-baseline: middle;
 				text-anchor: middle;
 			}
-			line.rl {
-				display: none;
-				stroke: oklch(1 0.37 0);
-			}
+			line.rl,
 			line.ol {
 				display: none;
-				stroke: oklch(1 0.37 60);
-			}
-			line.sll {
-				/* display: none; */
-				stroke: oklch(1 0.37 120);
-			}
-			line.slr {
-				/* display: none; */
-				stroke: oklch(1 0.37 180);
-			}
-			line.tll {
-				/* display: none; */
-				stroke: oklch(1 0.37 240);
-			}
-			line.tlr {
-				/* display: none; */
-				stroke: oklch(1 0.37 300);
 			}
 			#bigStarPath {
-				/* display: none; */
-				/* stroke: white; */
-				stroke-width: 2;
-				stroke-linejoin: bevel;
-				/* fill: oklch(1 0.1 200 / 0.5); */
+				stroke: none;
 			}
 			#smallStarPath {
-				/* stroke: white; */
-				stroke-width: 2;
-				stroke-linejoin: bevel;
-				/* fill: oklch(1 0.1 200 / 0.5); */
-				fill-rule: evenodd;
+				stroke: none;
 			}
 		</style>
 		<path id="bigStarPath" d={bigStarPath} />
 		<path id="smallStarPath" d={smallStarPath} />
 	</defs>
-	<Background {size} fill="black" />
+	<Background {size} fill="url(#lGradient)" />
 	<g id="guide">
 		{#each circles as c, i}
 			<circle r={c.r} cx={c.x} cy={c.y} id={`c${i}`} />
@@ -170,13 +154,13 @@
 		{/each}
 	</g>
 	{#each anglesArray(3, 0) as a, i}
-		<use href="#bigStarPath" transform={`rotate(${a})`} fill={`oklch(1.0 0.37 ${a} / 0.75)`} />
+		<use href="#bigStarPath" transform={`rotate(${a})`} fill={`oklch(1.0 0.37 ${a} / 0.66)`} />
 	{/each}
 	{#each anglesArray(3, 0) as a, i}
 		<use
 			href="#smallStarPath"
 			transform={`rotate(${a})`}
-			fill={`oklch(1.0 0.37 ${a + 180} / 0.75)`}
+			fill={`oklch(1.0 0.37 ${a + 180} / 0.66)`}
 		/>
 	{/each}
 </DopplerSvg>
