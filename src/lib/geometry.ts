@@ -263,3 +263,33 @@ export function pathFromIntersectionsOfLines(array: Array<Line | 'M' | 'Z'>): st
 	}
 	return intermediateArray.join(' ');
 }
+
+/**
+ * Pythagorean hypotenuse
+ * @param b Length of a short side
+ * @param c Length of a short side
+ * @returns Length of hypotenuse
+ */
+export function pythag(b: number, c: number): number {
+	return Math.sqrt(b ** 2 + c ** 2);
+}
+
+/**
+ * Pythagorean short side
+ * @param a Length of a hypotenuse
+ * @param c Length of a short side
+ * @returns Length of other short side
+ */
+export function pythag2(a: number, b: number): number {
+	return Math.sqrt(a ** 2 - b ** 2);
+}
+
+/**
+ * Angle in degrees from [0, 0]
+ * @param y
+ * @param x
+ * @returns angle
+ */
+export function tan(y: number, x: number): number {
+	return (Math.atan2(y, x) * 180) / Math.PI;
+}
