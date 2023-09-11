@@ -3,7 +3,15 @@
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
 	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
-	import { SQRT3, anglesArray, pythag, radialPoint, radialPointString, tan } from '$lib/geometry';
+	import {
+		SQRT3,
+		anglesArray,
+		polygonPath,
+		pythag,
+		radialPoint,
+		radialPointString,
+		tan
+	} from '$lib/geometry';
 	const size = 2 ** 10;
 	const r = 100;
 	const vesica = r * SQRT3;
@@ -33,17 +41,20 @@
 			...radialPoint(a - tan(vesica / 2, r * 3.5), pythag(vesica / 2, r * 3.5))
 		}))
 	];
-	const paths = [
-		[
-			radialPointString(angles[1], r * 4),
-			radialPointString(angles[3], r * 4),
-			radialPointString(angles[5], r * 4)
-		]
-	].map((p) => `M${p.join(' ')}Z`);
 </script>
 
 <DopplerSvg {size} id="merkabah">
 	<defs>
+		<style>
+			#circles,
+			#merkabah {
+				filter: url(#glow);
+				fill: none;
+				stroke: white;
+				fill: none;
+			}
+		</style>
+
 		<filter id="glow">
 			<feMorphology in="SourceGraphic" operator="dilate" radius="1" result="dilate" />
 			<feGaussianBlur in="dilate" stdDeviation="8" result="blur" />
@@ -54,6 +65,7 @@
 		</filter>
 	</defs>
 	<Background {size} fill="black" />
+
 	<g id="circles">
 		{#each circles as c}
 			<circle
@@ -65,20 +77,14 @@
 		{/each}
 	</g>
 
-	{#each paths as d, i}
-		<path {d} />
-	{/each}
+	<g id="merkabah">
+		<path d={polygonPath(3, r * 4)} />
+		<path d={polygonPath(3, r * 4, { rotate: 180 })} />
+		<path d={polygonPath(3, r * 2)} />
+		<path d={polygonPath(3, r * 2, { rotate: 180 })} />
+		<path d={polygonPath(6, r * 2, { rotate: 180 })} />
+		{#each angles as a}
+			<path d={`M${radialPointString(a, r * 4)} 0 0`} />
+		{/each}
+	</g>
 </DopplerSvg>
-
-<style>
-	circle,
-	path {
-		fill: none;
-	}
-	path {
-		stroke: white;
-	}
-	#circles {
-		filter: url(#glow);
-	}
-</style>
