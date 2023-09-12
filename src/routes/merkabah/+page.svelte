@@ -47,7 +47,7 @@
 	<defs>
 		<style>
 			#circles,
-			#merkabah {
+			#figure {
 				filter: url(#glow);
 				fill: none;
 				stroke: white;
@@ -77,7 +77,7 @@
 		{/each}
 	</g>
 
-	<g id="merkabah">
+	<g id="figure">
 		<path d={polygonPath(3, r * 4)} />
 		<path d={polygonPath(3, r * 4, { rotate: 180 })} />
 		<path d={polygonPath(3, r * 2)} />
