@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { arrayMap, radialPointString, starPoints, phi } from '$lib/geometry';
+	import { arrayMap, radialPointString, starPath, phi } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import { useZoomableViewbox } from '$lib/use-zoomable-viewbox';
 	import { onMount } from 'svelte';
@@ -62,10 +62,10 @@
 	<use href="#guide" stroke="hsla(0, 0%, 75%, 0.25)" />
 	<circle r={radii[12]} />
 	<g stroke="hsla(210, 50%, 50%, 1)">
-		<polygon points={starPoints(radii[0])} fill="none" />
-		<polygon points={starPoints(radii[4])} fill="none" />
-		<polygon points={starPoints(radii[8])} fill="none" />
-		<polygon points={starPoints(radii[12])} fill="white" />
+		<path d={starPath(radii[0])} fill="none" />
+		<path d={starPath(radii[4])} fill="none" />
+		<path d={starPath(radii[8])} fill="none" />
+		<path d={starPath(radii[12])} fill="white" />
 	</g>
 	{#each arrayMap(12, (k) => k) as k, i}
 		<path

@@ -7,7 +7,7 @@
 		anglesArray,
 		arrayMap,
 		radialPoint,
-		starPoints,
+		starPath,
 		viewBox,
 		phi,
 		radialPointString,
@@ -89,8 +89,8 @@
 			<circle {r} stroke={`hsla(${hue}, 50%, 50%, 0.5)`} fill="none" stroke-width={strokeWidth} />
 		{/each}
 		{#each anglesArray(12) as a, i}
-			<polygon
-				points={starPoints(radii[0], { rotate: 6 * i })}
+			<path
+				d={starPath(radii[0], { rotate: 6 * i })}
 				fill={`hsl(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%)`}
 				fill-opacity={0.16}
 				stroke={`hsl(${i % 2 === 0 ? hue : hue + 30}, 100%, ${i % 2 === 0 ? 50 : 50}%)`}

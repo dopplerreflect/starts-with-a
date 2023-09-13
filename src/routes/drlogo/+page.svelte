@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
 	import SourceCode from '$lib/components/SourceCode.svelte';
-	import { phi, anglesArray, radialPointString, starPoints, viewBox } from '$lib/geometry';
+	import { phi, anglesArray, radialPointString, starPath, viewBox } from '$lib/geometry';
 	import { useSaveFile } from '$lib/save-svg';
 	import { onMount } from 'svelte';
 	const size = 1024;
@@ -55,7 +55,7 @@
 			{#each angles as a, i}
 				<path d={`M${radialPointString(a, radii[2])}L${radialPointString(a, radii[0])}`} />
 			{/each}
-			<polygon points={starPoints(radii[0])} fill="none" />
+			<path d={starPath(radii[0])} fill="none" />
 		</g>
 	</defs>
 	<Background width={size} fill={solidColor ? 'none' : 'hsl(240, 50%, 15%)'} />

@@ -78,32 +78,18 @@ export function polygonPath(count: number, radius: number, options?: GeometryOpt
  */
 export function starPath(radius: number, options?: GeometryOptions): string {
 	const angles = anglesArray(10);
-	return (
-		angles
-			.map((angle, i) => {
-				return `${i === 0 ? 'M' : 'L'}${radialPointString(
-					angle,
-					i % 2 === 1 ? radius * phi ** 2 : radius,
-					options
-				)}`;
-			})
-			.join() + 'Z'
-	);
+	return [
+		'M',
+		...angles.map((angle, i) =>
+			pointToString(radialPoint(angle, i % 2 === 1 ? radius * phi ** 2 : radius, options))
+		),
+		'Z'
+	].join(' ');
 }
 
 export function pentagram(radius: number, options?: GeometryOptions): string {
 	const angles = anglesArray(5);
 	return `M${[0, 2, 4, 1, 3].map((i) => radialPointString(angles[i], radius, options)).join('L')}Z`;
-}
-/** Points for a 5-pointed star
- * @params radius
- * @param options
- * @returns string svg polygon points
- */
-export function starPoints(radius: number, options?: GeometryOptions): string {
-	return anglesArray(10)
-		.map((a, i) => radialPointString(a, i % 2 === 0 ? radius : radius * phi ** 2, options))
-		.join(' ');
 }
 
 export function arrayMap(count: number, fn: (n: number) => number): number[] {

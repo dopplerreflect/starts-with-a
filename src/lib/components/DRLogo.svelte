@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { phi, anglesArray, radialPointString, starPoints } from '$lib/geometry';
+	import { phi, anglesArray, radialPointString, starPath } from '$lib/geometry';
 	export let size = 128;
 	export let stroke = 'hsl(45, 100%, 100%';
 	export let strokeOpacity = 0.5;
@@ -52,6 +52,6 @@
 		{#each angles as a, i}
 			<path d={`M${radialPointString(a, radii[2])}L${radialPointString(a, radii[0])}`} />
 		{/each}
-		<polygon points={starPoints(radii[0])} fill="none" />
+		<path d={starPath(radii[0])} fill="none" />
 	</g>
 </g>
