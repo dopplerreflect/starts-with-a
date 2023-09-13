@@ -3,6 +3,7 @@
 <script lang="ts">
 	import Background from '$lib/components/Background.svelte';
 	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
+	import HexPattern from '$lib/components/HexPattern.svelte';
 	import {
 		SQRT3,
 		anglesArray,
@@ -47,7 +48,14 @@
 
 <DopplerSvg {size} id="merkabah" zoom={0} xPan={0} yPan={0}>
 	<defs>
+		<radialGradient id="rGradient">
+			<stop offset="0%" stop-color="orange" />
+			<stop offset="100%" stop-color="yellow" />
+		</radialGradient>
 		<style>
+			:root {
+				--merkabah-color: oklch(1 0.37 90 / 0.5);
+			}
 			#circles,
 			#figure {
 				filter: url(#glow);
@@ -59,10 +67,13 @@
 			}
 			#figure path {
 				stroke: none;
-				fill: white;
+				fill: var(--merkabah-color);
+			}
+			#figure line {
+				stroke: var(--merkabah-color);
 			}
 			#guide path {
-				/* display: none; */
+				display: none;
 				fill: none;
 				stroke: white;
 			}
@@ -76,16 +87,30 @@
 				<feMergeNode in="SourceGraphic" />
 			</feMerge>
 		</filter>
+		<HexPattern
+			id="HexPattern"
+			size={r / 6}
+			patternTransform="rotate(30)"
+			stroke="oklch(0.35 0.37 300)"
+		/>
+		<HexPattern
+			id="HexPattern2"
+			size={r / 3}
+			patternTransform="rotate(30)"
+			stroke="oklch(0.5 0.09 240)"
+		/>
 	</defs>
 	<Background {size} fill="black" />
-
+	<Background {size} fill="url(#HexPattern)" />
+	<Background {size} fill="url(#HexPattern2)" />
 	<g id="circles">
 		{#each circles as c}
 			<circle
 				r={c.r}
 				cx={c.x}
 				cy={c.y}
-				stroke={`oklch(0.5 0.37 ${200 + Math.sqrt(c.x ** 2 + c.y ** 2) * ((r * 4) / 1800)})`}
+				stroke-width={3}
+				stroke={`oklch(0.5 0.09 ${200 + Math.sqrt(c.x ** 2 + c.y ** 2) * ((r * 4) / (360 * 5))})`}
 			/>
 		{/each}
 	</g>
@@ -99,6 +124,125 @@
 	</g>
 
 	<g id="figure">
+		<line
+			x1={radialPoint(angles[5], r * 2).x}
+			y1={radialPoint(angles[5], r * 2).y}
+			x2={radialPoint(angles[1], r * 2).x}
+			y2={radialPoint(angles[1], r * 2).y}
+			stroke-width={dr[4]}
+		/>
+
+		<line
+			x1={radialPoint(angles[3], r * 2).x}
+			y1={radialPoint(angles[3], r * 2).y}
+			x2={radialPoint(angles[1], r * 2).x}
+			y2={radialPoint(angles[1], r * 2).y}
+			stroke-width={dr[4]}
+		/>
+		<line
+			x1={radialPoint(angles[5], r * 2).x}
+			y1={radialPoint(angles[5], r * 2).y}
+			x2={radialPoint(angles[3], r * 2).x}
+			y2={radialPoint(angles[3], r * 2).y}
+			stroke-width={dr[4]}
+		/>
+
+		<path
+			d={`M${radialPointString(angles[0], dr[4], {
+				center: radialPoint(angles[5], r * 2)
+			})} ${radialPointString(angles[4], dr[1], {
+				center: radialPoint(angles[0], r * 2)
+			})} ${radialPointString(angles[3], dr[1], {
+				center: radialPoint(angles[0], r * 2)
+			})} ${radialPointString(angles[1], dr[4], { center: radialPoint(angles[5], r * 2) })} Z`}
+		/>
+
+		<path
+			d={`M${radialPointString(angles[0], dr[4], {
+				center: radialPoint(angles[1], r * 2)
+			})} ${radialPointString(angles[2], dr[1], {
+				center: radialPoint(angles[0], r * 2)
+			})} ${radialPointString(angles[3], dr[1], {
+				center: radialPoint(angles[0], r * 2)
+			})} ${radialPointString(angles[5], dr[4], { center: radialPoint(angles[1], r * 2) })} Z`}
+		/>
+
+		<line
+			x1={radialPoint(angles[4], r * 2).x}
+			y1={radialPoint(angles[4], r * 2).y}
+			x2={radialPoint(angles[2], r * 2).x}
+			y2={radialPoint(angles[2], r * 2).y}
+			stroke-width={dr[2]}
+		/>
+
+		<path
+			d={`M${radialPointString(angles[4], dr[4], {
+				center: radialPoint(angles[3], r * 2)
+			})} ${radialPointString(angles[3], dr[2], {
+				center: radialPoint(angles[4], r * 2)
+			})} ${radialPointString(angles[2], dr[2], {
+				center: radialPoint(angles[4], r * 2)
+			})} ${radialPointString(angles[0], dr[4], {
+				center: radialPoint(angles[3], r * 2)
+			})}Z`}
+		/>
+
+		<path
+			d={`M${radialPointString(angles[4], dr[1], {
+				center: radialPoint(angles[0], r * 2)
+			})} ${radialPointString(angles[5], dr[2], {
+				center: radialPoint(angles[4], r * 2)
+			})} ${radialPointString(angles[3], dr[2], {
+				center: radialPoint(angles[4], r * 2)
+			})} ${radialPointString(angles[2], dr[1], {
+				center: radialPoint(angles[0], r * 2)
+			})}Z`}
+		/>
+
+		<path
+			d={`M${radialPointString(angles[2], dr[1], {
+				center: radialPoint(angles[0], r * 2)
+			})} ${radialPointString(angles[0], dr[2], {
+				center: radialPoint(angles[2], r * 2)
+			})} ${radialPointString(angles[4], dr[2], {
+				center: radialPoint(angles[2], r * 2)
+			})} ${radialPointString(angles[4], dr[1], {
+				center: radialPoint(angles[0], r * 2)
+			})}Z`}
+		/>
+
+		<path
+			d={`M${radialPointString(angles[2], dr[4], {
+				center: radialPoint(angles[3], r * 2)
+			})} ${radialPointString(angles[3], dr[2], {
+				center: radialPoint(angles[2], r * 2)
+			})} ${radialPointString(angles[4], dr[2], {
+				center: radialPoint(angles[2], r * 2)
+			})} ${radialPointString(angles[0], dr[4], {
+				center: radialPoint(angles[3], r * 2)
+			})}Z`}
+		/>
+
+		<path
+			d={`M${radialPointString(angles[4], dr[4], {
+				center: radialPoint(angles[5], r * 2)
+			})} ${radialPointString(angles[2], dr[4], {
+				center: radialPoint(angles[5], r * 2)
+			})} ${radialPointString(angles[1], dr[1], {
+				center: radialPoint(angles[4], r * 2)
+			})} ${radialPointString(angles[5], dr[1], { center: radialPoint(angles[4], r * 2) })}Z`}
+		/>
+
+		<path
+			d={`M${radialPointString(angles[4], dr[4], {
+				center: radialPoint(angles[1], r * 2)
+			})} ${radialPointString(angles[2], dr[4], {
+				center: radialPoint(angles[1], r * 2)
+			})} ${radialPointString(angles[1], dr[1], {
+				center: radialPoint(angles[2], r * 2)
+			})} ${radialPointString(angles[5], dr[1], { center: radialPoint(angles[2], r * 2) })}Z`}
+		/>
+
 		<path
 			d={`M${radialPointString(angles[4], r * 4)} ${radialPointString(angles[0] + 30, dr[4], {
 				center: radialPoint(angles[4], r * 4)
@@ -214,125 +358,6 @@
 			})} ${radialPointString(angles[0], dr[3], {
 				center: radialPoint(angles[3], r * 4)
 			})} ${radialPointString(angles[2], dr[1], { center: radialPoint(angles[5], r * 4) })}Z`}
-		/>
-
-		<line
-			x1={radialPoint(angles[5], r * 2).x}
-			y1={radialPoint(angles[5], r * 2).y}
-			x2={radialPoint(angles[1], r * 2).x}
-			y2={radialPoint(angles[1], r * 2).y}
-			stroke-width={dr[4]}
-		/>
-
-		<line
-			x1={radialPoint(angles[3], r * 2).x}
-			y1={radialPoint(angles[3], r * 2).y}
-			x2={radialPoint(angles[1], r * 2).x}
-			y2={radialPoint(angles[1], r * 2).y}
-			stroke-width={dr[4]}
-		/>
-		<line
-			x1={radialPoint(angles[5], r * 2).x}
-			y1={radialPoint(angles[5], r * 2).y}
-			x2={radialPoint(angles[3], r * 2).x}
-			y2={radialPoint(angles[3], r * 2).y}
-			stroke-width={dr[4]}
-		/>
-
-		<path
-			d={`M${radialPointString(angles[0], dr[4], {
-				center: radialPoint(angles[5], r * 2)
-			})} ${radialPointString(angles[4], dr[1], {
-				center: radialPoint(angles[0], r * 2)
-			})} ${radialPointString(angles[3], dr[1], {
-				center: radialPoint(angles[0], r * 2)
-			})} ${radialPointString(angles[1], dr[4], { center: radialPoint(angles[5], r * 2) })} Z`}
-		/>
-
-		<path
-			d={`M${radialPointString(angles[0], dr[4], {
-				center: radialPoint(angles[1], r * 2)
-			})} ${radialPointString(angles[2], dr[1], {
-				center: radialPoint(angles[0], r * 2)
-			})} ${radialPointString(angles[3], dr[1], {
-				center: radialPoint(angles[0], r * 2)
-			})} ${radialPointString(angles[5], dr[4], { center: radialPoint(angles[1], r * 2) })} Z`}
-		/>
-
-		<line
-			x1={radialPoint(angles[4], r * 2).x}
-			y1={radialPoint(angles[4], r * 2).y}
-			x2={radialPoint(angles[2], r * 2).x}
-			y2={radialPoint(angles[2], r * 2).y}
-			stroke-width={dr[2]}
-		/>
-
-		<path
-			d={`M${radialPointString(angles[4], dr[4], {
-				center: radialPoint(angles[3], r * 2)
-			})} ${radialPointString(angles[3], dr[2], {
-				center: radialPoint(angles[4], r * 2)
-			})} ${radialPointString(angles[2], dr[2], {
-				center: radialPoint(angles[4], r * 2)
-			})} ${radialPointString(angles[0], dr[4], {
-				center: radialPoint(angles[3], r * 2)
-			})}Z`}
-		/>
-
-		<path
-			d={`M${radialPointString(angles[4], dr[1], {
-				center: radialPoint(angles[0], r * 2)
-			})} ${radialPointString(angles[5], dr[2], {
-				center: radialPoint(angles[4], r * 2)
-			})} ${radialPointString(angles[3], dr[2], {
-				center: radialPoint(angles[4], r * 2)
-			})} ${radialPointString(angles[2], dr[1], {
-				center: radialPoint(angles[0], r * 2)
-			})}Z`}
-		/>
-
-		<path
-			d={`M${radialPointString(angles[3], dr[1], {
-				center: radialPoint(angles[0], r * 2)
-			})} ${radialPointString(angles[5], dr[2], {
-				center: radialPoint(angles[2], r * 2)
-			})} ${radialPointString(angles[4], dr[2], {
-				center: radialPoint(angles[2], r * 2)
-			})} ${radialPointString(angles[3], dr[1], {
-				center: radialPoint(angles[0], r * 2)
-			})}Z`}
-		/>
-
-		<path
-			d={`M${radialPointString(angles[2], dr[4], {
-				center: radialPoint(angles[3], r * 2)
-			})} ${radialPointString(angles[3], dr[2], {
-				center: radialPoint(angles[2], r * 2)
-			})} ${radialPointString(angles[4], dr[2], {
-				center: radialPoint(angles[2], r * 2)
-			})} ${radialPointString(angles[0], dr[4], {
-				center: radialPoint(angles[3], r * 2)
-			})}Z`}
-		/>
-
-		<path
-			d={`M${radialPointString(angles[4], dr[4], {
-				center: radialPoint(angles[5], r * 2)
-			})} ${radialPointString(angles[2], dr[4], {
-				center: radialPoint(angles[5], r * 2)
-			})} ${radialPointString(angles[1], dr[1], {
-				center: radialPoint(angles[4], r * 2)
-			})} ${radialPointString(angles[5], dr[1], { center: radialPoint(angles[4], r * 2) })}Z`}
-		/>
-
-		<path
-			d={`M${radialPointString(angles[4], dr[4], {
-				center: radialPoint(angles[1], r * 2)
-			})} ${radialPointString(angles[2], dr[4], {
-				center: radialPoint(angles[1], r * 2)
-			})} ${radialPointString(angles[1], dr[1], {
-				center: radialPoint(angles[2], r * 2)
-			})} ${radialPointString(angles[5], dr[1], { center: radialPoint(angles[2], r * 2) })}Z`}
 		/>
 	</g>
 </DopplerSvg>
