@@ -104,6 +104,11 @@
   resolved "https://registry.yarnpkg.com/@types/geometric/-/geometric-2.2.1.tgz#370ab5581bb585cb3ecb7d714e73f1d27250ac30"
   integrity sha512-lWc+so8skGxBP8h30NV8652gBSbtkRjsVmXVbZ8t+sEqmEVRXAU5sMnqsJ3G6Ozl+bPo+4AZSR1/Dhrr/d+NIg==
 
+"@types/node@^20.6.0":
+  version "20.6.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.6.0.tgz#9d7daa855d33d4efec8aea88cd66db1c2f0ebe16"
+  integrity sha512-najjVq5KN2vsH2U/xyh2opaSEz6cZMR2SetLIlxlj08nOcmPOemJmUK2o4kUzfLqfrWE0PIrNeE16XhYDd3nqg==
+
 "@types/pug@^2.0.4":
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@types/pug/-/pug-2.0.6.tgz#f830323c88172e66826d0bde413498b61054b5a6"

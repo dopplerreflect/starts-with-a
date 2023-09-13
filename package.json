@@ -26,6 +26,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@types/node": "^20.6.0",
 		"geometric": "^2.5.0"
 	}
 }
