@@ -27,6 +27,7 @@
 		</g>
 		<HexPattern id="hp1" size={r / 16} patternTransform="rotate(30)" stroke="oklch(0.5 0.18 90)" />
 	</defs>
+	<Background {size} fill="black" />
 	<Background {size} fill="url(#hp1)" />
 	{#each angles as a}
 		<use
