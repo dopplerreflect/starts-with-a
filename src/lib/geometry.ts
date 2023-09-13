@@ -293,3 +293,12 @@ export function pythag2(a: number, b: number): number {
 export function tan(y: number, x: number): number {
 	return (Math.atan2(y, x) * 180) / Math.PI;
 }
+
+/**
+ * SVG Path from an array of Points
+ * @param points
+ * @returns string path
+ */
+export function pathFromPoints(points: Point[]): string {
+	return ['M', ...points.map((p) => `${p.x} ${p.y}`), 'Z'].join(' ');
+}

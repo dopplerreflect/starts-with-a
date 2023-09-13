@@ -5,9 +5,11 @@
 	import DopplerSvg from '$lib/components/DopplerSVG.svelte';
 	import HexPattern from '$lib/components/HexPattern.svelte';
 	import {
+		Phi,
 		SQRT3,
 		anglesArray,
 		arrayMap,
+		pathFromPoints,
 		polygonPath,
 		pythag,
 		radialPoint,
@@ -48,13 +50,9 @@
 
 <DopplerSvg {size} id="merkabah" zoom={0} xPan={0} yPan={0}>
 	<defs>
-		<radialGradient id="rGradient">
-			<stop offset="0%" stop-color="orange" />
-			<stop offset="100%" stop-color="yellow" />
-		</radialGradient>
 		<style>
 			:root {
-				--merkabah-color: oklch(1 0.37 90 / 0.5);
+				--merkabah-color: oklch(1 0.37 100 / 0.5);
 			}
 			#circles,
 			#figure {
@@ -66,6 +64,7 @@
 				fill: white;
 			}
 			#figure path {
+				/* display: none; */
 				stroke: none;
 				fill: var(--merkabah-color);
 			}
@@ -351,13 +350,65 @@
 		/>
 
 		<path
-			d={`M${radialPointString(angles[5], dr[1], {
-				center: radialPoint(angles[5], r * 4)
-			})} ${radialPointString(angles[3], dr[3], {
-				center: radialPoint(angles[3], r * 4)
-			})} ${radialPointString(angles[0], dr[3], {
-				center: radialPoint(angles[3], r * 4)
-			})} ${radialPointString(angles[2], dr[1], { center: radialPoint(angles[5], r * 4) })}Z`}
+			d={pathFromPoints([
+				radialPoint(angles[5], dr[1], { center: radialPoint(angles[5], r * 4) }),
+				radialPoint(angles[3], dr[3], { center: radialPoint(angles[3], r * 4) }),
+				radialPoint(angles[0], dr[3], { center: radialPoint(angles[3], r * 4) }),
+				radialPoint(angles[2], dr[1], { center: radialPoint(angles[5], r * 4) })
+			])}
 		/>
 	</g>
+
+	<path
+		d={pathFromPoints([
+			radialPoint(angles[0], r * 4),
+			radialPoint(angles[2], r * 4),
+			radialPoint(angles[4], r * 4),
+			radialPoint(angles[5], r * 2),
+			radialPoint(angles[1], r * 2),
+			radialPoint(angles[3], r * 2),
+			radialPoint(angles[5], r * 2)
+		])}
+		fill-rule="evenodd"
+		fill="oklch(0.9 0.37 90 / 0.55)"
+	/>
+
+	<path
+		d={pathFromPoints([
+			radialPoint(angles[5], r * 4),
+			{ x: 0, y: 0 },
+			radialPoint(angles[1], r * 4),
+			radialPoint(angles[1] - 30, r * 2.305),
+			radialPoint(angles[1], r * 2),
+			radialPoint(angles[5], r * 2),
+			radialPoint(angles[5] + 30, r * 2.305)
+		])}
+		fill="oklch(1 0.37 90 / 0.55)"
+	/>
+
+	<path
+		d={pathFromPoints([
+			radialPoint(angles[1], r * 4),
+			{ x: 0, y: 0 },
+			radialPoint(angles[3], r * 4),
+			radialPoint(angles[3] - 30, r * 2.305),
+			radialPoint(angles[3], r * 2),
+			radialPoint(angles[1], r * 2),
+			radialPoint(angles[1] + 30, r * 2.305)
+		])}
+		fill="oklch(0.8 0.37 90 / 0.55)"
+	/>
+
+	<path
+		d={pathFromPoints([
+			radialPoint(angles[3], r * 4),
+			{ x: 0, y: 0 },
+			radialPoint(angles[5], r * 4),
+			radialPoint(angles[5] - 30, r * 2.305),
+			radialPoint(angles[5], r * 2),
+			radialPoint(angles[3], r * 2),
+			radialPoint(angles[3] + 30, r * 2.305)
+		])}
+		fill="oklch(0.7 0.37 90 / 0.55)"
+	/>
 </DopplerSvg>
