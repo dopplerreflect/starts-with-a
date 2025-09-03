@@ -96,7 +96,7 @@
 		</filter>
 		<linearGradient id="lGradient" gradientTransform="rotate(90)">
 			<stop offset="0%" stop-color="oklch(0.4 0.37 0)" />
-			<stop offset="100%" stop-color="oklch(0.0 0.37 240)" />
+			<stop offset="100%" stop-color="oklch(0.01 0.37 240)" />
 		</linearGradient>
 		<style>
 			#guide {
@@ -120,9 +120,13 @@
 		<LineWithLegend lineArray={tlr} name="tlr" />
 	</g>
 	{#each anglesArray(3, 0) as a, i}
-		<path d={bigStarPath} transform={`rotate(${a})`} fill={`oklch(1.0 0.37 ${a} / 0.66)`} />
+		<path d={bigStarPath} transform={`rotate(${a})`} fill={`oklch(0.99 0.37 ${a} / 0.66)`} />
 	{/each}
 	{#each anglesArray(3, 0) as a, i}
-		<path d={smallStarPath} transform={`rotate(${a})`} fill={`oklch(1.0 0.37 ${a + 180} / 0.66)`} />
+		<path
+			d={smallStarPath}
+			transform={`rotate(${a})`}
+			fill={`oklch(0.99 0.37 ${a + 180} / 0.66)`}
+		/>
 	{/each}
 </DopplerSvg>

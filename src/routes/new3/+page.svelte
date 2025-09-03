@@ -145,12 +145,12 @@
 			}
 			circle {
 				fill: none;
-				stroke: oklch(100% 0.37 200);
+				stroke: oklch(0.99 0.37 200);
 				stroke-width: 1.5;
 				/* display: none; */
 			}
 			line {
-				stroke: oklch(100% 0.37 200);
+				stroke: oklch(0.99 0.37 200);
 				stroke-width: 1;
 				/* display: none; */
 			}
@@ -198,11 +198,11 @@
 
 	<g id="figure">
 		<!-- top -->
-		<use fill="oklch(100% var(--chroma) var(--hue) / var(--t))" href="#edgeStar" />
-		<use fill="oklch(100% var(--chroma) var(--hue) / var(--t))" href="#faceStarOutside" />
-		<use fill="oklch(100% var(--chroma) var(--hue) / var(--t))" href="#faceStarInside" />
+		<use fill="oklch(0.99 var(--chroma) var(--hue) / var(--t))" href="#edgeStar" />
+		<use fill="oklch(0.99 var(--chroma) var(--hue) / var(--t))" href="#faceStarOutside" />
+		<use fill="oklch(0.99 var(--chroma) var(--hue) / var(--t))" href="#faceStarInside" />
 		<use
-			fill="oklch(100% var(--chroma) var(--hue) / var(--t))"
+			fill="oklch(0.99 var(--chroma) var(--hue) / var(--t))"
 			href="#faceStarOutside"
 			transform="scale(-1, 1)"
 		/>

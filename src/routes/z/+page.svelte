@@ -248,13 +248,13 @@
 			<use xlink:href="#path4path5" filter="white" />
 		</mask>
 		<g id="phyloDots">
-			{#each phylotaxicPoints( 540, radii[2] - radii[6], { center: radialPoint(angles24[1], radii[4]) } ) as p, i}
+			{#each phylotaxicPoints( 480, radii[2] - radii[6], { center: radialPoint(angles24[1], radii[4]) } ) as p, i}
 				<g>
 					<circle
 						cx={p.x}
 						cy={p.y}
 						r={size / 768}
-						fill={`hsl(270, 0%, ${100 - (i % 8) * 10}%)`}
+						fill={`hsl(270, 0%, ${100 - (i % 13) * 10}%)`}
 						mask="url(#petalMask)"
 					/>
 				</g>

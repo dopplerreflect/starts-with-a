@@ -20,8 +20,8 @@
 			{#each circles as c, i}
 				<path
 					d={polygonPath(6, c.r, { center: { x: c.x, y: c.y }, rotate: 0 })}
-					fill={`oklch(1 0.37 ${90 + 180 * (i % 2)} / ${1 / (circles.length / 4)})`}
-					stroke={`oklch(0 0.09 60 / 1)`}
+					fill={`oklch(0.99 0.37 ${90 + 180 * (i % 2)} / ${1 / (circles.length / 4)})`}
+					stroke={`oklch(0.01 0.09 60 / 1)`}
 				/>
 			{/each}
 		</g>

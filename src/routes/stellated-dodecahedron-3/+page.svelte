@@ -81,12 +81,12 @@
 			}
 			circle {
 				fill: none;
-				stroke: oklch(1 0.37 200);
+				stroke: oklch(0.99 0.37 200);
 				stroke-width: 2;
 			}
 			line {
 				stroke: none;
-				stroke: oklch(1 0.37 200);
+				stroke: oklch(0.99 0.37 200);
 			}
 			text {
 				fill: yellow;
@@ -97,7 +97,7 @@
 				fill: oklch(0.9 var(--chroma) 90 / var(--opacity));
 			}
 			#sideStar0 {
-				fill: oklch(1 var(--chroma) 90 / var(--opacity));
+				fill: oklch(0.99 var(--chroma) 90 / var(--opacity));
 			}
 			#sideStar1 {
 				fill: oklch(0.85 var(--chroma) 90 / var(--opacity));
@@ -124,7 +124,7 @@
 			}
 		</style>
 	</defs>
-	<Background {size} fill="oklch(0 0.37 300)" />
+	<Background {size} fill="oklch(0.01 0.37 300)" />
 	<g id="bgcircles">
 		{#each bgr as r}
 			{#each angles5 as a}

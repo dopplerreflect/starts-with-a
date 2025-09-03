@@ -52,8 +52,8 @@
 				stroke-width: 2;
 				stroke-linejoin: bevel;
 				stroke: oklch(1 0.37 90 / 1);
-				fill: url(#rGradient);
-				filter: url(#blur);
+				fill: none;
+				/* filter: url(#blur); */
 				fill-rule: evenodd;
 			}
 		</style>
@@ -66,8 +66,8 @@
 			</feMerge>
 		</filter>
 		<radialGradient id="rGradient">
-			<stop offset="0%" stop-color="oklch(1 0.37 90 / 0.5)" />
-			<stop offset="100%" stop-color="oklch(0.5 0.37 30 / 0.125)" />
+			<stop offset="0%" stop-color="oklch(1 0.37 90)" />
+			<stop offset="100%" stop-color="oklch(0.5 0.37 30)" />
 		</radialGradient>
 	</defs>
 	<Background {size} fill="oklch(0.1 0.175 300)" />

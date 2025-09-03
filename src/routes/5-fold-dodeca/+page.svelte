@@ -111,7 +111,7 @@
 			}
 			circle,
 			line {
-				stroke: oklch(1 0.37 200);
+				stroke: oklch(0.99 0.37 200);
 				fill: none;
 				filter: url(#blur);
 			}
@@ -123,7 +123,7 @@
 				/* stroke: oklch(1 0.37 100 / 0.75); */
 			}
 			.ssp0 {
-				fill: oklch(1 var(--chroma) var(--hue) / var(--opacity));
+				fill: oklch(0.99 var(--chroma) var(--hue) / var(--opacity));
 			}
 			.ssp1 {
 				fill: oklch(0.95 var(--chroma) var(--hue) / var(--opacity));
@@ -155,7 +155,7 @@
 		<path id="frontFacePath" d={frontFacePath} />
 		<filter id="glow">
 			<feMorphology in="SourceAlpha" operator="dilate" radius="20" result="dilate" />
-			<feFlood in="dilate" flood-color="oklch(1 0.37 90 / 0.2)" result="color" />
+			<feFlood in="dilate" flood-color="oklch(0.99 0.37 90 / 0.2)" result="color" />
 			<feComposite in="color" in2="dilate" operator="in" result="border" />
 			<feGaussianBlur in="border" stdDeviation="20" result="blur" />
 			<feMerge>
